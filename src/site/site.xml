@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Snackbot">
+  <bannerLeft>
+    <name>Snackbot</name>
+    <src>http://maven.apache.org/images/apache-maven-project.png</src>
+    <href>http://maven.apache.org/</href>
+  </bannerLeft>
+  <bannerRight>
+    <src>http://maven.apache.org/images/maven-small.gif</src>
+  </bannerRight>
+  <body>
+    <links>
+      <item name="Source" href="https://github.com/jarney/snackbot" />
+      <item name="Javadoc" href="apidocs/index.html"/>
+    </links>
+
+    <menu name="RoboClawDriver">
+      <item name="Introduction" href="index.html"/>
+      <item name="Release Notes" href="release-notes.html" />
+      <item name="RoboClaw User's Manual" href="roboclaw_user_manual.pdf"/>
+      <item name="API Reference" href="apidocs/index.html"/>
+      <item name="Unit Test Coverage Report" href="cobertura/index.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+
+  </body>
+</project>
