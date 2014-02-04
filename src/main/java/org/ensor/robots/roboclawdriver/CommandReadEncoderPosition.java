@@ -47,15 +47,20 @@ class CommandReadEncoderPosition extends CommandResponseFixed {
         return b;
     }
 
+    public static long byteAsULong(final byte b) {
+            return ((long)b) & 0x00000000000000FFL; 
+    }
+    
     @Override
     protected void onResponse(
             final byte[] aResponseBuffer,
             final int aResponseLength) {
-        
-        long pos = aResponseBuffer[0] << 24 | 
-                aResponseBuffer[1] << 16 | 
-                aResponseBuffer[2] << 8 | 
-                aResponseBuffer[3];
+
+
+        long pos = (byteAsULong(aResponseBuffer[0]) << 24) |
+                (byteAsULong(aResponseBuffer[1]) << 16) |
+                (byteAsULong(aResponseBuffer[2]) << 8) |
+                byteAsULong(aResponseBuffer[3]);
         
         byte status = aResponseBuffer[4];
         long time = System.currentTimeMillis();

@@ -110,7 +110,7 @@ public class RoboClaw implements
         mTemperature = 70.0;
         mErrorStatus = 0;
         
-        updateData();
+        initialize();
         
         ComponentManager mgr = ComponentManager.getInstance();
         mgr.registerComponent("roboclaw-0-motor0", m1);
@@ -126,14 +126,23 @@ public class RoboClaw implements
     protected void setTemperature(double aTemperature) {
         mTemperature = aTemperature;
     }
+
+    private final void initialize() {
+        handleCommand(new CommandReadFirmware(this));
+        
+        handleCommand(new CommandReadPIDQPPS(m1));
+        handleCommand(new CommandReadPIDQPPS(m2));
+        
+        updateData();
+        
+        handleCommand(new CommandSetEncoderMode(m1, false, true));
+        handleCommand(new CommandSetEncoderMode(m2, false, true));
+    }
     
     public final void updateData() {
-        handleCommand(new CommandReadFirmware(this));
         handleCommand(new CommandReadMainBatteryVoltage(this));
         handleCommand(new CommandReadLogicBatteryVoltage(this));
         handleCommand(new CommandReadMotorCurrents(m1, m2));
-        handleCommand(new CommandReadPIDQPPS(m1));
-        handleCommand(new CommandReadPIDQPPS(m2));
         handleCommand(new CommandReadTemperature(this));
         handleCommand(new CommandReadErrorStatus(this));
         handleCommand(new CommandReadEncoderMode(m1, m2));

@@ -42,5 +42,7 @@ public interface IMotorWithEncoder extends IMotor {
      */
     long getEncoderSpeed();
     
+    boolean getEncoderQuatratureMode();
+
     
 }

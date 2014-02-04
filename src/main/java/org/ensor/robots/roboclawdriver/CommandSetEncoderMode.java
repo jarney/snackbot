@@ -42,9 +42,13 @@ class CommandSetEncoderMode extends CommandResponseNone {
     
     @Override
     protected byte[] getCommand(byte aAddress) {
-        byte[] b = new byte[2];
-        b[0] = aAddress;
-        b[1] = (byte) (mMotor.getMotorId() == 0 ? 92 : 93);
+        byte[] b = new byte[3];
+        
+        byte modebyte = (byte) (mMotor.getMotorId() == 0 ? 92 : 93);
+
+        int offset = 0;
+        offset = setByte(b, offset, aAddress);
+        offset = setByte(b, offset, modebyte);
         byte mode = 0;
         if (mQuatrature) {
             mode |= (0x01);
@@ -52,7 +56,7 @@ class CommandSetEncoderMode extends CommandResponseNone {
         if (mSupportRCEncoder) {
             mode |= (0x80);
         }
-        b[2] = mode;
+        setByte(b, offset, mode);
         return b;
     }
     
