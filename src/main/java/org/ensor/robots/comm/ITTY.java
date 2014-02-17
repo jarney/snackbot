@@ -27,7 +27,7 @@ package org.ensor.robots.comm;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/** 
+/**
  * This interface models a TTY device (COMM port).
  * The device is used for general full-duplex communications
  * to other peripherals.

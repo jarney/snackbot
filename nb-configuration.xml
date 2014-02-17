@@ -15,4 +15,15 @@ Any value defined here will override the pom.xml file value but is only applicab
 -->
         <netbeans.hint.licensePath>${project.basedir}/licenseheader.txt</netbeans.hint.licensePath>
     </properties>
+    <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+        <word>Biote</word>
+        <word>Biote's</word>
+        <word>ms</word>
+        <word>RoboClaw</word>
+        <word>Servlet</word>
+        <word>SnackBot</word>
+        <word>unsubscribe</word>
+        <word>webcam</word>
+        <word>webcams</word>
+    </spellchecker-wordlist>
 </project-shared-configuration>

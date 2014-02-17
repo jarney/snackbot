@@ -44,6 +44,9 @@ public class AppReadEncoders {
         long enc1v = m1.getEncoderSpeed();
         double m1I = m1.getCurrentDraw();
         
+        String errorStatus = roboClaw.getErrorStatus();
+        System.out.println("Error status: " + errorStatus);
+        
         String enc1posstr = String.format("%8x", enc1pos);
         String mode1 = m1.getEncoderQuatratureMode() ? "quad" : "abs";
         
@@ -61,6 +64,8 @@ public class AppReadEncoders {
     public static void main(String[] args) throws Exception {
         RoboClaw roboClaw = new RoboClaw("/dev/ttyACM0");
 
+        roboClaw.handleCommand(new CommandSetMainBatteryMinVoltage(6));
+        
         IComponent c1 = ComponentManager.getComponent("roboclaw-0-motor0");
         IComponent c2 = ComponentManager.getComponent("roboclaw-0-motor1");
         

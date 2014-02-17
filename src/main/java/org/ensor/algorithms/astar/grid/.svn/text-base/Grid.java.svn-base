@@ -1,0 +1,37 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.bfc.util.pathfinding.grid;
+
+import java.util.HashMap;
+import com.bfc.util.pathfinding.Path;
+/**
+ *
+ * @author Jon
+ */
+public class Grid {
+    private HashMap<GridCoordinate, GridSquare> mSquares;
+    public Grid() {
+
+    }
+    public void addSquare(int x, int y, GridSquare s) {
+        mSquares.put(new GridCoordinate(x,y), s);
+    }
+    public Path<GridSquare> findPath() {
+        return new Path<GridSquare>();
+    }
+}
+
+class GridCoordinate {
+    public int x;
+    public int y;
+    public GridCoordinate(int aX, int aY) {
+        x = aX;
+        y = aY;
+    }
+}
+class GridSquare {
+
+}

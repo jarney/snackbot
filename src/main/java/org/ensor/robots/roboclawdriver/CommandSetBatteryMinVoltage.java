@@ -42,17 +42,20 @@ abstract class CommandSetBatteryMinVoltage extends CommandResponseNone {
         byte[] b = new byte[4];
         
         int voltage = (int) ((mVoltage - 6) * 5);
-        
-        b[0] = (byte)0x80;
-        b[1] = getCommandByte();
         if (voltage < 0) {
             voltage = 0;
         }
         if (voltage > 120) {
             voltage = 120;
         }
-        b[2] = (byte) voltage;
-        b[3] = calculateChecksum(b);
+        System.out.println("main battery voltage setting " + voltage);
+        
+        
+        int offset = 0;
+        offset = setByte(b, offset, aAddress);
+        offset = setByte(b, offset, getCommandByte());
+        offset = setByte(b, offset, (byte)voltage);
+        setChecksum(b, offset);
         
         return b;
     }

@@ -132,7 +132,7 @@ abstract class Command {
         b[aOffset] = (byte) ((aValue >> 24) & 0xff);
         b[aOffset + 1] = (byte) ((aValue >> 16) & 0xff);
         b[aOffset + 2] = (byte) ((aValue >> 8) & 0xff);
-        b[aOffset + 3] = (byte) ((aValue) & 0xff);
+        b[aOffset + 3] = (byte) (aValue & 0xff);
         return aOffset + 4;
     }
     protected int setShort(

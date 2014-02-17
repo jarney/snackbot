@@ -1,0 +1,7 @@
+
+files=$(ls target/lib/*.jar target/*.jar)
+for file in $files ; do
+	classpath=$file:$classpath
+done
+
+java -cp $classpath org.ensor.robots.network.client.UpgradeClient

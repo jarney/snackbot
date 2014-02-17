@@ -28,19 +28,19 @@ package org.ensor.robots.roboclawdriver;
  * @author jona
  */
 class CommandDriveMotorWithSpeedAccelDecelPos extends CommandResponseNone {
-    private final int mAccel;
-    private final int mSpeed;
-    private final int mDecel;
-    private final int mPos;
+    private final long mAccel;
+    private final long mSpeed;
+    private final long mDecel;
+    private final long mPos;
     private final boolean mBuffer;
     private final int mMotorId;
 
     protected CommandDriveMotorWithSpeedAccelDecelPos(
             final int aMotorId,
-            final int aAccel,
-            final int aSpeed,
-            final int aDecel,
-            final int aPos,
+            final long aAccel,
+            final long aSpeed,
+            final long aDecel,
+            final long aPos,
             final boolean aBuffer) {
         mMotorId = aMotorId;
         mAccel = aAccel;
@@ -51,19 +51,20 @@ class CommandDriveMotorWithSpeedAccelDecelPos extends CommandResponseNone {
     }
 
     @Override
-    protected byte[] getCommand(byte aAddress) {
+    protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[20];
         
-        b[0] = aAddress;
-        b[1] = (byte) ((mMotorId == 0) ? 65 : 66);
+        byte cmd = (byte) ((mMotorId == 0) ? 65 : 66);
 
-        setLong(b, 2, mAccel);
-        setLong(b, 6, mSpeed);
-        setLong(b, 10, mDecel);
-        setLong(b, 14, mPos);
-        b[18] = (byte) (mBuffer ? 1 : 0);
-        
-        b[19] = calculateChecksum(b);
+        int offset = 0;
+        offset = setByte(b, offset, aAddress);
+        offset = setByte(b, offset, cmd);
+        offset = setLong(b, offset, mAccel);
+        offset = setLong(b, offset, mSpeed);
+        offset = setLong(b, offset, mDecel);
+        offset = setLong(b, offset, mPos);
+        offset = setByte(b, offset, (mBuffer ? 1 : 0));
+        setChecksum(b, offset);
                 
         return b;
     }

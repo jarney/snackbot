@@ -24,15 +24,32 @@
 
 package org.ensor.robots.comm;
 
-/** 
- *
+/**
+ * This is the factory which creates an appropriate TTY device object based
+ * on the platform the code is being executed on.
  * @author jona
  */
-public class TTYFactory {
+public final class TTYFactory {
 
+    private TTYFactory() { }
+
+    /**
+     * This method returns a suitable TTY device opened in RAW mode so that
+     * binary communications can occur on it.  The TTY returned will send and
+     * receive data on the associated streams without interpreting the data
+     * being sent.  Any control characters will be sent as raw binary data
+     * instead of being intercepted by the TTY device.
+     *
+     * @param aTTY The absolute path of the TTY device.  Note that the format
+     *             of this path will be platform dependent.
+     *
+     * @return This method returns an ITTY interface suitable for use on this
+     *         platform.
+     * @throws Exception If the TTY device was not found or could not be
+     *                   initialized for some reason, this method will throw
+     *                   a general exception.
+     */
     public static ITTY open(final String aTTY) throws Exception {
-        // TODO: Create a corresponding TTY class
-        // for windows.
         return new TTYLinux(aTTY);
     }
 

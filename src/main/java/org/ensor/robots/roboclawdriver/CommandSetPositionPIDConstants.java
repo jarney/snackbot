@@ -38,14 +38,14 @@ class CommandSetPositionPIDConstants extends CommandResponseNone {
     private final int mMaxPos;
 
     protected CommandSetPositionPIDConstants(
-            int aMotorId,
-            int aP,
-            int aI,
-            int aD,
-            int aMaxI,
-            int aDeadzone,
-            int aMinPos,
-            int aMaxPos) {
+            final int aMotorId,
+            final int aP,
+            final int aI,
+            final int aD,
+            final int aMaxI,
+            final int aDeadzone,
+            final int aMinPos,
+            final int aMaxPos) {
         mMotorId = aMotorId;
         mP = aP;
         mI = aI;
@@ -57,20 +57,21 @@ class CommandSetPositionPIDConstants extends CommandResponseNone {
     }
     
     @Override
-    protected byte[] getCommand(byte aAddress) {
+    protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[31];
-        b[0] = aAddress;
-        b[1] = (byte) ((mMotorId == 0) ? 61 : 62);
         
-        setLong(b, 2, mP);
-        setLong(b, 6, mI);
-        setLong(b, 10, mD);
-        setLong(b, 14, mMaxI);
-        setLong(b, 18, mDeadZone);
-        setLong(b, 22, mMinPos);
-        setLong(b, 26, mMaxPos);
-        
-        b[30] = calculateChecksum(b);
+        int offset = 0;
+        byte cmd = (byte) ((mMotorId == 0) ? 61 : 62);
+        offset = setByte(b, offset, aAddress);
+        offset = setByte(b, offset, cmd);
+        offset = setLong(b, offset, mP);
+        offset = setLong(b, offset, mI);
+        offset = setLong(b, offset, mD);
+        offset = setLong(b, offset, mMaxI);
+        offset = setLong(b, offset, mDeadZone);
+        offset = setLong(b, offset, mMinPos);
+        offset = setLong(b, offset, mMaxPos);
+        setChecksum(b, offset);
         
         return b;
     }

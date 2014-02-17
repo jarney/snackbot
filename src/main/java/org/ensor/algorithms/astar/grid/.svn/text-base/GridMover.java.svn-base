@@ -1,0 +1,19 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.bfc.util.pathfinding.grid;
+
+import com.bfc.util.pathfinding.PathMover;
+
+/**
+ *
+ * @author Jon
+ */
+public class GridMover implements PathMover {
+    public int passableFlags;
+    public boolean canPass(GridNode n) {
+        return (passableFlags & n.passableFlags) != 0;
+    }
+}

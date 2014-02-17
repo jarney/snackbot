@@ -30,4 +30,4 @@
  * system.
  */
 
-package org.ensor.robots.motors;
+package org.ensor.robots.motors.tankdrive;

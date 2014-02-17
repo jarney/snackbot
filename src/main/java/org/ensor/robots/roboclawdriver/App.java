@@ -75,7 +75,7 @@ public final class App {
         
         poll(roboClaw, m1, m2);
         
-        m1.setDutyCycle(0.5);
+        m1.setDutyCycle(1.0);
         m2.setDutyCycle(0.5);
         
         Thread.sleep(500);
@@ -92,7 +92,7 @@ public final class App {
         poll(roboClaw, m1, m2);
  
         m1.setDutyCycle(-0.5);
-        m2.setDutyCycle(-0.5);
+        m2.setDutyCycle(-1);
         
         Thread.sleep(500);
         poll(roboClaw, m1, m2);

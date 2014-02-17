@@ -54,7 +54,63 @@ class RoboClawMotor implements
     private long mEncoderValue;
     private byte mEncoderStatus;
     private long mEncoderLastReadTime;
+
+    private final SpeedServo mSpeedServo;
+    private final PositionServo mPositionServo;
+            
+    class SpeedServo implements IServo {
+
+        public void setPosition(final long aPosition) {
+            mMotorController.handleCommand(
+                new CommandDriveMotorWithSignedSpeed(
+                        mMotorId,
+                        aPosition)
+            );
+        }
+        
+    }
     
+    class PositionServo implements IServo {
+
+        public void setPosition(final long aPosition) {
+            mMotorController.handleCommand(
+                    new CommandSetPositionPIDConstants(
+                        mMotorId,
+                        0x00010000,
+                        0x00008000,
+                        0x00004000,
+                        0,
+                        100,
+                        0,
+                        60000000)
+            );
+        
+            mMotorController.handleCommand(
+                new CommandDriveMotorWithSpeedAccelDecelPos(
+                    mMotorId,
+                    2000,
+                    2000,
+                    2000,
+                    aPosition,
+                    false)
+            );
+        }
+        
+    }
+    
+    RoboClawMotor(
+            final RoboClaw aThis,
+            final int aMotorId) {
+        mMotorController = aThis;
+        mMotorId = aMotorId;
+        mAbsoluteEncoder = false;
+        mSupportRCEncoders = false;
+        mBufferLength = 0;
+        mSpeedServo = new SpeedServo();
+        mPositionServo = new PositionServo();
+    }
+
+
     
     public IMotor getMotorInterface() {
         return this;
@@ -69,11 +125,11 @@ class RoboClawMotor implements
     }
 
     public IServo getPositionServo() {
-        return null;
+        return mPositionServo;
     }
 
     public IServo getSpeedServo() {
-        return null;
+        return mSpeedServo;
     }
 
     public ITemperatureSensor getTemperatureSensor() {
@@ -104,19 +160,21 @@ class RoboClawMotor implements
         return mMaxPos;
     }
     
-    protected void setQPPSInternal(int aQPPSConstant) {
+    protected void setQPPSInternal(final int aQPPSConstant) {
         mQPPSConstant = aQPPSConstant;
     }
 
-    protected void setMinMaxPosInternal(int minPos, int maxPos) {
+    protected void setMinMaxPosInternal(
+            final int minPos,
+            final int maxPos) {
         mMinPos = minPos;
         mMaxPos = maxPos;
     }
     
     protected void setPIDConstantsInternal(
-            int aPConstant,
-            int aIConstant,
-            int aDConstant
+            final int aPConstant,
+            final int aIConstant,
+            final int aDConstant
     ) {
         mPConstant = aPConstant;
         mIConstant = aIConstant;
@@ -126,33 +184,34 @@ class RoboClawMotor implements
     public int getMotorId() {
         return mMotorId;
     }
+
+    public void setDutyCycle(final double aDutyCycle) {
+        mMotorController.handleCommand(
+                new CommandDriveMotorWithDutyCycle(
+                        mMotorId,
+                        aDutyCycle
+                )
+        );
+    }
     
-    RoboClawMotor(RoboClaw aThis, int aMotorId) {
-        mMotorController = aThis;
-        mMotorId = aMotorId;
-        mAbsoluteEncoder = false;
-        mSupportRCEncoders = false;
-        mBufferLength = 0;
-    }
+//    public void setDutyCycle(double aDutyCycle) {
+//        byte speed;
+//        double dutyCycle;
+//        boolean forward;
+//        forward = aDutyCycle > 0;
+//
+//        dutyCycle = Math.abs(aDutyCycle);
+//        if (dutyCycle > 1.0) {
+//            dutyCycle = 1.0;
+//        }
+//        speed = (byte)((double)(dutyCycle * 127.0));
+//        Command cmd;
+//        cmd = new CommandDriveMotor(speed, forward, mMotorId);
+//
+//        mMotorController.handleCommand(cmd);
+//    }
 
-    public void setDutyCycle(double aDutyCycle) {
-        byte speed;
-        double dutyCycle;
-        boolean forward;
-        forward = aDutyCycle > 0;
-        
-        dutyCycle = Math.abs(aDutyCycle);
-        if (dutyCycle > 1.0) {
-            dutyCycle = 1.0;
-        }
-        speed = (byte)((double)(dutyCycle * 127.0));
-        Command cmd;
-        cmd = new CommandDriveMotor(speed, forward, mMotorId);
-        
-        mMotorController.handleCommand(cmd);
-    }
-
-    protected void setCurrentDraw(double aCurrentDraw) {
+    protected void setCurrentDraw(final double aCurrentDraw) {
         mCurrentDraw = aCurrentDraw;
     }
     
@@ -176,7 +235,7 @@ class RoboClawMotor implements
         return mSupportRCEncoders;
     }
 
-    void setEncoderSpeed(long d) {
+    void setEncoderSpeed(final long d) {
         mActualSpeed = d;
     }
     
@@ -190,7 +249,7 @@ class RoboClawMotor implements
         return mActualSpeed;
     }
 
-    void setBufferLength(byte b) {
+    void setBufferLength(final byte b) {
         mBufferLength = b;
     }
     
@@ -198,7 +257,10 @@ class RoboClawMotor implements
         return mBufferLength;
     }
 
-    void setQuadratureEncoderPosition(long pos, byte status, long time) {
+    void setQuadratureEncoderPosition(
+            final long pos,
+            final byte status,
+            final long time) {
         mEncoderValue = pos;
         mEncoderStatus = status;
         mEncoderLastReadTime = time;

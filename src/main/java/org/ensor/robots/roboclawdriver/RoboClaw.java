@@ -274,6 +274,36 @@ public class RoboClaw implements
         mErrorStatus = b;
     }
 
+    public String getErrorStatus() {
+        String s = "";
+
+        if ((mErrorStatus & 0x01) != 0) {
+            s = s + "M1 Over Current:";
+        }
+        if ((mErrorStatus & 0x02) != 0) {
+            s = s + "M2 OverCurrent:";
+        }
+        if ((mErrorStatus & 0x04) != 0) {
+            s = s + "E-Stop:";
+        }
+        if ((mErrorStatus & 0x08) != 0) {
+            s = s + "Temperature:";
+        }
+        if ((mErrorStatus & 0x10) != 0) {
+            s = s + "Main Battery High:";
+        }
+        if ((mErrorStatus & 0x20) != 0) {
+            s = s + "Main battery low:";
+        }
+        if ((mErrorStatus & 0x40) != 0) {
+            s = s + "Logic battery high:";
+        }
+        if ((mErrorStatus & 0x80) != 0) {
+            s = s + "Logic battery low:";
+        }
+        return s;
+    }
+
     /**
      * This method retrieves the configuration of the RoboClaw and associated
      * objects.

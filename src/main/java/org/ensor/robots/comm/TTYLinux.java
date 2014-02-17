@@ -25,7 +25,6 @@
 package org.ensor.robots.comm;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,23 +32,26 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/** 
- *
+/**
+ * This class is a TTY device for the Linux platform
+ * and takes care of putting the TTY device into RAW mode
+ * so that it is suitable for sending binary commands to
+ * for external device driver type operations.
  * @author jona
  */
 class TTYLinux implements ITTY {
-    
+
     private final FileOutputStream mOutputStream;
     private final FileInputStream mInputStream;
-    
+
     protected TTYLinux(final String aTTY) throws Exception {
-        
+
         init(aTTY);
-        
+
         mOutputStream = new FileOutputStream(aTTY);
         mInputStream = new FileInputStream(aTTY);
     }
-    
+
     /**
      * Set the TTY to "raw" and give it a 500ms timeout.
      */
@@ -57,7 +59,7 @@ class TTYLinux implements ITTY {
             throws IOException,
             InterruptedException {
         List<String> commandList = new ArrayList<String>();
-        
+
         commandList.add("stty");
         commandList.add("-F");
         commandList.add(aTTY);
@@ -66,33 +68,34 @@ class TTYLinux implements ITTY {
         commandList.add("10");
         commandList.add("min");
         commandList.add("0");
-        
+
         int rc = runCommand(commandList);
-        
+
         if (rc != 0) {
             System.out.println("Return code " + rc);
             throw new
                 IOException("Could not execute stty command to prepare device");
         }
-        
+
     }
-    
-    private int runCommand(List<String> s) throws IOException, InterruptedException {
+
+    private int runCommand(final List<String> s)
+            throws IOException, InterruptedException {
         String [] command = new String[s.size()];
         command = s.toArray(command);
         Process p = Runtime.getRuntime().exec(command);
         int rc = p.waitFor();
-        
+
         return rc;
     }
-    
-    
+
+
     public InputStream getInputStream() {
         return mInputStream;
     }
-    
+
     public OutputStream getOutputStream() {
         return mOutputStream;
     }
-    
+
 }

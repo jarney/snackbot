@@ -52,5 +52,5 @@ public interface IServo {
      * @param aPosition The relative position to set this servo to.  The
      *                  relative position is a value between '-1' and '1'.
      */
-    void setPosition(double aPosition);
+    void setPosition(long aPosition);
 }

@@ -1,0 +1,57 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.bfc.util.pathfinding.grid;
+
+import com.bfc.util.pathfinding.AStar;
+import com.bfc.util.pathfinding.Path;
+
+import com.bfc.util.pathfinding.grid.GridMap;
+import com.bfc.util.pathfinding.grid.GridMover;
+import com.bfc.util.pathfinding.grid.GridNode;
+
+import java.util.Collection;
+import java.util.ArrayList;
+/**
+ *
+ * @author Jon
+ */
+public class HexMap extends GridMap {
+    public HexMap() {
+        super();
+    }
+    @Override
+    public Collection<GridNode> getNeighbors(GridMover mover, GridNode node) {
+        ArrayList<GridNode> neighbors = new ArrayList<GridNode>();
+
+        addPassableNode(mover, neighbors, node.x+1, node.y);
+        addPassableNode(mover, neighbors, node.x-1, node.y);
+
+        addPassableNode(mover, neighbors, node.x, node.y+1);
+        addPassableNode(mover, neighbors, node.x, node.y-1);
+
+        addPassableNode(mover, neighbors, node.x+1, node.y+1);
+        addPassableNode(mover, neighbors, node.x+1, node.y-1);
+
+        return neighbors;
+    }
+    @Override
+    public double getCost(GridMover mover, GridNode startNode, GridNode endNode) {
+        int Ax = startNode.x + (startNode.y)/2;
+        int Bx = endNode.x + (endNode.y)/2;
+        int dx = Bx - Ax;
+        int dy = endNode.y - startNode.y;
+        return (java.lang.Math.abs (dx) + java.lang.Math.abs (dy) + java.lang.Math.abs (dx-dy)) / 2;
+        
+    }
+    @Override
+    public double getHeuristic(GridMover mover, GridNode startNode, GridNode endNode) {
+        int Ax = startNode.x + (startNode.y)/2;
+        int Bx = endNode.x + (endNode.y)/2;
+        int dx = Bx - Ax;
+        int dy = endNode.y - startNode.y;
+        return (java.lang.Math.abs (dx) + java.lang.Math.abs (dy) + java.lang.Math.abs (dx-dy)) / 2;
+    }
+}

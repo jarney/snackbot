@@ -1,0 +1,35 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.bfc.util.pathfinding.grid;
+
+import java.util.Collection;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author Jon
+ */
+public class GridMapDiagonalMoves extends GridMap {
+    public GridMapDiagonalMoves() {
+        super();
+    }
+    public Collection<GridNode> getNeighbors(GridMover mover, GridNode node) {
+        ArrayList<GridNode> neighbors = new ArrayList<GridNode>();
+        addPassableNode(mover, neighbors, node.x+1, node.y+1);
+        addPassableNode(mover, neighbors, node.x+1, node.y);
+        addPassableNode(mover, neighbors, node.x+1, node.y-1);
+
+        addPassableNode(mover, neighbors, node.x, node.y+1);
+        addPassableNode(mover, neighbors, node.x, node.y-1);
+
+        addPassableNode(mover, neighbors, node.x-1, node.y+1);
+        addPassableNode(mover, neighbors, node.x-1, node.y);
+        addPassableNode(mover, neighbors, node.x-1, node.y-1);
+
+        return neighbors;
+    }
+
+}

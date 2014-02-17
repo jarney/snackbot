@@ -1,0 +1,24 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.bfc.util.pathfinding.grid;
+
+import com.bfc.util.pathfinding.PathNode;
+
+/**
+ *
+ * @author Jon
+ */
+public class GridNode implements PathNode {
+    public int x;
+    public int y;
+    public int passableFlags;
+    @Override
+    public boolean equals(Object aN) {
+        if (!(aN instanceof GridNode)) return false;
+        GridNode n = (GridNode)aN;
+        return (x == n.x) && (y == n.y);
+    }
+}

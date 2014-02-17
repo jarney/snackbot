@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ ! -d server-current ] ; then
+	unzip target/RoboClawDriver-1.0-SNAPSHOT-bin.zip
+	mv server-update server-current
+fi
+
+getClasspath() {
+	serverInstance=$1
+
+	for file in $(ls ${serverInstance}/*) ; do
+		classpath=$file:$classpath
+	done
+	echo $classpath
+}
+
+while [ 1 -eq 1 ] ; do
+	classpath=$(getClasspath server-current)
+	echo "-------------------------------------------------"
+	java -cp ${classpath} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=10080 org.ensor.robots.network.server.BioteServer
+	let rc=$?
+	if [ $rc -eq 0 ] ; then
+		if [ -f server-update.zip ] ; then
+			rm -rf server-update
+			unzip server-update.zip
+		fi
+		if [ -d server-update ] ; then
+			rm -rf server-backup
+			mv server-current server-backup
+			mv server-update server-current
+		fi
+	else
+		if [ -d server-backup ] ; then
+			mv server-backup server-current
+		else
+			sleep 5
+		fi
+	fi
+done
