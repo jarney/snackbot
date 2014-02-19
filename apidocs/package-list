@@ -1,6 +1,5 @@
 org.ensor.algorithms.astar
 org.ensor.algorithms.astar.grid
-org.ensor.algorithms.astar.grid.test
 org.ensor.algorithms.toposort
 org.ensor.robots.comm
 org.ensor.robots.motors
