@@ -85,10 +85,6 @@ public abstract class GridMap implements IMap<GridMover,GridNode> {
         GridNode n = column.get(x);
         return n;
     }
-    public List<GridNode> findPath(GridMover mover, GridNode startNode, GridNode endNode, int maxSearchDepth) {
-        AStar<GridMover, GridNode> aStar = new AStar<GridMover, GridNode>();
-        return aStar.findPath(mover, this, startNode, endNode, maxSearchDepth);
-    }
     protected void addPassableNode(GridMover mover, ArrayList<GridNode> neighbors, int x, int y) {
         GridNode n = getNode(x, y);
         if (n == null) return;

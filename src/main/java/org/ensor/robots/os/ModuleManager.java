@@ -24,42 +24,119 @@
 
 package org.ensor.robots.os;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.ensor.algorithms.toposort.INode;
+import org.ensor.algorithms.toposort.TopologicalSort;
 
 /**
+ * This class implements a scheme for managing startup and shutdown of modules.
+ * The scheme is based on a topological sort which ensures that when modules
+ * are started, any modules on which they depend have been started first.
  *
  * @author jona
  */
 public class ModuleManager {
     
-    private Map<Class, IModule> mModules;
+    private final Map<Class, IModule> mModules;
     
-    private Map<Class, IModule> mStartedModules;
-    
-    ModuleManager() {
-        mModules = new HashMap<Class, IModule>();
-        mStartedModules = new HashMap<Class, IModule>();
+    class ModuleNode implements INode<IModule> {
+
+        private final IModule mMod;
+        
+        ModuleNode(final IModule aMod) {
+            mMod = aMod;
+        }
+        
+        public IModule getNode() {
+            return mMod;
+        }
+
+        public List<IModule> getDependencies() {
+            List<IModule> mods = new ArrayList<IModule>();
+
+            Class[] dependentClasses = mMod.getDependencies();
+            
+            if (dependentClasses != null) {
+                for (Class cl : mMod.getDependencies()) {
+                    mods.add(mModules.get(cl));
+                }
+            }
+            
+            return mods;
+        }
+        
     }
     
-    public void register(IModule aModule) {
+    public ModuleManager() {
+        mModules = new HashMap<Class, IModule>();
+    }
+    
+    /**
+     * This method registers a module with the module manager which will
+     * take responsibility for making sure that the module is only started
+     * if the dependent modules have already been started.
+     *
+     * @param aModule A module to manage with the module manager.
+     */
+    public void register(final IModule aModule) {
         mModules.put(aModule.getClass(), aModule);
     }
+
+    /**
+     * This method starts all modules in order of dependency by collecting
+     * the modules into a digraph and then performing a topological sort.
+     * The modules are then started in order of dependency thereby assuring
+     * that they are started in the correct order.
+     */
+    public void startAll() {
+        List<INode<IModule>> moduleNodes = getAllNodes();
+        TopologicalSort<IModule> topologicalSort =
+                new TopologicalSort<IModule>();
+        List<IModule> sortedList =
+                topologicalSort.getTopologicalSort(moduleNodes);
+        
+        for (IModule m : sortedList) {
+            m.start();
+        }
+        
+    }
     
-    void start(Class<? extends IModule> aModuleClass) {
-        IModule module = mModules.get(aModuleClass);
+    /**
+     * This method shuts down all modules which have been registered in
+     * reverse order of the startup.  This ensures that when dependent modules
+     * are shut down, they don't have their dependency shut down first.
+     */
+    public void shutdownAll() {
+        List<INode<IModule>> moduleNodes = getAllNodes();
+        TopologicalSort<IModule> topologicalSort =
+                new TopologicalSort<IModule>();
+        List<IModule> sortedList =
+                topologicalSort.getTopologicalSort(moduleNodes);
+
+        // Shutdown happens in the reverse order of startup.
+        Collections.reverse(sortedList);
         
-        List<IModule> moduleList = getModulesDependentOn(module);
-        
-        for (IModule moduleToStart : moduleList) {
-            moduleToStart.start();
+        for (IModule m : sortedList) {
+            m.shutdown();
         }
     }
 
-    private List<IModule> getModulesDependentOn(IModule module) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private List<INode<IModule>> getAllNodes() {
+        List<INode<IModule>> moduleNodes = new ArrayList<INode<IModule>>();
+        
+        for (Class c : mModules.keySet()) {
+            IModule module = mModules.get(c);
+            ModuleNode mn = new ModuleNode(module);
+            moduleNodes.add(mn);
+        }
+        
+        return moduleNodes;
     }
+    
     
     
 }

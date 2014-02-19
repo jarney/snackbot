@@ -22,27 +22,24 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.os;
+package org.ensor.robots.network.server;
+
+import org.ensor.robots.os.IModule;
 
 /**
  *
  * @author jona
  */
-public class Main {
+public class Module implements IModule {
 
-    public static void main(String []args) {
-        ModuleManager moduleManager = new ModuleManager();
-        
-//      moduleManager.register(
-//            new org.ensor.robots.scheduler.Module());
-        
-        moduleManager.register(new 
-            org.ensor.robots.network.server.Module());
-        
-//      moduleManager.register(
-//            org.ensor.robots.roboclawdriver.Module());
-        
-        moduleManager.startAll();
+    public Class[] getDependencies() {
+        return null;
     }
-    
+
+    public void start() {
+    }
+
+    public void shutdown() {
+    }
+
 }

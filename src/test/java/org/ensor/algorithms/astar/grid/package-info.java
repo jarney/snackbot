@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * all copiesa or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,27 +22,11 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.os;
-
 /**
- *
- * @author jona
+ * This package contains a sample program which can be used to verify the
+ * correctness of the AStar implementation.  The sample application is a Java-
+ * swing application which contains primitive drawing capabilities to draw
+ * the map as well as the capability to set the start and end points.  The
+ * path is then determined from those inputs and drawn.
  */
-public class Main {
-
-    public static void main(String []args) {
-        ModuleManager moduleManager = new ModuleManager();
-        
-//      moduleManager.register(
-//            new org.ensor.robots.scheduler.Module());
-        
-        moduleManager.register(new 
-            org.ensor.robots.network.server.Module());
-        
-//      moduleManager.register(
-//            org.ensor.robots.roboclawdriver.Module());
-        
-        moduleManager.startAll();
-    }
-    
-}
+package org.ensor.algorithms.astar.grid;

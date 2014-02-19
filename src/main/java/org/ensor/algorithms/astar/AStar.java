@@ -36,7 +36,7 @@ public class AStar<M extends IPathMover, N extends IPathNode> {
 
     private static final Comparator<AStarNode> COMPARATOR =
             new Comparator<AStarNode>() {
-                public int compare(final AStarNode n1, final AStarNode n2) {
+                public int compare(final AStarNode n2, final AStarNode n1) {
                     if (n1.mCost == n2.mCost) {
                         return 0;
                     }

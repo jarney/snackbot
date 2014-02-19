@@ -22,27 +22,29 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.os;
+package org.ensor.algorithms.toposort;
+
+import java.util.List;
 
 /**
+ * This interface implements a digraph node.
  *
  * @author jona
  */
-public class Main {
-
-    public static void main(String []args) {
-        ModuleManager moduleManager = new ModuleManager();
-        
-//      moduleManager.register(
-//            new org.ensor.robots.scheduler.Module());
-        
-        moduleManager.register(new 
-            org.ensor.robots.network.server.Module());
-        
-//      moduleManager.register(
-//            org.ensor.robots.roboclawdriver.Module());
-        
-        moduleManager.startAll();
-    }
+public interface INode<T> {
     
+    /**
+     * Returns the node of the graph.
+     *
+     * @return This node.
+     */
+    T getNode();
+    
+    /**
+     * Returns the list of nodes on which this node
+     * depends.
+     *
+     * @return List of dependency nodes.
+     */
+    List<T> getDependencies();
 }
