@@ -42,7 +42,7 @@ public interface ITTY {
      * @return The input stream to read from for this TTY device.
      */
     InputStream getInputStream();
-    
+
     /**
      * This method returns the output stream where data can be written
      * to the TTY device.

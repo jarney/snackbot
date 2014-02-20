@@ -23,7 +23,8 @@
  */
 
 /**
- * This package contains an implementation of the generic A* (AStar) algorithm.
+ *  This is an abstract implementation of the classic
+ * <a href="http://en.wikipedia.org/wiki/A*">AStar algorithm</a>.
  * The algorithm is used to find a least cost path given a set of nodes in a
  * graph.  The algorithm is implemented as a Java generic algorithm so that the
  * graph used and the cost parameter are completely abstract.  In addition,

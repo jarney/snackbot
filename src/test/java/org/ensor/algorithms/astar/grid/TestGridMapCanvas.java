@@ -67,14 +67,14 @@ public class TestGridMapCanvas extends java.awt.Canvas {
          */
         if (mMain.mStartPoint != null) {
             g.setColor(Color.red);
-            g.fillOval(mMain.mStartPoint.x*10, mMain.mStartPoint.y*10, 9, 9);
+            g.fillOval(mMain.mStartPoint.x()*10, mMain.mStartPoint.y()*10, 9, 9);
         }
         /*
          * Draw the ending point
          */
         if (mMain.mEndPoint != null) {
             g.setColor(Color.green);
-            g.fillOval(mMain.mEndPoint.x*10, mMain.mEndPoint.y*10, 9, 9);
+            g.fillOval(mMain.mEndPoint.x()*10, mMain.mEndPoint.y()*10, 9, 9);
         }
         /*
          * Draw the path (if there is one...)
@@ -84,7 +84,7 @@ public class TestGridMapCanvas extends java.awt.Canvas {
             Iterator<GridNode> it = mMain.mPath.iterator();
             while (it.hasNext()) {
                 GridNode n = it.next();
-                g.fillRect(n.x*10+3, n.y*10+3, 3, 3);
+                g.fillRect(n.x()*10+3, n.y()*10+3, 3, 3);
             }
         }
     }

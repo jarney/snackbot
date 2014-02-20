@@ -6,6 +6,9 @@
 package org.ensor.algorithms.astar;
 
 /**
+ * This interface represents an object which can move in a map of IPathNode
+ * objects.  The interface has no elements, but is a placeholder for the type
+ * of object which does the moving in the map.
  *
  * @author Jon
  */

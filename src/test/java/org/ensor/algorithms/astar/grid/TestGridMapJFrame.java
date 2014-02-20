@@ -69,8 +69,7 @@ public class TestGridMapJFrame extends javax.swing.JFrame {
         //mGridMap = new GridMapCompassMoves();
         //mGridMap = new GridMapDiagonalMoves();
         mGridMap = new HexMap();
-        mMover = new GridMover();
-        mMover.passableFlags = 1;
+        mMover = new GridMover(1);
         mStartPoint = null;
         mEndPoint = null;
         mState = STATE_MAP_SET;
@@ -98,14 +97,10 @@ public class TestGridMapJFrame extends javax.swing.JFrame {
        }
     }
     private void setStart(int i, int j) {
-        mStartPoint = new GridNode();
-        mStartPoint.x = i;
-        mStartPoint.y = j;
+        mStartPoint = new GridNode(i, j, 1);
     }
     private void setEnd(int i, int j) {
-        mEndPoint = new GridNode();
-        mEndPoint.x = i;
-        mEndPoint.y = j;
+        mEndPoint = new GridNode(i, j, 1);
     }
     private void onCanvasMouseClicked(java.awt.event.MouseEvent evt) {
        int x = evt.getX();
@@ -256,7 +251,7 @@ public class TestGridMapJFrame extends javax.swing.JFrame {
                         JSONObject node = new JSONObject();
                         node.put("x", x);
                         node.put("y", y);
-                        node.put("passableFlags", n.passableFlags);
+                        node.put("passableFlags", n.getMovementFlags());
                         mapmap.put(node);
                     }
                 }
@@ -265,15 +260,15 @@ public class TestGridMapJFrame extends javax.swing.JFrame {
             // Write the start and end points.
             if (mStartPoint != null) {
                 JSONObject startPoint = new JSONObject();
-                startPoint.put("x", mStartPoint.x);
-                startPoint.put("y", mStartPoint.y);
+                startPoint.put("x", mStartPoint.x());
+                startPoint.put("y", mStartPoint.y());
 
                 jsonMap.put("start", startPoint);
             }
             if (mEndPoint != null) {
                 JSONObject endPoint = new JSONObject();
-                endPoint.put("x", mEndPoint.x);
-                endPoint.put("y", mEndPoint.y);
+                endPoint.put("x", mEndPoint.x());
+                endPoint.put("y", mEndPoint.y());
 
                 jsonMap.put("end", endPoint);
             }
@@ -282,8 +277,8 @@ public class TestGridMapJFrame extends javax.swing.JFrame {
                 JSONArray path = new JSONArray();
                 for (GridNode n : mPath) {
                     JSONObject pathNode = new JSONObject();
-                    pathNode.put("x", n.x);
-                    pathNode.put("y", n.y);
+                    pathNode.put("x", n.x());
+                    pathNode.put("y", n.y());
                     path.put(pathNode);
                 }
                 jsonMap.put("path", path);

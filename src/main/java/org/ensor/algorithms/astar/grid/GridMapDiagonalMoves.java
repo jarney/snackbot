@@ -28,25 +28,40 @@ import java.util.Collection;
 import java.util.ArrayList;
 
 /**
- *
+ * This class represents a grid map on which a mover is allowed to move in the
+ * four cardinal compass directions as well as four diagonal directions.
+ * The adjacency returned by the getNeighbors method reflects this fact.
  * @author Jon
  */
 public class GridMapDiagonalMoves extends GridMap {
+    /**
+     * This method's default constructor simply instantiates the base grid
+     * map class and inherits most of its functionality from there.
+     */
     public GridMapDiagonalMoves() {
         super();
     }
-    public Collection<GridNode> getNeighbors(GridMover mover, GridNode node) {
+    /**
+     * This method returns the neighbors of the given node for the given
+     * mover the four cardinal directions as well as the four diagonals.
+     * @param mover The mover to find neighbors for in the map.
+     * @param node The node from which to find neighboring nodes.
+     * @return A collection of neighboring nodes.
+     */
+    public Collection<GridNode> getNeighbors(
+            final GridMover mover,
+            final GridNode node) {
         ArrayList<GridNode> neighbors = new ArrayList<GridNode>();
-        addPassableNode(mover, neighbors, node.x+1, node.y+1);
-        addPassableNode(mover, neighbors, node.x+1, node.y);
-        addPassableNode(mover, neighbors, node.x+1, node.y-1);
+        addPassableNode(mover, neighbors, node.x() + 1, node.y() + 1);
+        addPassableNode(mover, neighbors, node.x() + 1, node.y());
+        addPassableNode(mover, neighbors, node.x() + 1, node.y() - 1);
 
-        addPassableNode(mover, neighbors, node.x, node.y+1);
-        addPassableNode(mover, neighbors, node.x, node.y-1);
+        addPassableNode(mover, neighbors, node.x(), node.y() + 1);
+        addPassableNode(mover, neighbors, node.x(), node.y() - 1);
 
-        addPassableNode(mover, neighbors, node.x-1, node.y+1);
-        addPassableNode(mover, neighbors, node.x-1, node.y);
-        addPassableNode(mover, neighbors, node.x-1, node.y-1);
+        addPassableNode(mover, neighbors, node.x() - 1, node.y() + 1);
+        addPassableNode(mover, neighbors, node.x() - 1, node.y());
+        addPassableNode(mover, neighbors, node.x() - 1, node.y() - 1);
 
         return neighbors;
     }

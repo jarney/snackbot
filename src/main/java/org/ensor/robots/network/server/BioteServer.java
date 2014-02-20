@@ -71,9 +71,6 @@ public class BioteServer {
                 new UpgradeReceiverSocketServlet(server);
         servletHandler.addServlet(new ServletHolder(uss), "/v1/upgrade/*");
 
-        HelloServlet helloServlet = new HelloServlet();
-        servletHandler.addServlet(new ServletHolder(helloServlet), "/hello/*");
-
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setResourceBase("target/site");
         resourceHandler.setWelcomeFiles(new String[] {"index.html"});

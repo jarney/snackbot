@@ -41,8 +41,12 @@ public interface IMotorWithEncoder extends IMotor {
      * @return The number of pulses per second of the quadrature encoder.
      */
     long getEncoderSpeed();
-    
+
+    /**
+     * This method returns true if the motor has a quadrature encoder
+     * and 'false' if the motor has an absolute position encoder.
+     * @return True if the motor has a quadrature encoder.
+     */
     boolean getEncoderQuatratureMode();
 
-    
 }

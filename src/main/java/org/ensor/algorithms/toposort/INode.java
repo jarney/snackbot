@@ -27,19 +27,24 @@ package org.ensor.algorithms.toposort;
 import java.util.List;
 
 /**
- * This interface implements a digraph node.
+ * This interface implements a directed graph node
+ * by representing the node itself as well as any outgoing
+ * edges to the node.  The remainder of the graph structure may be
+ * deduced by a simple collection of such nodes.
+ *
+ * @param <T> The type of node that this graph represents.
  *
  * @author jona
  */
 public interface INode<T> {
-    
+
     /**
      * Returns the node of the graph.
      *
      * @return This node.
      */
     T getNode();
-    
+
     /**
      * Returns the list of nodes on which this node
      * depends.

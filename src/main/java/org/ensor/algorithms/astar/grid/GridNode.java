@@ -31,13 +31,97 @@ import org.ensor.algorithms.astar.IPathNode;
  * @author Jon
  */
 public class GridNode implements IPathNode {
-    public int x;
-    public int y;
-    public int passableFlags;
-    @Override
-    public boolean equals(Object aN) {
-        if (!(aN instanceof GridNode)) return false;
-        GridNode n = (GridNode)aN;
-        return (x == n.x) && (y == n.y);
+    private final int mX;
+    private final int mY;
+    private int mMovementFlags;
+
+    /**
+     * The constructor creates a new grid node at the specified location
+     * with the given movement flags.  The movement flags are compared with
+     * the mover's movement flags in order to determine whether a particular
+     * mover can pass this node.
+     * @param x The x location of this node.
+     * @param y The y location of this node.
+     * @param movmentFlags The movement flags which indicate which movers
+     *                     can pass the node.
+     */
+    public GridNode(
+        final int x,
+            final int y,
+            final int movmentFlags) {
+        mX = x;
+        mY = y;
+        mMovementFlags = movmentFlags;
     }
+    /**
+     * Returns the x location of this node.
+     * @return The x location of this node.
+     */
+    public int x() {
+        return mX;
+    }
+    /**
+     * Returns the y location of this node.
+     * @return The y location of this node.
+     */
+    public int y() {
+        return mY;
+    }
+    /**
+     * Returns the movement flags for this node.
+     * @return The movement flags of this node.
+     */
+    public int getMovementFlags() {
+        return mMovementFlags;
+    }
+    /**
+     * Sets the movement flags for this node.
+     * @param movementFlags The new set of movement flags for this node.
+     */
+    public void setMovementFlags(final int movementFlags) {
+        mMovementFlags = movementFlags;
+    }
+    /**
+     * This method masks on the given set of movement flags.
+     * @param movementFlags The set of movement flags to add to the current set.
+     */
+    public void addMovementFlags(final int movementFlags) {
+        mMovementFlags |= movementFlags;
+    }
+    /**
+     * This method masks off the given set of movement flags.
+     * @param movementFlags The set of movement flags to remove from the
+     *                       current set.
+     */
+    public void removeMovementFlags(final int movementFlags) {
+        mMovementFlags &= ~(movementFlags);
+    }
+    /**
+     * This method determines if the given object is a node and if so,
+     * whether it refers to the same grid location.  Movement flags are
+     * not a part of the equality check, only location.
+     * @param aN A node to test for equality.
+     * @return True if the given object is a node which refers to the same
+     *         grid location.
+     */
+    @Override
+    public boolean equals(final Object aN) {
+        if (!(aN instanceof GridNode)) {
+            return false;
+        }
+        GridNode n = (GridNode) aN;
+        return (mX == n.mX) && (mY == n.mY);
+    }
+
+    private static final int HASH_SEED = 7;
+    private static final int HASH_MULTIPLIER = 31;
+
+    @Override
+    public int hashCode() {
+        int hash = HASH_SEED;
+        hash = HASH_MULTIPLIER * hash + this.mX;
+        hash = HASH_MULTIPLIER * hash + this.mY;
+        return hash;
+    }
+
 }

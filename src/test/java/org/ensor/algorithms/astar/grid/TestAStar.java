@@ -128,8 +128,7 @@ public class TestAStar {
                 )
         );
         
-        GridMover mover = new GridMover();
-        mover.passableFlags = 1;
+        GridMover mover = new GridMover(1);
         
         String jsonString = bf.readLine();
         
@@ -146,13 +145,9 @@ public class TestAStar {
         JSONObject start = jsonObject.getJSONObject("start");
         JSONObject end = jsonObject.getJSONObject("end");
         
-        GridNode s = new GridNode();
-        s.x = start.getInt("x");
-        s.y = start.getInt("y");
+        GridNode s = new GridNode(start.getInt("x"), start.getInt("y"), 1);
+        GridNode e = new GridNode(end.getInt("x"), end.getInt("y"), 1);
         
-        GridNode e = new GridNode();
-        e.x = end.getInt("x");
-        e.y = end.getInt("y");
 
         List<GridNode>       path;
     
@@ -177,8 +172,8 @@ public class TestAStar {
             JSONObject pathNode = pathArray.getJSONObject(i);
             GridNode n = path.get(i);
             
-            Assert.assertEquals(pathNode.getInt("x"), n.x);
-            Assert.assertEquals(pathNode.getInt("y"), n.y);
+            Assert.assertEquals(pathNode.getInt("x"), n.x());
+            Assert.assertEquals(pathNode.getInt("y"), n.y());
         }
     }
     

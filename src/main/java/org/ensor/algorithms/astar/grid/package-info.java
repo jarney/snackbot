@@ -27,6 +27,8 @@
  * suitable for use in the A-Star algorithm.  The square and hexagonal grid
  * moves are implemented in an extensible manner so that other rules can be
  * additionally applied to the cost calculation as well as the rules which
- * determine adjacency and passability
+ * determine adjacency and the ability for a particular mover to pass a
+ * particular node.  Both the mover and the map node get a bitmap of flags
+ * and the mover is allowed to pass the node if "(moverFlags & nodeFlags) != 0"
  */
 package org.ensor.algorithms.astar.grid;

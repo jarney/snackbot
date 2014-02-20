@@ -69,7 +69,7 @@ public interface IMap<Mover extends IPathMover, Node extends IPathNode> {
      * map.  It is assumed that the costs are independent of the order of
      * traversal meaning that getHeuristic(M, S, E) == getHeuristic(M, E, S)
      * must always be true.
-     
+     *
      * @param mover The entity moving on the map.
      * @param startNode The node from which to start.
      * @param nextNode The end node for which to estimate cost.

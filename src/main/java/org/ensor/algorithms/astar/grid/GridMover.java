@@ -27,12 +27,52 @@ package org.ensor.algorithms.astar.grid;
 import org.ensor.algorithms.astar.IPathMover;
 
 /**
+ * This is an entity which can move on a grid.  The entity
+ * has an integer set of flags (bitmapped) which indicate which
+ * nodes the mover is allowed to traverse.  This mover implements a "canPass"
+ * method which indicates whether the mover is permitted to pass a particular
+ * node.
  *
  * @author Jon
  */
 public class GridMover implements IPathMover {
-    public int passableFlags;
-    public boolean canPass(GridNode n) {
-        return (passableFlags & n.passableFlags) != 0;
+    private int mMovementFlags;
+    /**
+     * This method creates a grid mover with the movement flags specified
+     * by the given integer.  The movement flags integer is a bitmap which
+     * indicates what nodes the mover is allowed to traverse.
+     *
+     * @param aPassableFlags The bitmap of flags which indicate movement ability
+     *                       for nodes in the map.
+     */
+    public GridMover(final int aPassableFlags) {
+        mMovementFlags = aPassableFlags;
+    }
+
+    /**
+     * This method returns the current set of movement flags.
+     * @return The current set of movement flags as a bitmap.
+     */
+    public int getMovementFlags() {
+        return mMovementFlags;
+    }
+
+    /**
+     * This method sets the current set of movement flags
+     * as an integer bitmap.
+     * @param aMovementFlags The set of movement flags to use for this mover
+     *                       as a bitmap integer.
+     */
+    public void setMovementFlags(final int aMovementFlags) {
+        mMovementFlags = aMovementFlags;
+    }
+    /**
+     * This method determines if this mover is allowed to traverse the given
+     * node.
+     * @param n The node to test for the ability to pass.
+     * @return True if this mover is permitted to pass this node.
+     */
+    public boolean canPass(final GridNode n) {
+        return (mMovementFlags & n.getMovementFlags()) != 0;
     }
 }

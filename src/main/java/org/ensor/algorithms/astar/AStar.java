@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 
 /**
- * This is an abstract implementation of the classic 
+ * This is an abstract implementation of the classic
  * <a href="http://en.wikipedia.org/wiki/A*">AStar algorithm</a>.
  *
  * The implementation is in terms of three abstract interfaces representing
@@ -29,7 +29,11 @@ import java.util.LinkedList;
  * between nodes and the neighbors of a node.  In addition, the map can obtain
  * a movement cost for moving between two adjacent nodes and can estimate a
  * heuristic cost for moving between two non-adjacent nodes.
- *
+ * @param <M> This parameter is the type of object which can move through
+ *            the graph.  This object must implement the IPathMover interface.
+ * @param <N> This parameter is the type of node in the graph which represents
+ *            the map for which to find a path.  The type must implement the
+ *            IPathNode interface.
  * @author Jon
  */
 public class AStar<M extends IPathMover, N extends IPathNode> {
@@ -72,7 +76,7 @@ public class AStar<M extends IPathMover, N extends IPathNode> {
             final N startNode,
             final N endNode,
             final int maxSearchDepth) {
-	// easy first check, if the destination is blocked, we can't get there
+        // easy first check, if the destination is blocked, we can't get there
 
         if (!map.isValid(mover, startNode)) {
             return null;
@@ -81,8 +85,8 @@ public class AStar<M extends IPathMover, N extends IPathNode> {
             return null;
         }
 
-	ArrayList<AStarNode<N>> closed = new ArrayList<AStarNode<N>>();
-	ArrayList<AStarNode<N>> open = new ArrayList<AStarNode<N>>();
+        ArrayList<AStarNode<N>> closed = new ArrayList<AStarNode<N>>();
+        ArrayList<AStarNode<N>> open = new ArrayList<AStarNode<N>>();
         HashMap<N, AStarNode<N>> allNodes = new HashMap<N, AStarNode<N>>();
 
         // initial state for A*. The closed group is empty. Only the starting
@@ -97,7 +101,7 @@ public class AStar<M extends IPathMover, N extends IPathNode> {
 
             // be the most likely to be the next step based on our heuristic
             AStarNode<N> current = Collections.min(open, COMPARATOR);
-            if (current.equals(endNode)) {
+            if (current.mNode.equals(endNode)) {
                 targetNode = current;
                 break;
             }
@@ -107,18 +111,20 @@ public class AStar<M extends IPathMover, N extends IPathNode> {
 
             Collection<N> neighbors = map.getNeighbors(mover, current.mNode);
             for (N n : neighbors) {
-                if (!map.isValid(mover, n)) continue;
-                // the cost to get to this node is cost the current plus the movement
+                if (!map.isValid(mover, n)) {
+                    continue;
+                }
 
-                // cost to reach this node. Note that the heursitic value is only used
                 AStarNode<N> neighbour = allNodes.get(n);
                 if (neighbour == null) {
                     neighbour = new AStarNode<N>(n, 0, 0, null);
                     allNodes.put(n, neighbour);
                 }
 
-                // in the sorted open list
-                double nextStepCost = current.mCost + map.getCost(mover, current.mNode, neighbour.mNode);
+                // the cost to get to this node is cost the current plus
+                // the movement
+                double nextStepCost = current.mCost +
+                        map.getCost(mover, current.mNode, neighbour.mNode);
                 if (nextStepCost < neighbour.mCost) {
                     if (open.contains(neighbour)) {
                         open.remove(neighbour);
@@ -129,16 +135,17 @@ public class AStar<M extends IPathMover, N extends IPathNode> {
                 }
 
                 // if the node hasn't already been processed and discarded then
-
-                // reset it's cost to our current cost and add it as a next possible
-
-                // step (i.e. to the open list)
-
-                if (!open.contains(neighbour) && !(closed.contains(neighbour))) {
+                // reset it's cost to our current cost and add it as a next
+                // possible step (i.e. to the open list)
+                if (!open.contains(neighbour) &&
+                        !(closed.contains(neighbour))) {
                     neighbour.mCost = nextStepCost;
-                    neighbour.mHeuristic = map.getHeuristic(mover, current.mNode, endNode);
+                    neighbour.mHeuristic = map.getHeuristic(
+                            mover,
+                            current.mNode,
+                            endNode);
                     neighbour.mParent = current;
-                    maxDepth = Math.max(maxDepth, current.mDepth+1);
+                    maxDepth = Math.max(maxDepth, current.mDepth + 1);
                     open.add(neighbour);
                 }
             }
@@ -157,7 +164,7 @@ public class AStar<M extends IPathMover, N extends IPathNode> {
         // to the start recording the nodes on the way.
 
         LinkedList<N> pathList = new LinkedList<N>();
-        
+
         AStarNode<N> target = targetNode;
         while (target != null) {
             pathList.addFirst(target.mNode);

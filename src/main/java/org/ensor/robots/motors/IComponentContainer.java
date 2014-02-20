@@ -42,7 +42,7 @@ public interface IComponentContainer {
      *         identifier.
      */
     IComponent getComponent(String aComponentId);
-    
+
     /**
      * This method returns a list of components that this object controls
      * or contains.
@@ -50,5 +50,5 @@ public interface IComponentContainer {
      *         by this object.
      */
     List<String> getComponents();
-    
+
 }

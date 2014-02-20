@@ -4,11 +4,20 @@
  */
 
 package org.ensor.algorithms.astar;
-import java.util.Collection;
 /**
- *
+ * One particular node in a map of nodes traversed with the AStar algorithm.
+ * The only real requirement is that the node be able to distinguish itself
+ * from other nodes and therefore must implement the 'equals' method per
+ * standard java patterns.
  * @author Jon
  */
 public interface IPathNode {
-    public boolean equals(Object aN);
+    /**
+     * This method returns true if and only if the given object is equal to
+     * this node.
+     * @param aN An object to compare with this object for equality.
+     * @return True if the two nodes are identical in the sense of the map.
+     */
+    @Override
+    boolean equals(Object aN);
 }

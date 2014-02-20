@@ -28,5 +28,5 @@ package org.ensor.robots.motors.tankdrive;
  * @author jona
  */
 public class TankDrive {
-    
+
 }

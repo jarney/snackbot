@@ -37,15 +37,15 @@ class CommandDriveMotorWithDutyCycle  extends CommandResponseNone {
         mMotorId = aMotorId;
         mDutyCycle = aDutyCycle;
     }
-    
+
     @Override
     protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[5];
-        
+
         int offset = 0;
         offset = setByte(b, offset, aAddress);
         offset = setByte(b, offset, ((mMotorId == 0) ? 32 : 33));
-        
+
         int dc = (int) (mDutyCycle * 1500);
 
         if (dc > 1500) {
@@ -54,11 +54,11 @@ class CommandDriveMotorWithDutyCycle  extends CommandResponseNone {
         if (dc < -1500) {
             dc = -1500;
         }
-        
+
         offset = setShort(b, offset, dc);
         setChecksum(b, offset);
-        
+
         return b;
     }
-    
+
 }
