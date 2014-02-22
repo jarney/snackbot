@@ -1,4 +1,4 @@
-# Smooth Running
+# Project: Smooth Running
 
 <img src="ProjectSmoothRunning.jpg" alt="Smooth Running" style="width: 1024px;"/>
 

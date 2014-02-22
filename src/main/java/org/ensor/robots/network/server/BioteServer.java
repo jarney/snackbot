@@ -23,17 +23,13 @@
  */
 
 package org.ensor.robots.network.server;
-import java.io.File;
 import java.util.Properties;
-import javax.servlet.ServletConfig;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.websocket.WebSocketServlet;
 import org.ensor.robots.scheduler.BioteManager;
 
 
@@ -67,9 +63,9 @@ public class BioteServer {
         BioteSocketServlet bss = new BioteSocketServlet(bioteManager);
         servletHandler.addServlet(new ServletHolder(bss), "/v1/biote/*");
         
-        UpgradeReceiverSocketServlet uss =
-                new UpgradeReceiverSocketServlet(server);
-        servletHandler.addServlet(new ServletHolder(uss), "/v1/upgrade/*");
+        //UpgradeReceiverSocketServlet uss =
+        //        new UpgradeReceiverSocketServlet(server);
+        //servletHandler.addServlet(new ServletHolder(uss), "/v1/upgrade/*");
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setResourceBase("target/site");

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
+import org.ensor.robots.os.IModuleManager;
 
 /**
  *
@@ -35,15 +36,15 @@ import org.eclipse.jetty.websocket.WebSocketServlet;
  */
 class UpgradeReceiverSocketServlet extends WebSocketServlet {
 
-    private Server mServer;
+    private IModuleManager mManager;
     
-    UpgradeReceiverSocketServlet(Server aServer) {
-        mServer = aServer;
+    UpgradeReceiverSocketServlet(IModuleManager aManager) {
+        mManager = aManager;
     }
     
     public WebSocket doWebSocketConnect(HttpServletRequest hsr, String string) {
         System.out.println("Received connection");
-        return new UpgradeReceiverSocket(mServer);
+        return new UpgradeReceiverSocket(mManager);
     }
 
 }

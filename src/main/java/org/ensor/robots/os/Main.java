@@ -33,11 +33,15 @@ public class Main {
     public static void main(String []args) {
         ModuleManager moduleManager = new ModuleManager();
         
-//      moduleManager.register(
-//            new org.ensor.robots.scheduler.Module());
         
-        moduleManager.register(new 
-            org.ensor.robots.network.server.Module());
+        org.ensor.robots.scheduler.Module bioteModule =
+                new org.ensor.robots.scheduler.Module();
+        moduleManager.register(bioteModule);
+        
+        org.ensor.robots.network.server.Module networkModule =
+            new org.ensor.robots.network.server.Module(bioteModule);
+                
+        moduleManager.register(networkModule);
         
 //      moduleManager.register(
 //            org.ensor.robots.roboclawdriver.Module());

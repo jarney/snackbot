@@ -39,7 +39,7 @@ import org.ensor.algorithms.toposort.TopologicalSort;
  *
  * @author jona
  */
-public class ModuleManager {
+public class ModuleManager implements IModuleManager {
     
     private final Map<Class, IModule> mModules;
     
@@ -100,7 +100,7 @@ public class ModuleManager {
                 topologicalSort.getTopologicalSort(moduleNodes);
         
         for (IModule m : sortedList) {
-            m.start();
+            m.start(this);
         }
         
     }
@@ -121,7 +121,7 @@ public class ModuleManager {
         Collections.reverse(sortedList);
         
         for (IModule m : sortedList) {
-            m.shutdown();
+            m.shutdown(this);
         }
     }
 

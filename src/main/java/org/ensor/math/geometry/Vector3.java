@@ -22,27 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.os;
+package org.ensor.math.geometry;
 
 /**
- * This interface represents a module of the system.  A module has
- * a list of other modules on which the module is dependent.  When a
- * module is requested to start, the system ensures that all of the
- * dependent modules have already been started.  Similarly, when a module
- * is shut down, any modules which are no longer needed are also shut down.
  *
  * @author jona
  */
-public interface IModule {
+public class Vector3 {
 
-    /**
-     *
-     * @return
-     */
-    Class[] getDependencies();
-    
-    void start(IModuleManager aManager);
-    
-    void shutdown(IModuleManager aManager);
-    
 }

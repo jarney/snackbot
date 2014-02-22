@@ -25,9 +25,6 @@ final class AStarNode<T extends IPathNode> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(final Object o) {
-        if (o instanceof IPathNode) {
-            return mNode.equals(o);
-        }
         if (o instanceof AStarNode) {
             AStarNode<T> n = (AStarNode<T>) o;
             return mNode.equals(n.mNode);

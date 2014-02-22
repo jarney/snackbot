@@ -22,27 +22,37 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.os;
+package org.ensor.robots.pathfollower;
+
+import org.ensor.robots.scheduler.Biote;
+import org.ensor.robots.scheduler.BioteManager;
+import org.ensor.robots.scheduler.Event;
 
 /**
- * This interface represents a module of the system.  A module has
- * a list of other modules on which the module is dependent.  When a
- * module is requested to start, the system ensures that all of the
- * dependent modules have already been started.  Similarly, when a module
- * is shut down, any modules which are no longer needed are also shut down.
  *
  * @author jona
  */
-public interface IModule {
+public class PathFollower extends Biote {
 
     /**
      *
-     * @return
+     * @param aBioteManager
      */
-    Class[] getDependencies();
+    public PathFollower(final BioteManager aBioteManager) {
+        super(aBioteManager, false);
+    }
     
-    void start(IModuleManager aManager);
-    
-    void shutdown(IModuleManager aManager);
-    
+    @Override
+    protected void onInit(Event message) throws Exception {
+        
+        // Start the repeating timer
+        // for sampling the position.
+        this.startTimer(100, message, true);
+    }
+
+    @Override
+    protected void onFinalize(Event message) throws Exception {
+        
+    }
+
 }

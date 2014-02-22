@@ -23,7 +23,9 @@
  */
 
 /**
- * This package contains a generic topological sort algorithm.  The algorithm
+ * This package contains a generic
+ * <a href="http://en.wikipedia.org/wiki/Topological_sorting">topological sort</a>
+ * algorithm.  The algorithm
  * can be used any time a dependency tree needs to be resolved so that tasks
  * or nodes of the tree can be traversed in such a way as to enforce the
  * graph established.  Examples include module initialization order and

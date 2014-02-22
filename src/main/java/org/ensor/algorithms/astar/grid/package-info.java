@@ -23,8 +23,12 @@
  */
 
 /**
- * This package contains an implementation of a square and hexagonal grid
- * suitable for use in the A-Star algorithm.  The square and hexagonal grid
+ * This package contains an implementation of a square and
+ * <a href="http://en.wikipedia.org/wiki/Hex_map">hex map</a>
+ * suitable for use in the
+ * <a href="http://en.wikipedia.org/wiki/A*">A-Star algorithm</a>.
+ *
+ * The square and hexagonal grid
  * moves are implemented in an extensible manner so that other rules can be
  * additionally applied to the cost calculation as well as the rules which
  * determine adjacency and the ability for a particular mover to pass a

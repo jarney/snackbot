@@ -22,27 +22,35 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.os;
+package org.ensor.robots.pathfollower;
+
+import org.ensor.math.geometry.Vector3;
 
 /**
- * This interface represents a module of the system.  A module has
- * a list of other modules on which the module is dependent.  When a
- * module is requested to start, the system ensures that all of the
- * dependent modules have already been started.  Similarly, when a module
- * is shut down, any modules which are no longer needed are also shut down.
+ * This interface models a smooth path function which is capable of returning
+ * a vector position for any arbitrary point in time "t" along the path.
  *
  * @author jona
  */
-public interface IModule {
+public interface IPath {
 
     /**
+     * Returns the position along the path for the given
+     * point in time.
      *
-     * @return
+     * @param aTime Point in time from 0 (beginning of path) to 1 (end of path).
+     * @return The 3d position associated with this point in time.
      */
-    Class[] getDependencies();
-    
-    void start(IModuleManager aManager);
-    
-    void shutdown(IModuleManager aManager);
+    Vector3 getPosition(double aTime);
+
+
+    /**
+     * Returns the <a href="http://en.wikipedia.org/wiki/Tangent">tangent</a>
+     * to the curve for the given point in time.
+     * @param aTime Point in time from 0 (beginning of path) to 1 (end of path).
+     * @return The 3d tangent vector (normalized to 1) associated with this
+     *         point in time.
+     */
+    Vector3 getDirection(double aTime);
     
 }

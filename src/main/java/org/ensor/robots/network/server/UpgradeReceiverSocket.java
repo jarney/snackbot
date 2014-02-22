@@ -32,16 +32,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.websocket.WebSocket;
+import org.ensor.robots.os.IModuleManager;
 
 /**
  *
  * @author jona
  */
 public class UpgradeReceiverSocket implements WebSocket.OnBinaryMessage {
-    private final Server mServer;
+    private final IModuleManager mManager;
 
-    UpgradeReceiverSocket(Server aServer) {
-        mServer = aServer;
+    UpgradeReceiverSocket(IModuleManager aManager) {
+        mManager = aManager;
     }
     
     private Connection mConnection;
@@ -71,12 +72,7 @@ public class UpgradeReceiverSocket implements WebSocket.OnBinaryMessage {
 
         public void run() {
             try {
-                mServer.stop();
-            }
-            catch (InterruptedException ex) {
-                // XXX Ignore interrupted exception
-                // since this is likely because of interrupting
-                // blocked threads.
+                mManager.shutdownAll();
             }
             catch (Exception ex) {
                 throw new RuntimeException("Shutting down server", ex);

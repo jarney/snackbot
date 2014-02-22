@@ -22,27 +22,43 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.os;
+package org.ensor.robots.scheduler;
+
+import java.util.Properties;
+import org.ensor.robots.os.IModule;
+import org.ensor.robots.os.IModuleManager;
 
 /**
- * This interface represents a module of the system.  A module has
- * a list of other modules on which the module is dependent.  When a
- * module is requested to start, the system ensures that all of the
- * dependent modules have already been started.  Similarly, when a module
- * is shut down, any modules which are no longer needed are also shut down.
  *
  * @author jona
  */
-public interface IModule {
+public class Module implements IModule {
 
-    /**
-     *
-     * @return
-     */
-    Class[] getDependencies();
+    private BioteManager mBioteManager;
     
-    void start(IModuleManager aManager);
+    public Module() {
+        mBioteManager = null;
+    }
     
-    void shutdown(IModuleManager aManager);
+    public Class[] getDependencies() {
+        Class[] deps = {
+        };
+        return deps;
+    }
+
+    public void start(IModuleManager aManager) {
+        Properties bioteManagerProperties = new Properties();
+        mBioteManager = new BioteManager(
+                "rootInstance",
+                bioteManagerProperties);
+    }
+
+    public void shutdown(IModuleManager aManager) {
+        mBioteManager.shutdown();
+    }
     
+    public BioteManager getBioteManager() {
+        return mBioteManager;
+    }
+
 }

@@ -17,7 +17,7 @@ getClasspath() {
 while [ 1 -eq 1 ] ; do
 	classpath=$(getClasspath server-current)
 	echo "-------------------------------------------------"
-	java -cp ${classpath} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=10080 org.ensor.robots.network.server.BioteServer
+	java -cp ${classpath} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=10080 org.ensor.robots.os.Main
 	let rc=$?
 	if [ $rc -eq 0 ] ; then
 		if [ -f server-update.zip ] ; then
