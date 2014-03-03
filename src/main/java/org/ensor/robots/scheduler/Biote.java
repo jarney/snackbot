@@ -24,7 +24,7 @@
 
 package org.ensor.robots.scheduler;
 
-import org.ensor.robots.primitives.Atom;
+import org.ensor.data.atom.Atom;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -167,7 +167,7 @@ public abstract class Biote {
                 for( IEventHandler h : subscribers ) {
                     h.process(msg);
                     log(Constants.LOG_BIOTE_CORE, "Biote.processEvents():" + eventName);
-                    log(Constants.LOG_BIOTE_CORE, "Biote.processEvent:", msg);
+                    log(Constants.LOG_BIOTE_CORE, "Biote.processEvent:", msg.serialize());
                 }
             }
             catch (Exception ex) {

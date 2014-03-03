@@ -23,15 +23,13 @@
  */
 package org.ensor.robots.network.server;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.websocket.WebSocket;
+import org.ensor.data.atom.json.JSONStringSerializer;
 import org.ensor.robots.scheduler.Biote;
 import org.ensor.robots.scheduler.BioteManager;
 import org.ensor.robots.scheduler.Event;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *
@@ -56,16 +54,17 @@ public class BioteSocket implements
         }
     }
 
-    public void sendMessage(Event data) throws Exception {
-        String jsonData = data.serializeToJSON();
+    public void sendMessage(Event aEvent) throws Exception {
+        String jsonData = JSONStringSerializer.instance().serializeTo(
+                aEvent.serialize());
         mConnection.sendMessage(jsonData);
     }
 
     @Override
     public void onMessage(String data) {
         try {
-            JSONObject jsonObject = new JSONObject(data);
-            Event e = new Event("Net-In", jsonObject);
+            Event e = new Event("Net-In",
+                    JSONStringSerializer.instance().serializeFrom(data));
             mBiote.stimulate(e);
         } catch (Exception ex) {
             Logger.getLogger(BioteSocket.class.getName()).log(Level.SEVERE, null, ex);

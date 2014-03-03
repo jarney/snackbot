@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copiesa or substantial portions of the Software.
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,15 +22,20 @@
  * THE SOFTWARE.
  */
 
+package org.ensor.data.atom;
+
 /**
- * This package contains a generic
- * <a href="http://en.wikipedia.org/wiki/Topological_sorting">topological
- * sort</a>
- * algorithm.  The algorithm
- * can be used any time a dependency tree needs to be resolved so that tasks
- * or nodes of the tree can be traversed in such a way as to enforce the
- * graph established.  Examples include module initialization order and
- * order of tasks to be performed by a robot where the ordering of the steps
- * is important.
+ * This interface provides a way for each atom in a list to
+ * be visited precisely one time.
+ * @author Jon
  */
-package org.ensor.algorithms.toposort;
+public interface IListVisitor {
+    /**
+     * This method is invoked every time an element of the list
+     * is visited.
+     * @param aAtom The element currently being visited.
+     * @throws Exception Exceptions may be thrown.  In this case, iteration
+     *                   will halt.
+     */
+    void visit(Atom aAtom) throws Exception;
+}

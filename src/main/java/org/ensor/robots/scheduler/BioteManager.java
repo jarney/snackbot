@@ -24,7 +24,9 @@
 
 package org.ensor.robots.scheduler;
 
-import org.ensor.robots.primitives.*;
+import org.ensor.data.atom.DictionaryAtom;
+import org.ensor.data.atom.ListAtom;
+import org.ensor.data.atom.Atom;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -35,6 +37,7 @@ import java.io.StringWriter;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
+import org.ensor.data.atom.log.AtomLogger;
 
 public class BioteManager {
         protected final static Logger mLogger = Logger.getLogger(BioteManager.class .getName()); 
@@ -157,7 +160,10 @@ public class BioteManager {
             if (atom == null) {
                 logString(system, bioteId, message + " : (null)");
             } else {
-                atom.dump(mLogger, mInstanceId + ":" + "[" + threadId + "]" + "[" + bioteId + "]" + message);
+                AtomLogger.dump(mLogger,
+                        mInstanceId + ":" + "[" + threadId + "]" +
+                                "[" + bioteId + "]" + message,
+                        atom);
             }
         }
 
@@ -251,12 +257,6 @@ public class BioteManager {
                     return false;
                 }
                 sampleStat("BioteManager.java:sendStimulus");
-                /* Regardless of who ends up processing the message,
-                 * make sure we know who the original recipient of the message
-                 * was supposed to be.  This is so that the actual recipient
-                 * can know who forwarded it to them.
-                 */
-                msg.setOriginalRecipient(bioteId);
                 int targetBioteId = b.getTargetBioteId(msg.getEventName());
                 Biote targetBiote = mBiotes.get(targetBioteId);
                 if (targetBiote == null) {
@@ -265,7 +265,7 @@ public class BioteManager {
                 }
                 targetBiote.__protected_friend_BioteManager__enqueueStimulus(this, msg);
                 logString(Constants.LOG_BIOTE_MANAGER, targetBiote.getBioteId(), "BioteManager.sendStimulus:" + msg.getEventName());
-                logString(Constants.LOG_BIOTE_MANAGER, targetBiote.getBioteId(), "BioteManager.sendStimulus", msg);
+                logString(Constants.LOG_BIOTE_MANAGER, targetBiote.getBioteId(), "BioteManager.sendStimulus", msg.serialize());
                 return true;
         }
         protected void __protected_friend_Biote__scheduleBiote(Biote b, boolean useBlockingQueue) {
@@ -361,10 +361,10 @@ public class BioteManager {
             }
         }
         public ListAtom flushStats() throws Exception {
-            ListAtom statsList = new ListAtom();
+            ListAtom statsList = ListAtom.newAtom();
             synchronized (mStats) {
                 for (SystemStat stat : mStats.values()) {
-                    DictionaryAtom statDict = new DictionaryAtom();
+                    DictionaryAtom statDict = DictionaryAtom.newAtom();
                     statDict.setString("name", stat.mName);
                     statDict.setInt("samples", stat.mSamples);
                     statDict.setInt("min", stat.mMin);

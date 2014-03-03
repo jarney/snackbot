@@ -23,14 +23,10 @@
  */
 
 /**
- * This package contains a generic
- * <a href="http://en.wikipedia.org/wiki/Topological_sorting">topological
- * sort</a>
- * algorithm.  The algorithm
- * can be used any time a dependency tree needs to be resolved so that tasks
- * or nodes of the tree can be traversed in such a way as to enforce the
- * graph established.  Examples include module initialization order and
- * order of tasks to be performed by a robot where the ordering of the steps
- * is important.
+ * This package holds objects which represent abstract data which can be
+ * serialized.  The data in this package can be represented in a number of
+ * different ways including with XML, JSON, URL-encoded strings and other
+ * formats.  The data carries no particular semantics other than the ability
+ * to represent and serialize it.
  */
-package org.ensor.algorithms.toposort;
+package org.ensor.data.atom;

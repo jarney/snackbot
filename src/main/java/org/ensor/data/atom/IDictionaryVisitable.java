@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copiesa or substantial portions of the Software.
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,9 +22,21 @@
  * THE SOFTWARE.
  */
 
+package org.ensor.data.atom;
+
 /**
- * This package is used to hold primitive data which can be easily passed
- * between biotes on different threads.  These are intended to be general
- * purpose event and dictionary data.
+ * This class provides a mechanism for iterating dictionaries by providing
+ * a visitor.  Both the mutable and immutable dictionaries implement
+ * this interface.
+ * @author jona
  */
-package org.ensor.robots.primitives;
+public interface IDictionaryVisitable {
+    /**
+     * When this method is called, each of the elements within the container
+     * will be visited precisely once.
+     * @param aVisitor The visitor to call for each element.
+     * @throws Exception Exceptions may be thrown.  In this case,
+     *                   iteration will halt.
+     */
+    void visitPairs(final IDictionaryVisitor aVisitor) throws Exception;
+}

@@ -1,7 +1,10 @@
 package org.ensor.robots.scheduler;
 
-import org.ensor.robots.primitives.DictionaryAtom;
-import org.ensor.robots.primitives.JSONSerializable;
+import org.ensor.data.atom.Atom;
+import org.ensor.data.atom.DictionaryAtom;
+import org.ensor.data.atom.ImmutableDict;
+import org.ensor.data.atom.Pair;
+import org.ensor.data.atom.StringAtom;
 import org.json.JSONObject;
 
 /**
@@ -15,30 +18,39 @@ import org.json.JSONObject;
  *
  * @author Jon
  */
-public class Event extends DictionaryAtom implements JSONSerializable {
-	private String		mEventName;
-        private int             mOriginalRecipient;
-        public Event(String eventName) {
-            super();
+public class Event {
+        private final String         mEventName;
+        private final ImmutableDict  mEventData;
+        
+        public Event(final String eventName) {
             mEventName = eventName;
-            mOriginalRecipient = 0;
-	}
-        public Event(String eventName, DictionaryAtom atom) {
-            super(atom);
+            mEventData = ImmutableDict.newAtom();
+        }
+        
+        public Event(final String eventName, final DictionaryAtom atom) {
             mEventName = eventName;
-            mOriginalRecipient = 0;
+            mEventData = ImmutableDict.newAtom(new Pair[] {
+                new Pair<String, Atom>(
+                        "event-name",
+                        StringAtom.newAtom(mEventName)),
+                new Pair<String, Atom>(
+                        "event-data",
+                        atom.getImmutable())
+            });
         }
-        public Event(String eventName, JSONObject jso) throws Exception {
-            super();
+        public Event(final String eventName, final ImmutableDict atom) {
             mEventName = eventName;
-            deserializeFromJSON(jso);
-            mOriginalRecipient = 0;
+            mEventData = ImmutableDict.newAtom(new Pair[] {
+                new Pair<String, Atom>(
+                        "event-name",
+                        StringAtom.newAtom(mEventName)),
+                new Pair<String, Atom>(
+                        "event-data",
+                        atom.getImmutable())
+            });
         }
-        public int getOriginalRecipient() {
-            return mOriginalRecipient;
-        }
-        public void setOriginalRecipient(int originalRecipient) {
-            mOriginalRecipient = originalRecipient;
+        public ImmutableDict serialize() {
+            return mEventData;
         }
 	public String getEventName() {
             return mEventName;

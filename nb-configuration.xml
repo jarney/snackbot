@@ -23,6 +23,7 @@ Any value defined here will override the pom.xml file value but is only applicab
         <word>RoboClaw</word>
         <word>Servlet</word>
         <word>SnackBot</word>
+        <word>threadsafe</word>
         <word>unsubscribe</word>
         <word>voxel</word>
         <word>waypoints</word>
