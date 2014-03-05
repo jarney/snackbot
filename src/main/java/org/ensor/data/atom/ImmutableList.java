@@ -24,6 +24,8 @@
 
 package org.ensor.data.atom;
 
+import java.util.Iterator;
+
 /**
  * This class represents a list of immutable objects and the list itself
  * is immutable.
@@ -99,6 +101,17 @@ public final class ImmutableList extends ListBase implements
     @Override
     public ImmutableList getImmutable() {
         return this;
+    }
+
+    /**
+     * This method returns an immutable iterator
+     * which can be used to iterate the contents of the list,
+     * but cannot be used to modify the content of the list.
+     * @return An immutable version of an iterator.
+     */
+    @Override
+    public Iterator<Atom> iterator() {
+        return new ImmutableIterator(super.iterator());
     }
 
     /**

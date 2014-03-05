@@ -47,10 +47,6 @@ public final class DictionaryAtom extends DictBase
     private DictionaryAtom() {
         super();
     }
-    private DictionaryAtom(final DictionaryAtom atom) {
-        super(atom.mMap);
-    }
-
     private DictionaryAtom(final Map.Entry<String, Atom> [] entries) {
         super();
         for (Map.Entry<String, Atom> e : entries) {
@@ -155,6 +151,16 @@ public final class DictionaryAtom extends DictBase
         setValue(aKey, aList);
     }
     /**
+     * This method sets the specified list value at the specified key of the
+     * dictionary.  If the dictionary is immutable, a mutable copy
+     * is placed into the dictionary instead.
+     * @param aKey A key to add to the dictionary.
+     * @param aList The list to convert to a mutable copy and set.
+     */
+    public void setList(final String aKey, final ImmutableList aList) {
+        setValue(aKey, aList.getMutable());
+    }
+    /**
      * This method sets the specified string value at the specified key of
      * the dictionary.
      * @param aKey The key to add to the dictionary.
@@ -169,8 +175,18 @@ public final class DictionaryAtom extends DictBase
      * @param aKey The key to add to the dictionary.
      * @param aValue The dictionary to set.
      */
-    public void setDict(final String aKey, final DictionaryAtom aValue) {
+    public void setDictionary(final String aKey, final DictionaryAtom aValue) {
         setValue(aKey, aValue);
+    }
+    /**
+     * This method sets the specified dictionary value at the specified key
+     * of the dictionary.  If the dictionary is immutable, a mutable copy
+     * is placed into the dictionary instead.
+     * @param aKey A key to add to the dictionary.
+     * @param aValue The dictionary to convert to a mutable copy and set.
+     */
+    public void setDictionary(final String aKey, final ImmutableDict aValue) {
+        setValue(aKey, aValue.getMutable());
     }
     /**
      * This method returns the dictionary for the given key.
@@ -178,14 +194,7 @@ public final class DictionaryAtom extends DictBase
      * @return The dictionary for the given key.
      */
     public DictionaryAtom getDictionary(final String key) {
-        Atom atom = getValue(key);
-        if (atom == null) {
-            return null;
-        }
-        if (atom.getType() == Atom.ATOM_TYPE_DICTIONARY) {
-            return (DictionaryAtom) atom;
-        }
-        return null;
+        return (DictionaryAtom) getValue(key);
     }
     /**
      * This method returns the list for the given key.
@@ -193,14 +202,7 @@ public final class DictionaryAtom extends DictBase
      * @return The list at the given key of the dictionary.
      */
     public ListAtom getList(final String key) {
-        Atom atom = getValue(key);
-        if (atom == null) {
-            return null;
-        }
-        if (atom.getType() == Atom.ATOM_TYPE_LIST) {
-            return (ListAtom) atom;
-        }
-        return null;
+        return (ListAtom) getValue(key);
     }
 
     /**
@@ -226,7 +228,7 @@ public final class DictionaryAtom extends DictBase
      * @return A reference to the mutable version of this class.
      */
     @Override
-    public Atom getMutable() {
+    public DictionaryAtom getMutable() {
         return this;
     }
 }

@@ -36,51 +36,73 @@ import org.junit.Test;
  */
 public class TestTopoSort {
     
-    abstract class Module implements INode<Class> {
-        public Class getNode() {
-            return this.getClass();
+    class KLazz {
+        private Class mClass;
+        public KLazz(final Class aClass) {
+            mClass = aClass;
         }
-        public abstract Class[] getDeps();
-        public List<Class> getDependencies() {
-            return Arrays.asList(getDeps());
+        public boolean equals(Object aObject) {
+            if (aObject instanceof KLazz) {
+                return mClass.equals(((KLazz)aObject).mClass);
+            }
+            else if (aObject instanceof Class) {
+                return mClass.equals(aObject);
+            }
+            return false;
+        }
+        public int hashCode() {
+            return 0;
         }
     }
     
+    abstract class Module implements INode<KLazz> {
+        public KLazz getNode() {
+            return new KLazz(this.getClass());
+        }
+        public abstract KLazz[] getDeps();
+        public List<KLazz> getDependencies() {
+            return Arrays.asList(getDeps());
+        }
+    }
+
     class AModule extends Module {
-        public final Class[] mDependentModules = { };
-        public Class[] getDeps() {
+        public final KLazz[] mDependentModules = { };
+        public KLazz[] getDeps() {
             return mDependentModules;
         }
     }    
     class BModule extends Module {
-        public final Class[] mDependentModules = { AModule.class };
-        public Class[] getDeps() {
+        public final KLazz[] mDependentModules = { 
+            new KLazz(AModule.class)
+        };
+        public KLazz[] getDeps() {
             return mDependentModules;
         }
     }    
 
     class CModule extends Module {
-        public final Class[] mDependentModules = { 
-            AModule.class, BModule.class 
+        public final KLazz[] mDependentModules = { 
+            new KLazz(AModule.class),
+            new KLazz(BModule.class)
         };
-        public Class[] getDeps() {
+        public KLazz[] getDeps() {
             return mDependentModules;
         }
     }
     
     class C1Module extends Module {
-        public final Class[] mDependentModules = { 
-            C2Module.class
+        public final KLazz[] mDependentModules = { 
+            new KLazz(C2Module.class)
         };
-        public Class[] getDeps() {
+        public KLazz[] getDeps() {
             return mDependentModules;
         }
     }
     class C2Module extends Module {
-        public final Class[] mDependentModules = { 
-            C1Module.class
+        public final KLazz[] mDependentModules = { 
+            new KLazz(C1Module.class)
         };
-        public Class[] getDeps() {
+        public KLazz[] getDeps() {
             return mDependentModules;
         }
     }
@@ -91,45 +113,45 @@ public class TestTopoSort {
         BModule m2 = new BModule();
         CModule m3 = new CModule();
         
-        TopologicalSort<Class> toposort = new TopologicalSort<Class>();
-        List<INode<Class>> list1 = new ArrayList<INode<Class>>();
+        TopologicalSort<KLazz> toposort = new TopologicalSort<KLazz>();
+        List<INode<KLazz>> list1 = new ArrayList<INode<KLazz>>();
         list1.add(m1);
         list1.add(m2);
         list1.add(m3);
         
-        List<Class> sort1 = toposort.getTopologicalSort(list1);
+        List<KLazz> sort1 = toposort.getTopologicalSort(list1);
         
         Assert.assertEquals(sort1.get(0), AModule.class);
         Assert.assertEquals(sort1.get(1), BModule.class);
         Assert.assertEquals(sort1.get(2), CModule.class);
         
-        List<INode<Class>> list2 = new ArrayList<INode<Class>>();
+        List<INode<KLazz>> list2 = new ArrayList<INode<KLazz>>();
         list2.add(m3);
         list2.add(m2);
         list2.add(m1);
         
-        List<Class> sort2 = toposort.getTopologicalSort(list2);
+        List<KLazz> sort2 = toposort.getTopologicalSort(list2);
         
         Assert.assertEquals(sort2.get(0), AModule.class);
         Assert.assertEquals(sort2.get(1), BModule.class);
         Assert.assertEquals(sort2.get(2), CModule.class);
         
-        List<INode<Class>> list3 = new ArrayList<INode<Class>>();
+        List<INode<KLazz>> list3 = new ArrayList<INode<KLazz>>();
         list3.add(m2);
         list3.add(m3);
         list3.add(m1);
         
-        List<Class> sort3 = toposort.getTopologicalSort(list3);
+        List<KLazz> sort3 = toposort.getTopologicalSort(list3);
         
         Assert.assertEquals(sort3.get(0), AModule.class);
         Assert.assertEquals(sort3.get(1), BModule.class);
         Assert.assertEquals(sort3.get(2), CModule.class);
         
-        List<INode<Class>> listWithCycles = new ArrayList<INode<Class>>();
+        List<INode<KLazz>> listWithCycles = new ArrayList<INode<KLazz>>();
         listWithCycles.add(new C1Module());
         listWithCycles.add(new C2Module());
         
-        List<Class> cycleSort = toposort.getTopologicalSort(listWithCycles);
+        List<KLazz> cycleSort = toposort.getTopologicalSort(listWithCycles);
         
         Assert.assertNull(cycleSort);
         

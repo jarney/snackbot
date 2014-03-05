@@ -25,7 +25,9 @@
 package org.ensor.data.atom;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -89,6 +91,8 @@ public class PrimitiveTest {
         Assert.assertEquals("true", t1.toString());
         Assert.assertEquals("false", f1.toString());
         
+        Assert.assertEquals(Atom.ATOM_TYPE_BOOLEAN, f1.getType());
+        
     }
     
     @Test
@@ -123,6 +127,7 @@ public class PrimitiveTest {
         
         Assert.assertEquals("-18", i21.toString());
         
+        Assert.assertEquals(Atom.ATOM_TYPE_INT, i21.getType());
         
     }
     
@@ -182,11 +187,15 @@ public class PrimitiveTest {
         Assert.assertNotEquals(other.hashCode(),two.hashCode());
         
         Assert.assertTrue(otherf.toString().startsWith("17.2"));
+        
+        Assert.assertEquals(Atom.ATOM_TYPE_REAL, otherf.getType());
     }
     
     @Test
     public void testList() throws Exception {
         ListAtom list = ListAtom.newAtom();
+
+        DictionaryAtom dict = DictionaryAtom.newAtom();
         
         list.append(1244);
         list.append(false);
@@ -194,6 +203,7 @@ public class PrimitiveTest {
         list.append(17.2);
         list.append(1244L);
         list.append(17.2f);
+        list.append(dict);
         
         ImmutableList ilist = ImmutableList.newAtom(list);
         ListAtom rlist = ilist.getMutable();
@@ -223,11 +233,17 @@ public class PrimitiveTest {
         Assert.assertEquals(list.getReal(5), rlist.getReal(5), 0.002);
         Assert.assertEquals(17.2, list.getReal(5), 0.002);
 
+        Assert.assertEquals(list.getDictionary(6), dict);
+        
+        ImmutableDict idict = ilist.getDictionary(6);
+        Assert.assertEquals(dict, idict);
+        
         // Check that the list is already mutable.
         Assert.assertTrue(list == list.getMutable());
         
         // Check that the ilist is already immutable.
         Assert.assertTrue(ilist == ilist.getImmutable());
+        Assert.assertTrue(ilist == ImmutableList.newAtom(ilist));
         
         final int[] count = {0};
         final List<Atom> atomlist = new ArrayList<Atom>();
@@ -243,17 +259,188 @@ public class PrimitiveTest {
         
         list.visitAtoms(visitor);
         
-        Assert.assertEquals(6, count[0]);
+        Assert.assertEquals(7, count[0]);
         Assert.assertEquals(count[0], list.size());
         Assert.assertEquals(list.size(), atomlist.size());
         
         ImmutableList ilist1 = ImmutableList.newAtom(atomlist);
+        ImmutableList ilist2 = list.getImmutable();
         ListAtom list1 = ListAtom.newAtom(atomlist);
         
         Assert.assertEquals(list.size(), ilist1.size());
+        Assert.assertEquals(list.size(), ilist2.size());
         Assert.assertEquals(list.size(), list1.size());
         
+        Assert.assertTrue(list.equals(ilist1));
+        Assert.assertTrue(list.equals(ilist2));
+        
+        ListAtom ne1 = ListAtom.newAtom();
+        ne1.append((Atom)null);
+        
+        ListAtom ne2 = ListAtom.newAtom();
+        ne2.append(StringAtom.newAtom("one"));
+        
+        ListAtom ne3 = ListAtom.newAtom();
+        ne3.append(StringAtom.newAtom("two"));
+        
+        Assert.assertFalse(ne1.equals(ne2));
+        Assert.assertFalse(ne2.equals(ne1));
+        Assert.assertFalse(ne1.equals(list));
+        Assert.assertTrue(ne1.equals(ne1));
+        Assert.assertFalse(ne2.equals(ne3));
+        
+        Assert.assertEquals(ilist1.hashCode(), list.hashCode());
+        
+        Assert.assertNotEquals(ne1.hashCode(), ne3.hashCode());
+        Assert.assertNotEquals(ne1.hashCode(), list.hashCode());
+        
+        Assert.assertFalse(ne1.equals("six"));
+        
+        // Test for a list contained inside another list.
+        ListAtom listinlist = ListAtom.newAtom();
+        listinlist.append(list);
+        ImmutableList ilistinlist = listinlist.getImmutable();
+        
+        Assert.assertEquals(listinlist.getList(0), list);
+        Assert.assertEquals(ilistinlist.getList(0), list);
+        
+        List<Atom> itlist = new ArrayList<Atom>();
+        
+        Iterator<Atom> itilist = ilist.iterator();
+        
+        while (itilist.hasNext()) {
+            Atom n = itilist.next();
+            itlist.add(n);
+        }
+        ImmutableList ilist3 = ImmutableList.newAtom(itlist);
+        Assert.assertEquals(ilist3, ilist);
+
+        itilist = ilist.iterator();
+        boolean exceptionHit = false;
+        try {
+            itilist.remove();
+        }
+        catch (UnsupportedOperationException ex) {
+            exceptionHit = true;
+        }
+        Assert.assertTrue(exceptionHit);
+        
+        Assert.assertEquals(Atom.ATOM_TYPE_LIST, ilist.getType());
     }
     
-    
+    @Test
+    public void testDict() throws Exception {
+        ImmutableDict id = ImmutableDict.newAtom();
+        ImmutableDict id2 = ImmutableDict.newAtom();
+        
+        Assert.assertTrue(id == id2);
+        Assert.assertTrue(id.isEmpty());
+        
+        DictionaryAtom dict = DictionaryAtom.newAtom();
+        
+        ListAtom list = ListAtom.newAtom();
+        list.append(1234);
+        ImmutableList ilist = list.getImmutable();
+        
+        
+        dict.setBoolean("boolean", true);
+        dict.setDictionary("dict", DictionaryAtom.newAtom());
+        dict.setDictionary("idict", id);
+        dict.setInt("int", 124);
+        dict.setList("ilist", ilist);
+        dict.setList("list", list);
+        dict.setReal("float", 1.0f);
+        dict.setReal("double", 1.0);
+        dict.setString("string", "string");
+        
+        Assert.assertEquals(124, dict.getInt("int"));
+        Assert.assertEquals(1.0, dict.getReal("double"), 0.002);
+        Assert.assertEquals("string", dict.getString("string"));
+        Assert.assertTrue(dict.getBoolean("boolean"));
+        Assert.assertEquals(dict.getList("list"), list);
+        Assert.assertEquals(dict.getList("ilist"), list);
+        
+        
+        DictionaryAtom mutable = dict.getMutable();
+        Assert.assertTrue(dict == mutable);
+        
+        
+        ImmutableDict fullDict = dict.getImmutable();
+        
+        Assert.assertEquals(dict, fullDict);
+        
+        ImmutableDict fulldict2 = ImmutableDict.newAtom(fullDict);
+        Assert.assertTrue(fulldict2 == fullDict);
+        
+        ImmutableDict fulldict3 = ImmutableDict.newAtom(dict);
+        
+        Assert.assertEquals(dict, fulldict2);
+        Assert.assertEquals(dict, fulldict3);
+
+        ImmutableDict fulldict4 = fullDict.getImmutable();
+        Assert.assertTrue(fullDict == fulldict4);
+        
+        Assert.assertTrue(dict.containsKey("string"));
+        Assert.assertFalse(dict.containsKey("asdf"));
+        
+        Atom string = dict.getValue("string");
+        Assert.assertEquals(string, StringAtom.newAtom("string"));
+
+        ImmutableList ilist2 = fullDict.getList("list");
+        Assert.assertEquals(list, ilist2);
+        
+        Assert.assertTrue(dict.keySet().contains("string"));
+        
+        final boolean[] foundString = {false};
+        
+        IDictionaryVisitor visitor = new IDictionaryVisitor() {
+
+            public void visit(String aKey, Atom aValue) throws Exception {
+                if (aKey.equals("string")) {
+                    foundString[0] = true;
+                }
+            }
+        };
+        dict.visitPairs(visitor);
+        
+        Assert.assertTrue(foundString[0]);
+        
+        foundString[0] = false;
+        
+        fullDict.visitPairs(visitor);
+        
+        Assert.assertTrue(foundString[0]);
+        
+        Assert.assertFalse(dict.equals("somethingelse"));
+        
+        DictionaryAtom dictcopy = DictionaryAtom.newAtom(dict);
+        Assert.assertEquals(dict, dictcopy);
+        
+        dictcopy.setDictionary("dict", dict);
+        
+        Assert.assertEquals(dict, dictcopy.getDictionary("dict"));
+        
+        Assert.assertEquals(dict.size(), dict.entrySet().size());
+        
+        ImmutableDict idictcopy = dictcopy.getImmutable();
+        
+        Assert.assertEquals(dict, idictcopy.getDictionary("dict"));
+        
+        
+        Map.Entry [] entries = new Map.Entry[dict.size()];
+        
+        int i = 0;
+        for (Map.Entry<String, Atom> entry : dict.entrySet()) {
+            entries[i++] = entry;
+        }
+        DictionaryAtom dictcopyfromarray = DictionaryAtom.newAtom(entries);
+        
+        Assert.assertEquals(dict, dictcopyfromarray);
+        
+        ImmutableDict idictcopyfromarray = ImmutableDict.newAtom(entries);
+        
+        Assert.assertEquals(dict, idictcopyfromarray);
+        
+        Assert.assertEquals(Atom.ATOM_TYPE_DICTIONARY, dict.getType());
+    }
 }

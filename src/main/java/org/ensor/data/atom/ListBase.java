@@ -115,4 +115,47 @@ abstract class ListBase extends Atom implements
             aVisitor.visit(a);
         }
     }
+
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject instanceof ListBase) {
+            ListBase lb = (ListBase) aObject;
+            if (lb.mList.size() != mList.size()) {
+                return false;
+            }
+            int i;
+            for (i = 0; i < mList.size(); i++) {
+                Atom a1 = lb.get(i);
+                Atom a2 = mList.get(i);
+                if (a1 == null) {
+                    if (a2 != null) {
+                        return false;
+                    }
+                }
+                else {
+                    if (a2 == null) {
+                        return false;
+                    }
+                    else {
+                        if (!a1.equals(a2)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static final int HASH_BASE = 5;
+    private static final int HASH_MULTIPLIER = 73;
+
+    @Override
+    public int hashCode() {
+        int hash = HASH_BASE;
+        hash = HASH_MULTIPLIER * hash +
+                (this.mList != null ? this.mList.hashCode() : 0);
+        return hash;
+    }
 }

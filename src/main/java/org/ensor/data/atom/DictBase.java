@@ -53,23 +53,6 @@ abstract class DictBase extends Atom
         super(ATOM_TYPE_DICTIONARY);
         mMap = new HashMap<String, Atom>();
     }
-    protected DictBase(final Map<String, Atom> aMap) {
-        super(ATOM_TYPE_DICTIONARY);
-        mMap = aMap;
-    }
-
-    private DictBase(final Map.Entry<String, Atom> [] entries) {
-        this();
-        for (Map.Entry<String, Atom> e : entries) {
-            mMap.put(e.getKey(), e.getValue());
-        }
-    }
-    private DictBase(final List<Map.Entry<String, Atom>> entries) {
-        this();
-        for (Map.Entry<String, Atom> e : entries) {
-            mMap.put(e.getKey(), e.getValue());
-        }
-    }
     /**
      * This method determines if the dictionary has any elements inside it.
      *
@@ -78,7 +61,13 @@ abstract class DictBase extends Atom
     public boolean isEmpty() {
         return mMap.isEmpty();
     }
-
+    /**
+     * This method returns the number of entries in the dictionary.
+     * @return The number of entries in the dictionary.
+     */
+    public int size() {
+        return mMap.size();
+    }
     /**
      * Determines if the specified key has an element associated with it.
      * @param key The key to check.
@@ -96,16 +85,6 @@ abstract class DictBase extends Atom
     public Atom getValue(final String key) {
         return mMap.get(key);
     }
-    protected IntAtom getIntAtom(final String key) {
-        Atom atom = getValue(key);
-        if (atom == null) {
-            return null;
-        }
-        if (atom.getType() == Atom.ATOM_TYPE_INT) {
-            return (IntAtom) atom;
-        }
-        return null;
-    }
     /**
      * This method returns the integer associated with the given
      * key.  Note that if no integer is associated with this key, a null-pointer
@@ -114,17 +93,7 @@ abstract class DictBase extends Atom
      * @return The integer associated with this dictionary key.
      */
     public int getInt(final String key) {
-        return getIntAtom(key).getValue();
-    }
-    protected BoolAtom getBoolAtom(final String key) {
-        Atom atom = getValue(key);
-        if (atom == null) {
-            return null;
-        }
-        if (atom.getType() == Atom.ATOM_TYPE_BOOLEAN) {
-            return (BoolAtom) atom;
-        }
-        return null;
+        return ((IntAtom) getValue(key)).getValue();
     }
     /**
      * This method returns the boolean associated with the given key.
@@ -133,18 +102,8 @@ abstract class DictBase extends Atom
      * @param key The key for the boolean to retrieve.
      * @return The boolean associated with this dictionary key.
      */
-    public boolean getBool(final String key) {
-        return getBoolAtom(key).getValue();
-    }
-    protected RealAtom getRealAtom(final String key) {
-        Atom atom = getValue(key);
-        if (atom == null) {
-            return null;
-        }
-        if (atom.getType() == Atom.ATOM_TYPE_REAL) {
-            return (RealAtom) atom;
-        }
-        return null;
+    public boolean getBoolean(final String key) {
+        return ((BoolAtom) getValue(key)).getValue();
     }
     /**
      * This method retrieves the floating point number associated with
@@ -154,7 +113,7 @@ abstract class DictBase extends Atom
      * @return The floating point number associated with the given key.
      */
     public double getReal(final String key) {
-        return getRealAtom(key).getValue();
+        return ((RealAtom) getValue(key)).getValue();
     }
     /**
      * This method retrieves the string associated with the given key.
@@ -165,11 +124,7 @@ abstract class DictBase extends Atom
      * @return A string representation of the data stored at this location.
      */
     public String getString(final String key) {
-        Atom atom = getValue(key);
-        if (atom == null) {
-            return null;
-        }
-        return atom.toString();
+        return getValue(key).toString();
     }
     /**
      * This method returns the set of keys which are defined for this
@@ -205,9 +160,30 @@ abstract class DictBase extends Atom
      *                   and the visitation stops.
      */
     public void visitPairs(final IDictionaryVisitor aVisitor) throws Exception {
-        for (Map.Entry<String, Atom> entry : mMap.entrySet()) {
+        for (Map.Entry<String, Atom> entry : this) {
             aVisitor.visit(entry.getKey(), entry.getValue());
         }
     }
+    /**
+     * This method compares the two underlying maps to determine if they
+     * are equal in terms of keys and content.  This comparison does not
+     * compare whether the two are both immutable or both immutable.
+     * @param aObject The object to compare for equality.
+     * @return True if the two maps have the same content.
+     */
+    @Override
+    public boolean equals(final Object aObject) {
+        if (aObject instanceof DictBase) {
+            DictBase other = (DictBase) aObject;
+            return other.mMap.equals(mMap);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return mMap.hashCode();
+    }
+        
 
 }

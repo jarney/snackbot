@@ -33,9 +33,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This class contains the necessary logic to perform a topological sort
- * of an abstract node.  This can be used conveniently for dependency
- * processing for modules and for laying out a list of tasks with
+ * This class contains the necessary logic to perform a
+ * <a href="http://en.wikipedia.org/wiki/Topological_sorting">topological
+ * sort</a>
+ * of a collection of abstract nodes.  This can be used conveniently for
+ * dependency processing for modules and for laying out a list of tasks with
  * interdependency so that another process can execute them and be sure
  * that any ordering rules are observed.
  *
@@ -62,7 +64,7 @@ public class TopologicalSort<T> {
         }
         @Override
         public boolean equals(final Object other) {
-            return mNode.equals(other);
+            return mNode.equals(((Node<T>)other).mNode);
         }
         @Override
         public int hashCode() {
@@ -89,14 +91,8 @@ public class TopologicalSort<T> {
         @Override
         public int hashCode() {
             int hash = HASH_SEED;
-            int from = 0;
-            int to = 0;
-            if (mFrom != null) {
-                from = mFrom.hashCode();
-            }
-            if (mTo != null) {
-                to = mTo.hashCode();
-            }
+            int from = mFrom.hashCode();
+            int to = mTo.hashCode();
             hash = HASH_MULTIPLIER * hash + from;
             hash = HASH_MULTIPLIER * hash + to;
             return hash;

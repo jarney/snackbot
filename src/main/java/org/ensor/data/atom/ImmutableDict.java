@@ -47,10 +47,6 @@ public final class ImmutableDict
     private ImmutableDict() {
         super();
     }
-    private ImmutableDict(final ImmutableDict atom) {
-        super(atom.mMap);
-    }
-
     private ImmutableDict(final Map.Entry<String, Atom> [] entries) {
         super();
         for (Map.Entry<String, Atom> e : entries) {
@@ -134,14 +130,7 @@ public final class ImmutableDict
      * @return The dictionary at the specified key location.
      */
     public ImmutableDict getDictionary(final String key) {
-        Atom atom = getValue(key);
-        if (atom == null) {
-            return null;
-        }
-        if (atom.getType() == Atom.ATOM_TYPE_DICTIONARY) {
-            return (ImmutableDict) atom;
-        }
-        return null;
+        return (ImmutableDict) getValue(key);
     }
     /**
      * This method returns the list at the specified key location.
@@ -152,14 +141,7 @@ public final class ImmutableDict
      * @return The list at the specified key location.
      */
     public ImmutableList getList(final String key) {
-        Atom atom = getValue(key);
-        if (atom == null) {
-            return null;
-        }
-        if (atom.getType() == Atom.ATOM_TYPE_LIST) {
-            return (ImmutableList) atom;
-        }
-        return null;
+        return (ImmutableList) getValue(key);
     }
     @Override
     public ImmutableDict getImmutable() {

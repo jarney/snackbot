@@ -22,35 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.pathfollower;
-
-import org.ensor.math.geometry.Vector3;
+package org.ensor.algorithms.cubicspline;
 
 /**
- * This interface models a smooth path function which is capable of returning
- * a vector position for any arbitrary point in time "t" along the path.
  *
+ * @param<T> Type of value to extract data from.
  * @author jona
  */
-public interface IPath {
-
-    /**
-     * Returns the position along the path for the given
-     * point in time.
-     *
-     * @param aTime Point in time from 0 (beginning of path) to 1 (end of path).
-     * @return The 3d position associated with this point in time.
-     */
-    Vector3 getPosition(double aTime);
-
-
-    /**
-     * Returns the <a href="http://en.wikipedia.org/wiki/Tangent">tangent</a>
-     * to the curve for the given point in time.
-     * @param aTime Point in time from 0 (beginning of path) to 1 (end of path).
-     * @return The 3d tangent vector (normalized to 1) associated with this
-     *         point in time.
-     */
-    Vector3 getDirection(double aTime);
-    
+public interface IValueExtractor<T> {
+    double getValue(final T aValue);
 }

@@ -31,27 +31,6 @@ final class AStarNode<T extends IPathNode> {
         }
         return false;
     }
-    private static final int HASH_SEED = 5;
-    private static final int HASH_MULTIPLIER = 53;
-    private static final int BITS_PER_INT = 32;
-    @Override
-    public int hashCode() {
-        int hash = HASH_SEED;
-        int nodeHashCode = 0;
-        if (mNode != null) {
-            nodeHashCode = mNode.hashCode();
-        }
-        hash = HASH_MULTIPLIER * hash + nodeHashCode;
-        hash = HASH_MULTIPLIER * hash +
-                (int) (Double.doubleToLongBits(this.mCost) ^
-                        (Double.doubleToLongBits(this.mCost) >>> BITS_PER_INT));
-        hash = HASH_MULTIPLIER * hash + this.mDepth;
-        hash = HASH_MULTIPLIER * hash + (int)
-                (Double.doubleToLongBits(this.mHeuristic) ^
-                (Double.doubleToLongBits(this.mHeuristic) >>> BITS_PER_INT));
-        return hash;
-    }
-
 // CHECKSTYLE:OFF
     protected T mNode;
     protected double mCost;

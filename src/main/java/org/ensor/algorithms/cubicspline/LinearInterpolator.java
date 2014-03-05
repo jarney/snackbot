@@ -22,38 +22,38 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.math.geometry;
+package org.ensor.algorithms.cubicspline;
 
 /**
- *
+ * This class implements an interpolator which is based on a linear
+ * relation between the input parameter and the distance traveled from
+ * start to end.
  * @author jona
  */
-public class Vector3 implements IVector<Vector3> {
+public class LinearInterpolator implements IPrimitiveInterpolator {
 
-    private final double mX;
-    private final double mY;
-    private final double mZ;
-    
-    public Vector3(double x, double y, double z) {
-        mX = x;
-        mY = y;
-        mZ = z;
-    }
-    public double distance(Vector3 p2) {
-        double dx = (p2.mX - mX);
-        double dy = (p2.mY - mY);
-        double dz = (p2.mZ - mZ);
-        return dx * dx + dy * dy + dz * dz;
-    }
-    public double getX() {
-        return mX;
-    }
-    public double getY() {
-        return mY;
-    }
-    public double getZ() {
-        return mZ;
-    }
+    private final double mStart;
+    private final double mDelta;
 
+    /**
+     * The constructor creates a linear interpolator which runs from the start
+     * to the end point.
+     * @param aStart Start point of the interpolation for t=0.
+     * @param aEnd End point of the interpolation for t=1.
+     */
+    LinearInterpolator(final double aStart, final double aEnd) {
+        mStart = aStart;
+        mDelta = aEnd - aStart;
+    }
+    /**
+     * This method returns the point value for the specified path
+     * parameter.  The path parameter runs from 0 to 1.
+     * @param t Path parameter.
+     * @return The point between start and end of path corresponding to this
+     *         path location.
+     */
+    public double getValue(final double t) {
+        return mStart + t * mDelta;
+    }
 
 }

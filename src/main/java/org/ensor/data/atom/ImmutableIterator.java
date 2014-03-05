@@ -68,5 +68,7 @@ public class ImmutableIterator<Type> implements Iterator<Type> {
      * the idea of the underlying collection being immutable.
      */
     public void remove() {
+        throw new UnsupportedOperationException(
+                "Immutable iterator cannot modify content of list");
     }
 }

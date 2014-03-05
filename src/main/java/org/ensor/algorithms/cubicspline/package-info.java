@@ -22,38 +22,8 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.math.geometry;
-
 /**
- *
- * @author jona
+ * This package contains code for cubic splines and other techniques for
+ * calculating a smooth path between a set of points.
  */
-public class Vector3 implements IVector<Vector3> {
-
-    private final double mX;
-    private final double mY;
-    private final double mZ;
-    
-    public Vector3(double x, double y, double z) {
-        mX = x;
-        mY = y;
-        mZ = z;
-    }
-    public double distance(Vector3 p2) {
-        double dx = (p2.mX - mX);
-        double dy = (p2.mY - mY);
-        double dz = (p2.mZ - mZ);
-        return dx * dx + dy * dy + dz * dz;
-    }
-    public double getX() {
-        return mX;
-    }
-    public double getY() {
-        return mY;
-    }
-    public double getZ() {
-        return mZ;
-    }
-
-
-}
+package org.ensor.algorithms.cubicspline;
