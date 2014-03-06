@@ -26,43 +26,9 @@ package org.ensor.math.geometry;
 
 /**
  *
+ * @param<T> Type of value to extract data from.
  * @author jona
  */
-public class Vector2 implements IVector<Vector2> {
-    public static final IValueExtractor<Vector2> XEXTRACTOR = new XExtractor();
-    public static final IValueExtractor<Vector2> YEXTRACTOR = new YExtractor();
-
-    public Vector2 add(Vector2 aOther) {
-        return new Vector2(aOther.mX + mX, aOther.mY + mY);
-    }
-    
-    static class XExtractor implements IValueExtractor<Vector2> {
-       public double getValue(Vector2 aValue) {
-            return aValue.getX();
-        }
-    }
-    static class YExtractor implements IValueExtractor<Vector2> {
-       public double getValue(Vector2 aValue) {
-            return aValue.getY();
-        }
-    }
-
-    private final double mX;
-    private final double mY;
-    
-    public Vector2(double x, double y) {
-        mX = x;
-        mY = y;
-    }
-    public double distance(Vector2 p2) {
-        double dx = (p2.mX - mX);
-        double dy = (p2.mY - mY);
-        return dx * dx + dy * dy;
-    }
-    public double getX() {
-        return mX;
-    }
-    public double getY() {
-        return mY;
-    }
+public interface IValueExtractor<T> {
+    double getValue(final T aValue);
 }

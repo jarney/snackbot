@@ -71,7 +71,7 @@ public final class Pair<F, S> implements Map.Entry<F, S> {
         mSecond = v;
         return oldValue;
     }
-    
+
     @Override
     public boolean equals(final Object aObject) {
         if (aObject instanceof Pair) {
@@ -79,21 +79,23 @@ public final class Pair<F, S> implements Map.Entry<F, S> {
             return mFirst.equals(other.getKey()) &&
                     mSecond.equals(other.getValue());
         }
-        
+
         return false;
     }
 
     private static final int HASH_BASE = 7;
     private static final int HASH_MULTIPLIER = 97;
-    
+
     @Override
     public int hashCode() {
         int hash = HASH_BASE;
-        hash = HASH_MULTIPLIER * hash +
-                (this.mFirst != null ? this.mFirst.hashCode() : 0);
-        hash = HASH_MULTIPLIER * hash +
-                (this.mSecond != null ? this.mSecond.hashCode() : 0);
+        if (mFirst != null) {
+            hash = HASH_MULTIPLIER * hash + mFirst.hashCode();
+        }
+        if (mSecond != null) {
+            hash = HASH_MULTIPLIER * hash + mSecond.hashCode();
+        }
         return hash;
     }
-    
+
 }

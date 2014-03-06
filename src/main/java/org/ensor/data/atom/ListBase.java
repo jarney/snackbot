@@ -154,8 +154,9 @@ abstract class ListBase extends Atom implements
     @Override
     public int hashCode() {
         int hash = HASH_BASE;
-        hash = HASH_MULTIPLIER * hash +
-                (this.mList != null ? this.mList.hashCode() : 0);
+        if (mList != null) {
+            hash = HASH_MULTIPLIER * hash + mList.hashCode();
+        }
         return hash;
     }
 }

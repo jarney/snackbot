@@ -58,7 +58,7 @@ public class PrimitiveTest {
         Assert.assertNotEquals(p, "asdf");
         
         Pair<String, Integer> pnull = new Pair<String, Integer>(null, null);
-        Assert.assertEquals(7*97*97, pnull.hashCode());
+        Assert.assertEquals(7, pnull.hashCode());
         
     }
     
@@ -338,17 +338,17 @@ public class PrimitiveTest {
         
         DictionaryAtom dict = DictionaryAtom.newAtom();
         
-        ListAtom list = ListAtom.newAtom();
-        list.append(1234);
-        ImmutableList ilist = list.getImmutable();
         
         
         dict.setBoolean("boolean", true);
-        dict.setDictionary("dict", DictionaryAtom.newAtom());
+        dict.newDictionary("dict");
         dict.setDictionary("idict", id);
         dict.setInt("int", 124);
+        ListAtom list = dict.newList("list");
+        list.append(1234);
+        ImmutableList ilist = list.getImmutable();
         dict.setList("ilist", ilist);
-        dict.setList("list", list);
+        
         dict.setReal("float", 1.0f);
         dict.setReal("double", 1.0);
         dict.setString("string", "string");
@@ -416,7 +416,7 @@ public class PrimitiveTest {
         DictionaryAtom dictcopy = DictionaryAtom.newAtom(dict);
         Assert.assertEquals(dict, dictcopy);
         
-        dictcopy.setDictionary("dict", dict);
+        dictcopy.newDictionary("dict", dict);
         
         Assert.assertEquals(dict, dictcopy.getDictionary("dict"));
         
@@ -442,5 +442,18 @@ public class PrimitiveTest {
         Assert.assertEquals(dict, idictcopyfromarray);
         
         Assert.assertEquals(Atom.ATOM_TYPE_DICTIONARY, dict.getType());
+        
+        DictionaryAtom dictRemoval = DictionaryAtom.newAtom();
+        dictRemoval.setInt("abc", 123);
+        dictRemoval.setInt("def", 456);
+        dictRemoval.remove("abc");
+        Assert.assertFalse(dictRemoval.containsKey("abc"));
+        
+        dictRemoval.setValue("abc", null);
+        dictRemoval.setValue("def", null);
+        Assert.assertFalse(dictRemoval.containsKey("abc"));
+        Assert.assertFalse(dictRemoval.containsKey("def"));
+        
+        
     }
 }

@@ -26,9 +26,8 @@ package org.ensor.algorithms.cubicspline;
 
 /**
  *
- * @param<T> Type of value to extract data from.
  * @author jona
  */
-public interface IValueExtractor<T> {
-    double getValue(final T aValue);
+public interface IInterpolatorFactory<InterpolatorType> {
+    public InterpolatorType[] createInterpolators(IValueCollection aValues);
 }

@@ -36,7 +36,7 @@ import org.ensor.math.geometry.IPath;
  * for each of the segments.
  * @author jona
  */
-public class PathBase<ValueType>
+class PathBase<ValueType>
     implements IPath<ValueType> {
     protected final int mPathSegments;
     protected final IInterpolator<ValueType>[] mSegments;
@@ -84,12 +84,12 @@ public class PathBase<ValueType>
     }
 
     private int getSegment(final double aTime) {
-        for (int i = 0; i < segmentStarts.length; i++) {
+        for (int i = 1; i < segmentStarts.length; i++) {
             if (segmentStarts[i] >= aTime) {
                 return i - 1;
             }
         }
-        return 0;
+        return segmentStarts.length-1;
     }
 
     /**

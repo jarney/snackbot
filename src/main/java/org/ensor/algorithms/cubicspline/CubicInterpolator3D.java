@@ -41,38 +41,20 @@ public class CubicInterpolator3D
     private final CubicInterpolator mZInterpolator;
 
     /**
-     * This constructor creates a 3d cubic spline based on each of the
-     * 3 vector component's 4 cubic polynomial coefficients.
-     * @param xCoefficients The cubic polynomial coefficients
-     *                      which make up the polynomial
-     *                      x[0] + tx[1] + t^2x[2] + t^3x[3];
-     * @param yCoefficients The cubic polynomial coefficients
-     *                      which make up the polynomial
-     *                      y[0] + ty[1] + t^2y[2] + t^3y[3];
-     * @param zCoefficients The cubic polynomial coefficients
-     *                      which make up the polynomial
-     *                      z[0] + tz[1] + t^2z[2] + t^3z[3];
+     * This constructor creates a 2d cubic spline based a cubic interpolator
+     * for each coordinate.
+     * @param aXInterp A cubic interpolator for the x coordinate.
+     * @param aYInterp A cubic interpolator for the y coordinate.
+     * @param aZInterp A cubic interpolator for the z coordinate.
      */
     public CubicInterpolator3D(
-            final double []xCoefficients,
-            final double []yCoefficients,
-            final double []zCoefficients
+            final CubicInterpolator aXInterp,
+            final CubicInterpolator aYInterp,
+            final CubicInterpolator aZInterp
     ) {
-        mXInterpolator = new CubicInterpolator(
-                xCoefficients[0],
-                xCoefficients[1],
-                xCoefficients[2],
-                xCoefficients[3]);
-        mYInterpolator = new CubicInterpolator(
-                yCoefficients[0],
-                yCoefficients[1],
-                yCoefficients[2],
-                yCoefficients[3]);
-        mZInterpolator = new CubicInterpolator(
-                zCoefficients[0],
-                zCoefficients[1],
-                zCoefficients[2],
-                zCoefficients[3]);
+        mXInterpolator = aXInterp;
+        mYInterpolator = aYInterp;
+        mZInterpolator = aZInterp;
     }
     /**
      * This method returns the position along the path for the given path

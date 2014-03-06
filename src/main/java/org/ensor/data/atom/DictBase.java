@@ -26,7 +26,6 @@ package org.ensor.data.atom;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -184,6 +183,4 @@ abstract class DictBase extends Atom
     public int hashCode() {
         return mMap.hashCode();
     }
-        
-
 }

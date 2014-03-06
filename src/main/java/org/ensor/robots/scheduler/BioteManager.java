@@ -364,13 +364,12 @@ public class BioteManager {
             ListAtom statsList = ListAtom.newAtom();
             synchronized (mStats) {
                 for (SystemStat stat : mStats.values()) {
-                    DictionaryAtom statDict = DictionaryAtom.newAtom();
+                    DictionaryAtom statDict = statsList.newDictionary();
                     statDict.setString("name", stat.mName);
                     statDict.setInt("samples", stat.mSamples);
                     statDict.setInt("min", stat.mMin);
                     statDict.setInt("max", stat.mMax);
                     statDict.setInt("total", stat.mTotal);
-                    statsList.append(statDict);
                 }
                 mStats.clear();
             }

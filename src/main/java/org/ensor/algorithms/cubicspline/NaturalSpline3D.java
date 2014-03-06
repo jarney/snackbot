@@ -24,6 +24,7 @@
 
 package org.ensor.algorithms.cubicspline;
 
+import java.util.List;
 import org.ensor.math.geometry.IPath;
 import org.ensor.math.geometry.Vector3;
 
@@ -35,26 +36,6 @@ public class NaturalSpline3D
     extends PathBase<Vector3>
     implements IPath<Vector3> {
 
-    private static final XValueExtractor XEXTRACTOR = new XValueExtractor();
-    private static final YValueExtractor YEXTRACTOR = new YValueExtractor();
-    private static final ZValueExtractor ZEXTRACTOR = new ZValueExtractor();
-
-    static class XValueExtractor implements IValueExtractor<Vector3> {
-        public double getValue(final Vector3 v) {
-            return v.getX();
-        }
-    }
-    static class YValueExtractor implements IValueExtractor<Vector3> {
-        public double getValue(final Vector3 v) {
-            return v.getY();
-        }
-    }
-    static class ZValueExtractor implements IValueExtractor<Vector3> {
-        public double getValue(final Vector3 v) {
-            return v.getZ();
-        }
-    }
-
     /**
      * The constructor creates a natural cubic spline path
      * which can interpolate between the various points given
@@ -64,23 +45,28 @@ public class NaturalSpline3D
      *
      * @param aPoints The list of points to interpolate between.
      */
-    public NaturalSpline3D(final Vector3[] aPoints) {
+    public NaturalSpline3D(final List<Vector3> aPoints) {
         super(createInterpolators(aPoints));
     }
-    
-    public static IInterpolator<Vector3>[] createInterpolators(final Vector3[] aPoints) {
-        int len = aPoints.length;
-        IInterpolator<Vector3>[] interpolators = new IInterpolator[len];
-        
-        for (int i = 0; i < len; i++) {
-            // Initialize the interpolator segments.
-            // by solving the matrix expression to find the cubic
-            // expression parameters.
-            double[] cx = new double[4];
-            double[] cy = new double[4];
-            double[] cz = new double[4];
-            interpolators[i] = new CubicInterpolator3D(
-                    cx, cy, cz
+
+    private static IInterpolator<Vector3>[] createInterpolators(
+            final List<Vector3> aPoints) {
+
+        CubicInterpolatorFactory cif = new CubicInterpolatorFactory();
+
+        CubicInterpolator[] xInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, Vector3.XEXTRACTOR));
+        CubicInterpolator[] yInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, Vector3.YEXTRACTOR));
+        CubicInterpolator[] zInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, Vector3.ZEXTRACTOR));
+
+        int num = xInterp.length;
+        IInterpolator<Vector3>[] interpolators = new IInterpolator[num];
+
+        for (int j = 0; j < num; j++) {
+            interpolators[j] = new CubicInterpolator3D(
+                    xInterp[j], yInterp[j], zInterp[j]
             );
         }
 

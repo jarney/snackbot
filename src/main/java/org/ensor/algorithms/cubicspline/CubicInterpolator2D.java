@@ -40,33 +40,17 @@ public class CubicInterpolator2D
     private final CubicInterpolator mYInterpolator;
 
     /**
-     * This constructor creates a 3d cubic spline based on each of the
-     * 3 vector component's 4 cubic polynomial coefficients.
-     * @param xCoefficients The cubic polynomial coefficients
-     *                      which make up the polynomial
-     *                      x[0] + tx[1] + t^2x[2] + t^3x[3];
-     * @param yCoefficients The cubic polynomial coefficients
-     *                      which make up the polynomial
-     *                      y[0] + ty[1] + t^2y[2] + t^3y[3];
-     * @param zCoefficients The cubic polynomial coefficients
-     *                      which make up the polynomial
-     *                      z[0] + tz[1] + t^2z[2] + t^3z[3];
+     * This constructor creates a 2d cubic spline based a cubic interpolator
+     * for each coordinate.
+     * @param aXInterp A cubic interpolator for the x coordinate.
+     * @param aYInterp A cubic interpolator for the y coordinate.
      */
     public CubicInterpolator2D(
-            final double []xCoefficients,
-            final double []yCoefficients,
-            final double []zCoefficients
+            final CubicInterpolator aXInterp,
+            final CubicInterpolator aYInterp
     ) {
-        mXInterpolator = new CubicInterpolator(
-                xCoefficients[0],
-                xCoefficients[1],
-                xCoefficients[2],
-                xCoefficients[3]);
-        mYInterpolator = new CubicInterpolator(
-                yCoefficients[0],
-                yCoefficients[1],
-                yCoefficients[2],
-                yCoefficients[3]);
+        mXInterpolator = aXInterp;
+        mYInterpolator = aYInterp;
     }
     /**
      * This method returns the position along the path for the given path

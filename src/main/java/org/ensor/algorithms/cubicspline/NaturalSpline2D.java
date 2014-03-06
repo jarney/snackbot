@@ -24,6 +24,7 @@
 
 package org.ensor.algorithms.cubicspline;
 
+import java.util.List;
 import org.ensor.math.geometry.IPath;
 import org.ensor.math.geometry.Vector2;
 
@@ -35,20 +36,7 @@ public class NaturalSpline2D
     extends PathBase<Vector2>
     implements IPath<Vector2> {
 
-    private static final XValueExtractor XEXTRACTOR = new XValueExtractor();
-    private static final YValueExtractor YEXTRACTOR = new YValueExtractor();
-
-    static class XValueExtractor implements IValueExtractor<Vector2> {
-        public double getValue(final Vector2 v) {
-            return v.getX();
-        }
-    }
-    static class YValueExtractor implements IValueExtractor<Vector2> {
-        public double getValue(final Vector2 v) {
-            return v.getY();
-        }
-    }
-
+    
     /**
      * The constructor creates a natural cubic spline path
      * which can interpolate between the various points given
@@ -58,24 +46,26 @@ public class NaturalSpline2D
      *
      * @param aPoints The list of points to interpolate between.
      */
-    public NaturalSpline2D(final Vector2[] aPoints) {
+    public NaturalSpline2D(final List<Vector2> aPoints) {
         super(createInterpolators(aPoints));
     }
-    
-    public static IInterpolator<Vector2>[] createInterpolators(
-            final Vector2[] aPoints) {
-        int len = aPoints.length;
-        IInterpolator<Vector2>[] interpolators = new IInterpolator[len];
-        
-        for (int i = 0; i < len; i++) {
-            // Initialize the interpolator segments.
-            // by solving the matrix expression to find the cubic
-            // expression parameters.
-            double[] cx = new double[4];
-            double[] cy = new double[4];
-            double[] cz = new double[4];
-            interpolators[i] = new CubicInterpolator2D(
-                    cx, cy, cz
+
+    private static IInterpolator<Vector2>[] createInterpolators(
+            final List<Vector2> aPoints) {
+
+        CubicInterpolatorFactory cif = new CubicInterpolatorFactory();
+
+        CubicInterpolator[] xInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, Vector2.XEXTRACTOR));
+        CubicInterpolator[] yInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, Vector2.YEXTRACTOR));
+
+        int num = xInterp.length;
+        IInterpolator<Vector2>[] interpolators = new IInterpolator[num];
+
+        for (int j = 0; j < num; j++) {
+            interpolators[j] = new CubicInterpolator2D(
+                    xInterp[j], yInterp[j]
             );
         }
 

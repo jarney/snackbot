@@ -23,7 +23,9 @@
  */
 
 /**
- * This package contains code for cubic splines and other techniques for
+ * This package contains code for
+ * <a href="http://en.wikipedia.org/wiki/Spline_%28mathematics%29">
+ * cubic splines</a> and other techniques for
  * calculating a smooth path between a set of points.
  */
 package org.ensor.algorithms.cubicspline;

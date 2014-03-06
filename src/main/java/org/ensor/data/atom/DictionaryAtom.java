@@ -102,8 +102,20 @@ public final class DictionaryAtom extends DictBase
      * @param aKey The key to add to the dictionary.
      * @param aValue The value to associate with this key.
      */
-    public void setValue(final String aKey, final Atom aValue) {
-        mMap.put(aKey, aValue);
+    protected void setValue(final String aKey, final Atom aValue) {
+        if (aValue == null) {
+            mMap.remove(aKey);
+        }
+        else {
+            mMap.put(aKey, aValue);
+        }
+    }
+    /**
+     * This method removes the given entry in the dictionary.
+     * @param aKey The key to remove.
+     */
+    public void remove(final String aKey) {
+        mMap.remove(aKey);
     }
     /**
      * This method sets the specified integer at the specified key
@@ -142,13 +154,14 @@ public final class DictionaryAtom extends DictBase
         setValue(aKey, BoolAtom.newAtom(aValue));
     }
     /**
-     * This method sets the specified list value at the specified key of the
-     * dictionary.
+     * This method adds a new list underneath the dictionary.
      * @param aKey The key to add to the dictionary.
-     * @param aList The list to add to the dictionary.
+     * @return Returns the newly created list attached to the dictionary.
      */
-    public void setList(final String aKey, final ListAtom aList) {
-        setValue(aKey, aList);
+    public ListAtom newList(final String aKey) {
+        ListAtom list = ListAtom.newAtom();
+        setValue(aKey, list);
+        return list;
     }
     /**
      * This method sets the specified list value at the specified key of the
@@ -169,14 +182,33 @@ public final class DictionaryAtom extends DictBase
     public void setString(final String aKey, final String aValue) {
         setValue(aKey, StringAtom.newAtom(aValue));
     }
+
+    private DictionaryAtom newDict(
+            final String aKey,
+            final DictionaryAtom aDict) {
+        setValue(aKey, aDict);
+        return aDict;
+    }
     /**
-     * This method sets the specified dictionary value at the specified key
-     * of the dictionary.
+     * This method creates a new dictionary and adds it as a child
+     * of this dictionary.
      * @param aKey The key to add to the dictionary.
-     * @param aValue The dictionary to set.
+     * @return Returns the newly created dictionary.
      */
-    public void setDictionary(final String aKey, final DictionaryAtom aValue) {
-        setValue(aKey, aValue);
+    public DictionaryAtom newDictionary(final String aKey) {
+        return newDict(aKey, DictionaryAtom.newAtom());
+    }
+    /**
+     * This method creates a new dictionary and adds it as a child
+     * of this dictionary.  The newly created dictionary is a deep
+     * copy of the given dictionary.
+     * @param aKey The key to add to the dictionary.
+     * @param aDict A dictionary to copy and place into this dictionary.
+     * @return Returns the newly created dictionary.
+     */
+    public DictionaryAtom newDictionary(final String aKey,
+            final DictionaryAtom aDict) {
+        return newDict(aKey, DictionaryAtom.newAtom(aDict.entrySet()));
     }
     /**
      * This method sets the specified dictionary value at the specified key

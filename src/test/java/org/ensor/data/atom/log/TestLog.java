@@ -46,15 +46,10 @@ public class TestLog {
     public void testLog() {
         DictionaryAtom dict = DictionaryAtom.newAtom();
         
-        DictionaryAtom subdict = DictionaryAtom.newAtom();
-        ListAtom sublist = ListAtom.newAtom();
-
-        ListAtom nonemptylist = ListAtom.newAtom();
+        ListAtom nonemptylist = dict.newList("nonemptylist");
         nonemptylist.append("one");
-        
-        dict.setList("nonemptylist", nonemptylist);
-        dict.setList("list", sublist);
-        dict.setDictionary("dict", subdict);
+        ListAtom sublist = dict.newList("list");
+        DictionaryAtom subdict = dict.newDictionary("dict");
         dict.setString("string", "string");
         dict.setReal("real", 1.2f);
         dict.setInt("int", 12334);

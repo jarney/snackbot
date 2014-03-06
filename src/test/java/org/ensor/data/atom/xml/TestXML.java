@@ -42,11 +42,8 @@ public class TestXML {
     public void testDictSerializer() throws Exception {
         DictionaryAtom dict = DictionaryAtom.newAtom();
         
-        DictionaryAtom subdict = DictionaryAtom.newAtom();
-        ListAtom sublist = ListAtom.newAtom();
-
-        dict.setList("list", sublist);
-        dict.setDictionary("dict", subdict);
+        ListAtom sublist = dict.newList("list");
+        DictionaryAtom subdict = dict.newDictionary("dict");
         dict.setString("string", "string");
         dict.setReal("real", 1.2f);
         dict.setInt("int", 12334);
@@ -66,11 +63,8 @@ public class TestXML {
     public void testListSerializer() throws Exception {
         ListAtom list = ListAtom.newAtom();
         
-        DictionaryAtom subdict = DictionaryAtom.newAtom();
-        ListAtom sublist = ListAtom.newAtom();
-        
-        list.append(sublist);
-        list.append(subdict);
+        ListAtom sublist = list.newList();
+        DictionaryAtom subdict = list.newDictionary();
         list.append("string");
         list.append(1.2f);
         list.append(12334);

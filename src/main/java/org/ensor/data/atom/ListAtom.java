@@ -76,9 +76,30 @@ public final class ListAtom extends ListBase implements
      * This method adds the specified element to the end of the list.
      * @param aAtom The element to add to the list.
      */
-    public void append(final Atom aAtom) {
+    protected void append(final Atom aAtom) {
         mList.add(aAtom);
     }
+    /**
+     * This method creates a new list and adds it as a child of this
+     * list.
+     * @return The newly created list appended to this list.
+     */
+    public ListAtom newList() {
+        ListAtom list = ListAtom.newAtom();
+        mList.add(list);
+        return list;
+    }
+    /**
+     * This method creates a new dictionary and adds it as a child of this
+     * list.
+     * @return The newly created dictionary appended to this list.
+     */
+    public DictionaryAtom newDictionary() {
+        DictionaryAtom dict = DictionaryAtom.newAtom();
+        mList.add(dict);
+        return dict;
+    }
+
     /**
      * This method adds the specified element to the end of the list.
      * @param aAtom The element to add to the list.

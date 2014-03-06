@@ -42,6 +42,9 @@ public class CubicInterpolator implements IPrimitiveInterpolator {
    private final double mDD;
    private final double mDC;
 
+   private static final double K2 = 2;
+   private static final double K3 = 3;
+   
    /**
     * This constructor creates a cubic expression evaluator
     * which calculates the value of the expression 'a+bt+ct^2+dt^3'.
@@ -59,8 +62,8 @@ public class CubicInterpolator implements IPrimitiveInterpolator {
       mB = b;
       mC = c;
       mD = d;
-      mDD = 3 * mD;
-      mDC = 2 * mC;
+      mDD = K3 * mD;
+      mDC = K2 * mC;
    }
    /**
     * This method evaluates the cubic expression for the given path parameter
