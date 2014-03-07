@@ -2,20 +2,20 @@
 
 <rss version="0.91">
   <channel>
-    <title>RoboClawDriver - Checkstyle report</title>
-    <link>http://maven.apache.org</link>
-    <description>RoboClawDriver - Checkstyle report</description>
+    <title>snackbot - Checkstyle report</title>
+    <link>http://jarney.github.io/snackbot/</link>
+    <description>snackbot - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2014</copyright>
     <item>
-      <title>File: 138,
-             Errors: 1343,
+      <title>File: 176,
+             Errors: 1200,
              Warnings: 0,
              Infos: 0
       </title>
-            <link>http://maven.apache.org/checkstyle.html</link>
+            <link>http://jarney.github.io/snackbot//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://maven.apache.org/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://jarney.github.io/snackbot//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadBufferLength.java">org/ensor/robots/roboclawdriver/CommandReadBufferLength.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadBufferLength.java">org/ensor/robots/roboclawdriver/CommandReadBufferLength.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.log.package-info.java">org/ensor/data/atom/log/package-info.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.IFunctionT.java">org/ensor/math/analysis/IFunctionT.java</a>
                 </td>
                 <td>
                   0
@@ -52,12 +52,40 @@
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.Biote.java">org/ensor/robots/scheduler/Biote.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.IDifferentiableT.java">org/ensor/math/analysis/IDifferentiableT.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.log.package-info.java">org/ensor/data/atom/log/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.Biote.java">org/ensor/robots/scheduler/Biote.java</a>
                 </td>
                 <td>
                   0
@@ -71,7 +99,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.ImmutableList.java">org/ensor/data/atom/ImmutableList.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.ImmutableList.java">org/ensor/data/atom/ImmutableList.java</a>
                 </td>
                 <td>
                   0
@@ -85,7 +113,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.json.URLUtil.java">org/ensor/data/atom/json/URLUtil.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.IHasW.java">org/ensor/math/geometry/IHasW.java</a>
                 </td>
                 <td>
                   0
@@ -99,7 +127,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.IntAtom.java">org/ensor/data/atom/IntAtom.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.IntAtom.java">org/ensor/data/atom/IntAtom.java</a>
                 </td>
                 <td>
                   0
@@ -113,7 +141,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadPIDMinMaxPos.java">org/ensor/robots/roboclawdriver/CommandReadPIDMinMaxPos.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadPIDMinMaxPos.java">org/ensor/robots/roboclawdriver/CommandReadPIDMinMaxPos.java</a>
                 </td>
                 <td>
                   0
@@ -122,12 +150,12 @@
                   0
                 </td>
                 <td>
-                  25
+                  24
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.ISerializer.java">org/ensor/data/atom/ISerializer.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.ISerializer.java">org/ensor/data/atom/ISerializer.java</a>
                 </td>
                 <td>
                   0
@@ -141,7 +169,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetMainBatteryMaxVoltage.java">org/ensor/robots/roboclawdriver/CommandSetMainBatteryMaxVoltage.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetMainBatteryMaxVoltage.java">org/ensor/robots/roboclawdriver/CommandSetMainBatteryMaxVoltage.java</a>
                 </td>
                 <td>
                   0
@@ -155,7 +183,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadPIDQPPS.java">org/ensor/robots/roboclawdriver/CommandReadPIDQPPS.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadPIDQPPS.java">org/ensor/robots/roboclawdriver/CommandReadPIDQPPS.java</a>
                 </td>
                 <td>
                   0
@@ -164,12 +192,12 @@
                   0
                 </td>
                 <td>
-                  21
+                  20
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetBatteryMaxVoltage.java">org/ensor/robots/roboclawdriver/CommandSetBatteryMaxVoltage.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetBatteryMaxVoltage.java">org/ensor/robots/roboclawdriver/CommandSetBatteryMaxVoltage.java</a>
                 </td>
                 <td>
                   0
@@ -183,7 +211,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.client.UpgradeClient.java">org/ensor/robots/network/client/UpgradeClient.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.client.UpgradeClient.java">org/ensor/robots/network/client/UpgradeClient.java</a>
                 </td>
                 <td>
                   0
@@ -197,7 +225,21 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetBatteryMinVoltage.java">org/ensor/robots/roboclawdriver/CommandSetBatteryMinVoltage.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.ConstantFunction.java">org/ensor/math/analysis/ConstantFunction.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetBatteryMinVoltage.java">org/ensor/robots/roboclawdriver/CommandSetBatteryMinVoltage.java</a>
                 </td>
                 <td>
                   0
@@ -211,7 +253,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.tankdrive.TankDrive.java">org/ensor/robots/motors/tankdrive/TankDrive.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.tankdrive.TankDrive.java">org/ensor/robots/motors/tankdrive/TankDrive.java</a>
                 </td>
                 <td>
                   0
@@ -225,7 +267,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandResponseFixed.java">org/ensor/robots/roboclawdriver/CommandResponseFixed.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandResponseFixed.java">org/ensor/robots/roboclawdriver/CommandResponseFixed.java</a>
                 </td>
                 <td>
                   0
@@ -239,7 +281,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetLogicBatteryMaxVoltage.java">org/ensor/robots/roboclawdriver/CommandSetLogicBatteryMaxVoltage.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetLogicBatteryMaxVoltage.java">org/ensor/robots/roboclawdriver/CommandSetLogicBatteryMaxVoltage.java</a>
                 </td>
                 <td>
                   0
@@ -253,7 +295,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.IListVisitor.java">org/ensor/data/atom/IListVisitor.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.IListVisitor.java">org/ensor/data/atom/IListVisitor.java</a>
                 </td>
                 <td>
                   0
@@ -267,7 +309,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.toposort.INode.java">org/ensor/algorithms/toposort/INode.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.toposort.INode.java">org/ensor/algorithms/toposort/INode.java</a>
                 </td>
                 <td>
                   0
@@ -281,7 +323,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedSpeedAndAccel.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedSpeedAndAccel.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedSpeedAndAccel.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedSpeedAndAccel.java</a>
                 </td>
                 <td>
                   0
@@ -290,12 +332,12 @@
                   0
                 </td>
                 <td>
-                  12
+                  0
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.os.ModuleManager.java">org/ensor/robots/os/ModuleManager.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.os.ModuleManager.java">org/ensor/robots/os/ModuleManager.java</a>
                 </td>
                 <td>
                   0
@@ -309,21 +351,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.pathfollower.IPath.java">org/ensor/robots/pathfollower/IPath.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.xml.XMLSerializer.java">org/ensor/data/atom/xml/XMLSerializer.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.xml.XMLSerializer.java">org/ensor/data/atom/xml/XMLSerializer.java</a>
                 </td>
                 <td>
                   0
@@ -337,7 +365,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithIndivAccelSpeedDist.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithIndivAccelSpeedDist.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithIndivAccelSpeedDist.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithIndivAccelSpeedDist.java</a>
                 </td>
                 <td>
                   0
@@ -351,7 +379,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.SystemStat.java">org/ensor/robots/scheduler/SystemStat.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.SystemStat.java">org/ensor/robots/scheduler/SystemStat.java</a>
                 </td>
                 <td>
                   0
@@ -365,7 +393,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.package-info.java">org/ensor/data/atom/package-info.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.package-info.java">org/ensor/data/atom/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -379,623 +407,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadEncoderPosition.java">org/ensor/robots/roboclawdriver/CommandReadEncoderPosition.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  9
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.grid.GridMapCompassMoves.java">org/ensor/algorithms/astar/grid/GridMapCompassMoves.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.IComponent.java">org/ensor/robots/motors/IComponent.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadBatteryVoltage.java">org/ensor/robots/roboclawdriver/CommandReadBatteryVoltage.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  14
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.Event.java">org/ensor/robots/scheduler/Event.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  9
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.grid.package-info.java">org/ensor/algorithms/astar/grid/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSpeedAccelDecelPos.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSpeedAccelDecelPos.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.grid.GridMover.java">org/ensor/algorithms/astar/grid/GridMover.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.Pair.java">org/ensor/data/atom/Pair.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  6
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.ITemperatureSensor.java">org/ensor/robots/motors/ITemperatureSensor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.math.geometry.Vector3.java">org/ensor/math/geometry/Vector3.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.log.AtomLogger.java">org/ensor/data/atom/log/AtomLogger.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  15
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandWriteSettings.java">org/ensor/robots/roboclawdriver/CommandWriteSettings.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.package-info.java">org/ensor/robots/roboclawdriver/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSpeedAccelDecelPos.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSpeedAccelDecelPos.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.server.BioteServer.java">org/ensor/robots/network/server/BioteServer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  15
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.Constants.java">org/ensor/robots/scheduler/Constants.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  15
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadLogicBatteryVoltage.java">org/ensor/robots/roboclawdriver/CommandReadLogicBatteryVoltage.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.server.Module.java">org/ensor/robots/network/server/Module.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  21
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.json.package-info.java">org/ensor/data/atom/json/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedDutyAccel.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedDutyAccel.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  13
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetPositionPIDConstants.java">org/ensor/robots/roboclawdriver/CommandSetPositionPIDConstants.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  6
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.StringAtom.java">org/ensor/data/atom/StringAtom.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadMotorCurrents.java">org/ensor/robots/roboclawdriver/CommandReadMotorCurrents.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  20
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.ICurrentMeasurable.java">org/ensor/robots/motors/ICurrentMeasurable.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.server.UpgradeReceiverSocketServlet.java">org/ensor/robots/network/server/UpgradeReceiverSocketServlet.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  6
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.AppTestPositionServo.java">org/ensor/robots/roboclawdriver/AppTestPositionServo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  29
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadMainBatteryVoltage.java">org/ensor/robots/roboclawdriver/CommandReadMainBatteryVoltage.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.pathfollower.PathFollower.java">org/ensor/robots/pathfollower/PathFollower.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedSpeedAndAccel.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedSpeedAndAccel.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  9
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.ImmutableDict.java">org/ensor/data/atom/ImmutableDict.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedSpeed.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedSpeed.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  10
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedDutyAccel.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedDutyAccel.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  14
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.client.BioteClient.java">org/ensor/robots/network/client/BioteClient.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadEncoderSpeed.java">org/ensor/robots/roboclawdriver/CommandReadEncoderSpeed.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  11
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedSpeedAndDistance.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedSpeedAndDistance.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  14
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.os.IModule.java">org/ensor/robots/os/IModule.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  6
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.IListVisitable.java">org/ensor/data/atom/IListVisitable.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.grid.HexMap.java">org/ensor/algorithms/astar/grid/HexMap.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.json.JSONStringSerializer.java">org/ensor/data/atom/json/JSONStringSerializer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  15
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.toposort.TopologicalSort.java">org/ensor/algorithms/toposort/TopologicalSort.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.IMotorWithEncoder.java">org/ensor/robots/motors/IMotorWithEncoder.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithDutyCycle.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithDutyCycle.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.IComponentContainer.java">org/ensor/robots/motors/IComponentContainer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedSpeedAndDistance.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedSpeedAndDistance.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadEncoderPosition.java">org/ensor/robots/roboclawdriver/CommandReadEncoderPosition.java</a>
                 </td>
                 <td>
                   0
@@ -1009,35 +421,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.RoboClawMotor.java">org/ensor/robots/roboclawdriver/RoboClawMotor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  32
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadEncoderMode.java">org/ensor/robots/roboclawdriver/CommandReadEncoderMode.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  9
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.IConfigurable.java">org/ensor/robots/motors/IConfigurable.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.grid.GridMapCompassMoves.java">org/ensor/algorithms/astar/grid/GridMapCompassMoves.java</a>
                 </td>
                 <td>
                   0
@@ -1051,21 +435,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedAccelSpeedDistance.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedAccelSpeedDistance.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  20
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.comm.ITTY.java">org/ensor/robots/comm/ITTY.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.IComponent.java">org/ensor/robots/motors/IComponent.java</a>
                 </td>
                 <td>
                   0
@@ -1079,133 +449,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.RoboClaw.java">org/ensor/robots/roboclawdriver/RoboClaw.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  77
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.AppTestSpeedServo.java">org/ensor/robots/roboclawdriver/AppTestSpeedServo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  23
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.BioteManager.java">org/ensor/robots/scheduler/BioteManager.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  222
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.IEventHandler.java">org/ensor/robots/scheduler/IEventHandler.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.BioteModule.java">org/ensor/robots/scheduler/BioteModule.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetLogicBatteryMinVoltage.java">org/ensor/robots/roboclawdriver/CommandSetLogicBatteryMinVoltage.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.IPathNode.java">org/ensor/algorithms/astar/IPathNode.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.comm.package-info.java">org/ensor/robots/comm/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.RealAtom.java">org/ensor/data/atom/RealAtom.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadFirmware.java">org/ensor/robots/roboclawdriver/CommandReadFirmware.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadBatteryVoltage.java">org/ensor/robots/roboclawdriver/CommandReadBatteryVoltage.java</a>
                 </td>
                 <td>
                   0
@@ -1219,567 +463,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.grid.GridMapDiagonalMoves.java">org/ensor/algorithms/astar/grid/GridMapDiagonalMoves.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.tankdrive.package-info.java">org/ensor/robots/motors/tankdrive/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.ListAtom.java">org/ensor/data/atom/ListAtom.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.AStarNode.java">org/ensor/algorithms/astar/AStarNode.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.AppReadEncoders.java">org/ensor/robots/roboclawdriver/AppReadEncoders.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  22
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.IServo.java">org/ensor/robots/motors/IServo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.DictBase.java">org/ensor/data/atom/DictBase.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.server.BioteSocket.java">org/ensor/robots/network/server/BioteSocket.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  15
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithIndivAccelSpeed.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithIndivAccelSpeed.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  12
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.BooleanSet.java">org/ensor/robots/scheduler/BooleanSet.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  19
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.comm.TTYFactory.java">org/ensor/robots/comm/TTYFactory.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.os.IModuleManager.java">org/ensor/robots/os/IModuleManager.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.grid.GridNode.java">org/ensor/algorithms/astar/grid/GridNode.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.IMap.java">org/ensor/algorithms/astar/IMap.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.comm.TTYLinux.java">org/ensor/robots/comm/TTYLinux.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandResponseVariable.java">org/ensor/robots/roboclawdriver/CommandResponseVariable.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.toposort.package-info.java">org/ensor/algorithms/toposort/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.package-info.java">org/ensor/robots/motors/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.AppSetBatterySettings.java">org/ensor/robots/roboclawdriver/AppSetBatterySettings.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.os.Main.java">org/ensor/robots/os/Main.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  11
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.IDictionaryVisitor.java">org/ensor/data/atom/IDictionaryVisitor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.package-info.java">org/ensor/algorithms/astar/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.Command.java">org/ensor/robots/roboclawdriver/Command.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  13
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.IMotor.java">org/ensor/robots/motors/IMotor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithDutyCycle.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithDutyCycle.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  11
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.package-info.java">org/ensor/robots/scheduler/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.motors.ComponentManager.java">org/ensor/robots/motors/ComponentManager.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.server.BioteSocketServlet.java">org/ensor/robots/network/server/BioteSocketServlet.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  6
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.math.geometry.package-info.java">org/ensor/math/geometry/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedAccelSpeedDistance.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedAccelSpeedDistance.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  11
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.json.JSONSerializer.java">org/ensor/data/atom/json/JSONSerializer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  26
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.BoolAtom.java">org/ensor/data/atom/BoolAtom.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.ListBase.java">org/ensor/data/atom/ListBase.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.AStar.java">org/ensor/algorithms/astar/AStar.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.Atom.java">org/ensor/data/atom/Atom.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.server.NetworkBiote.java">org/ensor/robots/network/server/NetworkBiote.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  15
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadErrorStatus.java">org/ensor/robots/roboclawdriver/CommandReadErrorStatus.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  6
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.ImmutableIterator.java">org/ensor/data/atom/ImmutableIterator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.App.java">org/ensor/robots/roboclawdriver/App.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  46
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.xml.package-info.java">org/ensor/data/atom/xml/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetEncoderMode.java">org/ensor/robots/roboclawdriver/CommandSetEncoderMode.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.Event.java">org/ensor/robots/scheduler/Event.java</a>
                 </td>
                 <td>
                   0
@@ -1793,21 +477,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadTemperature.java">org/ensor/robots/roboclawdriver/CommandReadTemperature.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  6
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotor.java">org/ensor/robots/roboclawdriver/CommandDriveMotor.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.grid.package-info.java">org/ensor/algorithms/astar/grid/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -1821,21 +491,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedSpeed.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedSpeed.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.IDictionaryVisitable.java">org/ensor/data/atom/IDictionaryVisitable.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSpeedAccelDecelPos.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSpeedAccelDecelPos.java</a>
                 </td>
                 <td>
                   0
@@ -1849,7 +505,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.IPathMover.java">org/ensor/algorithms/astar/IPathMover.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.PathBase.java">org/ensor/algorithms/cubicspline/PathBase.java</a>
                 </td>
                 <td>
                   0
@@ -1863,21 +519,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.network.server.UpgradeReceiverSocket.java">org/ensor/robots/network/server/UpgradeReceiverSocket.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  21
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.algorithms.astar.grid.GridMap.java">org/ensor/algorithms/astar/grid/GridMap.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.grid.GridMover.java">org/ensor/algorithms/astar/grid/GridMover.java</a>
                 </td>
                 <td>
                   0
@@ -1891,7 +533,77 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetMainBatteryMinVoltage.java">org/ensor/robots/roboclawdriver/CommandSetMainBatteryMinVoltage.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.Pair.java">org/ensor/data/atom/Pair.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.CubicFunction.java">org/ensor/math/analysis/CubicFunction.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.ITemperatureSensor.java">org/ensor/robots/motors/ITemperatureSensor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.Vector3.java">org/ensor/math/geometry/Vector3.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.log.AtomLogger.java">org/ensor/data/atom/log/AtomLogger.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandWriteSettings.java">org/ensor/robots/roboclawdriver/CommandWriteSettings.java</a>
                 </td>
                 <td>
                   0
@@ -1905,7 +617,287 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandResponseNone.java">org/ensor/robots/roboclawdriver/CommandResponseNone.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.package-info.java">org/ensor/robots/roboclawdriver/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSpeedAccelDecelPos.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSpeedAccelDecelPos.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.NaturalSpline4D.java">org/ensor/algorithms/cubicspline/NaturalSpline4D.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.server.BioteServer.java">org/ensor/robots/network/server/BioteServer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.Vector2.java">org/ensor/math/geometry/Vector2.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.Constants.java">org/ensor/robots/scheduler/Constants.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadLogicBatteryVoltage.java">org/ensor/robots/roboclawdriver/CommandReadLogicBatteryVoltage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.QuadraticFunction.java">org/ensor/math/analysis/QuadraticFunction.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.server.Module.java">org/ensor/robots/network/server/Module.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.json.package-info.java">org/ensor/data/atom/json/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedDutyAccel.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedDutyAccel.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.IHasX.java">org/ensor/math/geometry/IHasX.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.IPath.java">org/ensor/math/geometry/IPath.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetPositionPIDConstants.java">org/ensor/robots/roboclawdriver/CommandSetPositionPIDConstants.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.StringAtom.java">org/ensor/data/atom/StringAtom.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadMotorCurrents.java">org/ensor/robots/roboclawdriver/CommandReadMotorCurrents.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  20
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.ICurrentMeasurable.java">org/ensor/robots/motors/ICurrentMeasurable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.IRealValueProjection.java">org/ensor/math/geometry/IRealValueProjection.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.server.UpgradeReceiverSocketServlet.java">org/ensor/robots/network/server/UpgradeReceiverSocketServlet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.AppTestPositionServo.java">org/ensor/robots/roboclawdriver/AppTestPositionServo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  29
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadMainBatteryVoltage.java">org/ensor/robots/roboclawdriver/CommandReadMainBatteryVoltage.java</a>
                 </td>
                 <td>
                   0
@@ -1919,7 +911,35 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.data.atom.DictionaryAtom.java">org/ensor/data/atom/DictionaryAtom.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.pathfollower.PathFollower.java">org/ensor/robots/pathfollower/PathFollower.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedSpeedAndAccel.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedSpeedAndAccel.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.ImmutableDict.java">org/ensor/data/atom/ImmutableDict.java</a>
                 </td>
                 <td>
                   0
@@ -1933,7 +953,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.scheduler.Module.java">org/ensor/robots/scheduler/Module.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedSpeed.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedSpeed.java</a>
                 </td>
                 <td>
                   0
@@ -1947,7 +967,91 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://maven.apache.org/checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetPIDQPPSConstants.java">org/ensor/robots/roboclawdriver/CommandSetPIDQPPSConstants.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.ZProjection.java">org/ensor/math/geometry/ZProjection.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.IDifferentiableFunction.java">org/ensor/math/analysis/IDifferentiableFunction.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedDutyAccel.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedDutyAccel.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.IDifferentiable.java">org/ensor/math/analysis/IDifferentiable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.client.BioteClient.java">org/ensor/robots/network/client/BioteClient.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadEncoderSpeed.java">org/ensor/robots/roboclawdriver/CommandReadEncoderSpeed.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedSpeedAndDistance.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedSpeedAndDistance.java</a>
                 </td>
                 <td>
                   0
@@ -1957,6 +1061,1434 @@
                 </td>
                 <td>
                   13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.IHasY.java">org/ensor/math/geometry/IHasY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.os.IModule.java">org/ensor/robots/os/IModule.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.package-info.java">org/ensor/math/analysis/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.IListVisitable.java">org/ensor/data/atom/IListVisitable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.grid.HexMap.java">org/ensor/algorithms/astar/grid/HexMap.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.WProjection.java">org/ensor/math/geometry/WProjection.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.IInterpolatorFactory.java">org/ensor/algorithms/cubicspline/IInterpolatorFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.IHasZ.java">org/ensor/math/geometry/IHasZ.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.IValueCollection.java">org/ensor/algorithms/cubicspline/IValueCollection.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.pathfollower.package-info.java">org/ensor/robots/pathfollower/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.json.JSONStringSerializer.java">org/ensor/data/atom/json/JSONStringSerializer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.toposort.TopologicalSort.java">org/ensor/algorithms/toposort/TopologicalSort.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.IMotorWithEncoder.java">org/ensor/robots/motors/IMotorWithEncoder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithDutyCycle.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithDutyCycle.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.package-info.java">org/ensor/algorithms/cubicspline/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.IComponentContainer.java">org/ensor/robots/motors/IComponentContainer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedSpeedAndDistance.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedSpeedAndDistance.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.RoboClawMotor.java">org/ensor/robots/roboclawdriver/RoboClawMotor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  32
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadEncoderMode.java">org/ensor/robots/roboclawdriver/CommandReadEncoderMode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.IConfigurable.java">org/ensor/robots/motors/IConfigurable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.VectorInterpolatorBase.java">org/ensor/algorithms/cubicspline/VectorInterpolatorBase.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithSignedAccelSpeedDistance.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithSignedAccelSpeedDistance.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  18
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.comm.ITTY.java">org/ensor/robots/comm/ITTY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.IVector.java">org/ensor/math/geometry/IVector.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.RoboClaw.java">org/ensor/robots/roboclawdriver/RoboClaw.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  77
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.Vector3Interpolator.java">org/ensor/algorithms/cubicspline/Vector3Interpolator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.YProjection.java">org/ensor/math/geometry/YProjection.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.AppTestSpeedServo.java">org/ensor/robots/roboclawdriver/AppTestSpeedServo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.BioteManager.java">org/ensor/robots/scheduler/BioteManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  222
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.IEventHandler.java">org/ensor/robots/scheduler/IEventHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.BioteModule.java">org/ensor/robots/scheduler/BioteModule.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetLogicBatteryMinVoltage.java">org/ensor/robots/roboclawdriver/CommandSetLogicBatteryMinVoltage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.IPathNode.java">org/ensor/algorithms/astar/IPathNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.comm.package-info.java">org/ensor/robots/comm/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.RealAtom.java">org/ensor/data/atom/RealAtom.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadFirmware.java">org/ensor/robots/roboclawdriver/CommandReadFirmware.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.grid.GridMapDiagonalMoves.java">org/ensor/algorithms/astar/grid/GridMapDiagonalMoves.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.Vector2Interpolator.java">org/ensor/algorithms/cubicspline/Vector2Interpolator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.tankdrive.package-info.java">org/ensor/robots/motors/tankdrive/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.ListAtom.java">org/ensor/data/atom/ListAtom.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.AStarNode.java">org/ensor/algorithms/astar/AStarNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.AppReadEncoders.java">org/ensor/robots/roboclawdriver/AppReadEncoders.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.IMetric.java">org/ensor/math/geometry/IMetric.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.IServo.java">org/ensor/robots/motors/IServo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.LinearFunction.java">org/ensor/math/analysis/LinearFunction.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.DictBase.java">org/ensor/data/atom/DictBase.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.analysis.IFunction.java">org/ensor/math/analysis/IFunction.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.server.BioteSocket.java">org/ensor/robots/network/server/BioteSocket.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithIndivAccelSpeed.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithIndivAccelSpeed.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.BooleanSet.java">org/ensor/robots/scheduler/BooleanSet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  19
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.comm.TTYFactory.java">org/ensor/robots/comm/TTYFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.os.IModuleManager.java">org/ensor/robots/os/IModuleManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.grid.GridNode.java">org/ensor/algorithms/astar/grid/GridNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.IMap.java">org/ensor/algorithms/astar/IMap.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.comm.TTYLinux.java">org/ensor/robots/comm/TTYLinux.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.IInterpolator.java">org/ensor/algorithms/cubicspline/IInterpolator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandResponseVariable.java">org/ensor/robots/roboclawdriver/CommandResponseVariable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.toposort.package-info.java">org/ensor/algorithms/toposort/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.package-info.java">org/ensor/robots/motors/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.AppSetBatterySettings.java">org/ensor/robots/roboclawdriver/AppSetBatterySettings.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.VectorValueCollection.java">org/ensor/algorithms/cubicspline/VectorValueCollection.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.os.Main.java">org/ensor/robots/os/Main.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.IDictionaryVisitor.java">org/ensor/data/atom/IDictionaryVisitor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.package-info.java">org/ensor/algorithms/astar/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.Command.java">org/ensor/robots/roboclawdriver/Command.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.IMotor.java">org/ensor/robots/motors/IMotor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.Vector4Interpolator.java">org/ensor/algorithms/cubicspline/Vector4Interpolator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorsWithDutyCycle.java">org/ensor/robots/roboclawdriver/CommandDriveMotorsWithDutyCycle.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.package-info.java">org/ensor/robots/scheduler/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.ComponentManager.java">org/ensor/robots/motors/ComponentManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.server.BioteSocketServlet.java">org/ensor/robots/network/server/BioteSocketServlet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.package-info.java">org/ensor/math/geometry/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedAccelSpeedDistance.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedAccelSpeedDistance.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.NaturalSpline2D.java">org/ensor/algorithms/cubicspline/NaturalSpline2D.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.CubicInterpolatorFactory.java">org/ensor/algorithms/cubicspline/CubicInterpolatorFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.json.JSONSerializer.java">org/ensor/data/atom/json/JSONSerializer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.EuclideanMetric.java">org/ensor/math/geometry/EuclideanMetric.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.BoolAtom.java">org/ensor/data/atom/BoolAtom.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.ListBase.java">org/ensor/data/atom/ListBase.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.AStar.java">org/ensor/algorithms/astar/AStar.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.Atom.java">org/ensor/data/atom/Atom.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.server.NetworkBiote.java">org/ensor/robots/network/server/NetworkBiote.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.Vector4.java">org/ensor/math/geometry/Vector4.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadErrorStatus.java">org/ensor/robots/roboclawdriver/CommandReadErrorStatus.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.ImmutableIterator.java">org/ensor/data/atom/ImmutableIterator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.App.java">org/ensor/robots/roboclawdriver/App.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  46
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.xml.package-info.java">org/ensor/data/atom/xml/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetEncoderMode.java">org/ensor/robots/roboclawdriver/CommandSetEncoderMode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.XProjection.java">org/ensor/math/geometry/XProjection.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandReadTemperature.java">org/ensor/robots/roboclawdriver/CommandReadTemperature.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotor.java">org/ensor/robots/roboclawdriver/CommandDriveMotor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandDriveMotorWithSignedSpeed.java">org/ensor/robots/roboclawdriver/CommandDriveMotorWithSignedSpeed.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.IDictionaryVisitable.java">org/ensor/data/atom/IDictionaryVisitable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.IPathMover.java">org/ensor/algorithms/astar/IPathMover.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.network.server.UpgradeReceiverSocket.java">org/ensor/robots/network/server/UpgradeReceiverSocket.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.astar.grid.GridMap.java">org/ensor/algorithms/astar/grid/GridMap.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetMainBatteryMinVoltage.java">org/ensor/robots/roboclawdriver/CommandSetMainBatteryMinVoltage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandResponseNone.java">org/ensor/robots/roboclawdriver/CommandResponseNone.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.DictionaryAtom.java">org/ensor/data/atom/DictionaryAtom.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.NaturalSpline3D.java">org/ensor/algorithms/cubicspline/NaturalSpline3D.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.scheduler.Module.java">org/ensor/robots/scheduler/Module.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.CommandSetPIDQPPSConstants.java">org/ensor/robots/roboclawdriver/CommandSetPIDQPPSConstants.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
                 </td>
               </tr>
                       </tbody>

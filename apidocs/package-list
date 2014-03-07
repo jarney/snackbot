@@ -1,10 +1,12 @@
 org.ensor.algorithms.astar
 org.ensor.algorithms.astar.grid
+org.ensor.algorithms.cubicspline
 org.ensor.algorithms.toposort
 org.ensor.data.atom
 org.ensor.data.atom.json
 org.ensor.data.atom.log
 org.ensor.data.atom.xml
+org.ensor.math.analysis
 org.ensor.math.geometry
 org.ensor.robots.comm
 org.ensor.robots.motors
