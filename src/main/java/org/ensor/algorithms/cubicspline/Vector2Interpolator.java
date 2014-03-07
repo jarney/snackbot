@@ -24,7 +24,7 @@
 
 package org.ensor.algorithms.cubicspline;
 
-import org.ensor.math.geometry.Vector3;
+import org.ensor.math.geometry.Vector2;
 
 /**
  * This class models a 3d cubic spline by using primitive spline interpolators
@@ -32,29 +32,25 @@ import org.ensor.math.geometry.Vector3;
  * velocity at any point along the path as well as the overall path length.
  * @author jona
  */
-public class CubicInterpolator3D
-    extends CubicInterpolatorBase<Vector3>
-    implements IInterpolator<Vector3> {
+class Vector2Interpolator
+    extends VectorInterpolatorBase<Vector2>
+    implements IInterpolator<Vector2> {
 
-    private final CubicInterpolator mXInterpolator;
-    private final CubicInterpolator mYInterpolator;
-    private final CubicInterpolator mZInterpolator;
+    private final IPrimitiveInterpolator mXInterpolator;
+    private final IPrimitiveInterpolator mYInterpolator;
 
     /**
      * This constructor creates a 2d cubic spline based a cubic interpolator
      * for each coordinate.
      * @param aXInterp A cubic interpolator for the x coordinate.
      * @param aYInterp A cubic interpolator for the y coordinate.
-     * @param aZInterp A cubic interpolator for the z coordinate.
      */
-    public CubicInterpolator3D(
-            final CubicInterpolator aXInterp,
-            final CubicInterpolator aYInterp,
-            final CubicInterpolator aZInterp
+    public Vector2Interpolator(
+            final IPrimitiveInterpolator aXInterp,
+            final IPrimitiveInterpolator aYInterp
     ) {
         mXInterpolator = aXInterp;
         mYInterpolator = aYInterp;
-        mZInterpolator = aZInterp;
     }
     /**
      * This method returns the position along the path for the given path
@@ -62,11 +58,10 @@ public class CubicInterpolator3D
      * @param t The input path parameter (running from 0 to 1).
      * @return The position for the given path parameter.
      */
-    public Vector3 getValue(final double t) {
-        return new Vector3(
+    public Vector2 getValue(final double t) {
+        return new Vector2(
                 mXInterpolator.getValue(t),
-                mYInterpolator.getValue(t),
-                mZInterpolator.getValue(t)
+                mYInterpolator.getValue(t)
         );
     }
     /**
@@ -76,11 +71,10 @@ public class CubicInterpolator3D
      * @param t The input path parameter (running from 0 to 1).
      * @return The velocity vector at the given path parameter 't'.
      */
-    public Vector3 getDerivative(final double t) {
-        return new Vector3(
+    public Vector2 getDerivative(final double t) {
+        return new Vector2(
                 mXInterpolator.getDerivative(t),
-                mYInterpolator.getDerivative(t),
-                mZInterpolator.getDerivative(t)
+                mYInterpolator.getDerivative(t)
         );
     }
 

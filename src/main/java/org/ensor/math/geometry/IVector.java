@@ -30,5 +30,4 @@ package org.ensor.math.geometry;
  */
 public interface IVector<VectorType> {
     double distance(VectorType aOther);
-    VectorType add(VectorType aOther);
 }

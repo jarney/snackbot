@@ -28,24 +28,12 @@ package org.ensor.math.geometry;
  *
  * @author jona
  */
-public class Vector2 implements IVector<Vector2> {
-    public static final IValueExtractor<Vector2> XEXTRACTOR = new XExtractor();
-    public static final IValueExtractor<Vector2> YEXTRACTOR = new YExtractor();
-
-    public Vector2 add(Vector2 aOther) {
-        return new Vector2(aOther.mX + mX, aOther.mY + mY);
-    }
-    
-    static class XExtractor implements IValueExtractor<Vector2> {
-       public double getValue(Vector2 aValue) {
-            return aValue.getX();
-        }
-    }
-    static class YExtractor implements IValueExtractor<Vector2> {
-       public double getValue(Vector2 aValue) {
-            return aValue.getY();
-        }
-    }
+public class Vector2 
+    implements
+        IHasX,
+        IHasY,
+        IVector<Vector2>,
+        IScalar<Vector2> {
 
     private final double mX;
     private final double mY;
@@ -64,5 +52,16 @@ public class Vector2 implements IVector<Vector2> {
     }
     public double getY() {
         return mY;
+    }
+    public Vector2 add(Vector2 aOther) {
+        return new Vector2(aOther.mX + mX, aOther.mY + mY);
+    }
+
+    public Vector2 multiply(double aValue) {
+        return new Vector2(mX * aValue, mY * aValue);
+    }
+
+    public Vector2 negate() {
+        return new Vector2(-mX, -mY);
     }
 }

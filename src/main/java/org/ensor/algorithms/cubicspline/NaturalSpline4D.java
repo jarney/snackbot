@@ -26,19 +26,20 @@ package org.ensor.algorithms.cubicspline;
 
 import java.util.List;
 import org.ensor.math.geometry.IPath;
-import org.ensor.math.geometry.Vector2;
+import org.ensor.math.geometry.Vector4;
+import org.ensor.math.geometry.WExtractor;
 import org.ensor.math.geometry.XExtractor;
 import org.ensor.math.geometry.YExtractor;
+import org.ensor.math.geometry.ZExtractor;
 
 /**
  *
  * @author jona
  */
-public final class NaturalSpline2D
-    extends PathBase<Vector2>
-    implements IPath<Vector2> {
+public final class NaturalSpline4D
+    extends PathBase<Vector4>
+    implements IPath<Vector4> {
 
-    
     /**
      * The constructor creates a natural cubic spline path
      * which can interpolate between the various points given
@@ -48,12 +49,12 @@ public final class NaturalSpline2D
      *
      * @param aPoints The list of points to interpolate between.
      */
-    public NaturalSpline2D(final List<Vector2> aPoints) {
+    public NaturalSpline4D(final List<Vector4> aPoints) {
         super(createInterpolators(aPoints));
     }
 
-    private static IInterpolator<Vector2>[] createInterpolators(
-            final List<Vector2> aPoints) {
+    private static IInterpolator<Vector4>[] createInterpolators(
+            final List<Vector4> aPoints) {
 
         CubicInterpolatorFactory cif = new CubicInterpolatorFactory();
 
@@ -61,16 +62,21 @@ public final class NaturalSpline2D
                 new VectorValueCollection(aPoints, XExtractor.XEXTRACTOR));
         IPrimitiveInterpolator[] yInterp = cif.createInterpolators(
                 new VectorValueCollection(aPoints, YExtractor.YEXTRACTOR));
+        IPrimitiveInterpolator[] zInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, ZExtractor.ZEXTRACTOR));
+        IPrimitiveInterpolator[] wInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, WExtractor.WEXTRACTOR));
 
         int num = xInterp.length;
-        IInterpolator<Vector2>[] interpolators = new IInterpolator[num];
+        IInterpolator<Vector4>[] interpolators = new IInterpolator[num];
 
         for (int j = 0; j < num; j++) {
-            interpolators[j] = new Vector2Interpolator(
-                    xInterp[j], yInterp[j]
+            interpolators[j] = new Vector4Interpolator(
+                    xInterp[j], yInterp[j], zInterp[j], wInterp[j]
             );
         }
 
         return interpolators;
     }
+
 }

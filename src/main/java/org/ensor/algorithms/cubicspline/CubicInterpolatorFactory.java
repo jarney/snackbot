@@ -28,21 +28,40 @@ package org.ensor.algorithms.cubicspline;
  *
  * @author jona
  */
-public class CubicInterpolatorFactory
-    implements IInterpolatorFactory<CubicInterpolator> {
+class CubicInterpolatorFactory
+    implements IInterpolatorFactory<IPrimitiveInterpolator> {
 
     private static final double TWO = 2.0;
     private static final double THREE = 3.0;
     private static final double FOUR = 4.0;
 
-    public CubicInterpolator[] createInterpolators(
+    public IPrimitiveInterpolator[] createInterpolators(
             final IValueCollection aPoints) {
         
-        int num = aPoints.length() - 1;
+        int nPoints = aPoints.length();
+        
+        // We must have some points in order to make this work.
+        if (nPoints == 0) {
+            return null;
+        }
+        // If we have only 1 point, just return a constant interpolator.
+        if (nPoints == 1) {
+            IPrimitiveInterpolator[] ci = new IPrimitiveInterpolator[1];
+            ci[0] = new ConstantInterpolator(aPoints.getValue(0));
+            return ci;
+        }
+        if (nPoints == 2) {
+            IPrimitiveInterpolator[] ci = new IPrimitiveInterpolator[1];
+            ci[0] = new LinearInterpolator(
+                    aPoints.getValue(0),
+                    aPoints.getValue(1));
+            return ci;
+        }
+        int num = nPoints - 1;
         // If there are 'n' points, then there are
         // n-1 path segments between them.
         
-        CubicInterpolator[] ci = new CubicInterpolator[num];
+        IPrimitiveInterpolator[] ci = new IPrimitiveInterpolator[num];
         
         /*
              We solve the equation

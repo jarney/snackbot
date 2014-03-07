@@ -29,6 +29,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import org.ensor.algorithms.astar.AStar;
+import org.ensor.data.atom.ImmutableDict;
+import org.ensor.data.atom.ImmutableList;
+import org.ensor.data.atom.json.JSONStringSerializer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +50,7 @@ public class TestAStar {
      * @throws JSONException 
      */
     @Test
-    public void testPathFinding() throws IOException, JSONException {
+    public void testPathFinding() throws Exception {
         GridMapCompassMoves gridMap = new GridMapCompassMoves();
         performGridTest(gridMap, "scurve-compass.json");
     }
@@ -59,7 +62,7 @@ public class TestAStar {
      * @throws JSONException 
      */
     @Test
-    public void testPathFindingBadStart() throws IOException, JSONException {
+    public void testPathFindingBadStart() throws Exception {
         GridMapCompassMoves gridMap = new GridMapCompassMoves();
         performGridTest(gridMap, "badStart.json");
     }
@@ -70,7 +73,7 @@ public class TestAStar {
      * @throws JSONException 
      */
     @Test
-    public void testPathFindingBadEnd() throws IOException, JSONException {
+    public void testPathFindingBadEnd() throws Exception {
         GridMapCompassMoves gridMap = new GridMapCompassMoves();
         performGridTest(gridMap, "badEnd.json");
     }
@@ -83,7 +86,7 @@ public class TestAStar {
      * @throws JSONException 
      */
     @Test
-    public void testPathFindingNoPath() throws IOException, JSONException {
+    public void testPathFindingNoPath() throws Exception {
         GridMapCompassMoves gridMap = new GridMapCompassMoves();
         performGridTest(gridMap, "nopath.json");
     }
@@ -95,7 +98,7 @@ public class TestAStar {
      * @throws JSONException 
      */
     @Test
-    public void testPathFindingNoPathDiagonals() throws IOException, JSONException {
+    public void testPathFindingNoPathDiagonals() throws Exception {
         GridMapDiagonalMoves gridMap = new GridMapDiagonalMoves();
         performGridTest(gridMap, "nopath.json");
     }
@@ -106,7 +109,7 @@ public class TestAStar {
      * @throws JSONException 
      */
     @Test
-    public void testPathFindingDiagonalMoves() throws IOException, JSONException {
+    public void testPathFindingDiagonalMoves() throws Exception {
         GridMapDiagonalMoves gridMap = new GridMapDiagonalMoves();
         performGridTest(gridMap, "scurve-diagonal.json");
     }
@@ -116,34 +119,37 @@ public class TestAStar {
      * @throws JSONException 
      */
     @Test
-    public void testPathFindingHexMap() throws IOException, JSONException {
+    public void testPathFindingHexMap() throws Exception {
         HexMap gridMap = new HexMap();
         performGridTest(gridMap, "hexmap.json");
     }
     
-    public void performGridTest(GridMap aMap, String aTestJSONFile) throws IOException, JSONException{
+    public void performGridTest(GridMap aMap, String aTestJSONFile)
+            throws Exception {
+        GridMover mover = new GridMover(1);
+        
         BufferedReader bf = new BufferedReader(
                 new InputStreamReader(
                     this.getClass().getResourceAsStream(aTestJSONFile)
                 )
         );
         
-        GridMover mover = new GridMover(1);
-        
         String jsonString = bf.readLine();
+        ImmutableDict jsonObject = 
+                JSONStringSerializer.instance().serializeFrom(jsonString);
         
-        JSONObject jsonObject = new JSONObject(jsonString);
+        bf.close();
         
-        JSONArray array = jsonObject.getJSONArray("map");
+        ImmutableList array = jsonObject.getList("map");
         
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject node = array.getJSONObject(i);
+        for (int i = 0; i < array.size(); i++) {
+            ImmutableDict node = array.getDictionary(i);
             aMap.addNode(node.getInt("x"), node.getInt("y"),
                     node.getInt("passableFlags"));
         }
 
-        JSONObject start = jsonObject.getJSONObject("start");
-        JSONObject end = jsonObject.getJSONObject("end");
+        ImmutableDict start = jsonObject.getDictionary("start");
+        ImmutableDict end = jsonObject.getDictionary("end");
         
         GridNode s = new GridNode(start.getInt("x"), start.getInt("y"), 1);
         GridNode e = new GridNode(end.getInt("x"), end.getInt("y"), 1);
@@ -157,23 +163,20 @@ public class TestAStar {
             aMap,
             s, e, 20);
         
+        if (jsonObject.containsKey("path")) {
+            ImmutableList pathArray = jsonObject.getList("path");
 
-        JSONArray pathArray = jsonObject.optJSONArray("path");
-        if (pathArray == null) {
-            Assert.assertNull(path);
-            return;
-        }
-        
-        Assert.assertNotNull(path);
-        
-        Assert.assertEquals(pathArray.length(), path.size());
-        
-        for (int i = 0; i < pathArray.length(); i++) {
-            JSONObject pathNode = pathArray.getJSONObject(i);
-            GridNode n = path.get(i);
-            
-            Assert.assertEquals(pathNode.getInt("x"), n.x());
-            Assert.assertEquals(pathNode.getInt("y"), n.y());
+            Assert.assertNotNull(path);
+
+            Assert.assertEquals(pathArray.size(), path.size());
+
+            for (int i = 0; i < pathArray.size(); i++) {
+                ImmutableDict pathNode = pathArray.getDictionary(i);
+                GridNode n = path.get(i);
+
+                Assert.assertEquals(pathNode.getInt("x"), n.x());
+                Assert.assertEquals(pathNode.getInt("y"), n.y());
+            }
         }
     }
     

@@ -29,7 +29,7 @@ package org.ensor.algorithms.cubicspline;
  * @param <T> The type of value being interpolated (vector type).
  * @author jona
  */
-public interface IInterpolator<T> {
+interface IInterpolator<T> {
     T getValue(double t);
     T getDerivative(double t);
     double getPathLength();

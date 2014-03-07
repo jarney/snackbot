@@ -28,6 +28,6 @@ package org.ensor.algorithms.cubicspline;
  *
  * @author jona
  */
-public interface IInterpolatorFactory<InterpolatorType> {
+interface IInterpolatorFactory<InterpolatorType> {
     public InterpolatorType[] createInterpolators(IValueCollection aValues);
 }

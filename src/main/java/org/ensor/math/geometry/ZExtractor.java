@@ -22,42 +22,17 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.algorithms.cubicspline;
+package org.ensor.math.geometry;
 
 /**
- * This class implements an interpolator which is based on a linear
- * relation between the input parameter and the distance traveled from
- * start to end.
+ *
  * @author jona
  */
-public class LinearInterpolator implements IPrimitiveInterpolator {
-
-    private final double mStart;
-    private final double mDelta;
-
-    /**
-     * The constructor creates a linear interpolator which runs from the start
-     * to the end point.
-     * @param aStart Start point of the interpolation for t=0.
-     * @param aEnd End point of the interpolation for t=1.
-     */
-    public LinearInterpolator(final double aStart, final double aEnd) {
-        mStart = aStart;
-        mDelta = aEnd - aStart;
-    }
-    /**
-     * This method returns the point value for the specified path
-     * parameter.  The path parameter runs from 0 to 1.
-     * @param t Path parameter.
-     * @return The point between start and end of path corresponding to this
-     *         path location.
-     */
-    public double getValue(final double t) {
-        return mStart + t * mDelta;
-    }
+public class ZExtractor implements IValueExtractor<IHasZ> {
+    public static final IValueExtractor<IHasZ> ZEXTRACTOR = new ZExtractor();
     
-    public double getDerivative(final double t) {
-        return mDelta;
-    }
+    public double getValue(IHasZ aValue) {
+         return aValue.getZ();
+     }
 
 }

@@ -31,7 +31,7 @@ import org.ensor.math.geometry.Vector3;
  *
  * @author jona
  */
-public abstract class CubicInterpolatorBase<VectorType extends IVector> {
+abstract class VectorInterpolatorBase<VectorType extends IVector> {
     
     private static final double QUARTER = 0.25;
     private static final double HALFWAY = 0.5;

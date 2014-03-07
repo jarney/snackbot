@@ -25,25 +25,21 @@
 package org.ensor.algorithms.cubicspline;
 
 /**
- * This class implements an interpolator which is based on a linear
- * relation between the input parameter and the distance traveled from
- * start to end.
+ * This class represents an interpolator which returns a constant value
+ * for the entire interval.
  * @author jona
  */
-public class LinearInterpolator implements IPrimitiveInterpolator {
+public class ConstantInterpolator implements IPrimitiveInterpolator {
 
-    private final double mStart;
-    private final double mDelta;
+    private final double mValue;
 
     /**
-     * The constructor creates a linear interpolator which runs from the start
-     * to the end point.
-     * @param aStart Start point of the interpolation for t=0.
-     * @param aEnd End point of the interpolation for t=1.
+     * The constructor creates an interpolator which returns the
+     * same value for the entire interval.
+     * @param aValue The constant value of the interpolation for the interval.
      */
-    public LinearInterpolator(final double aStart, final double aEnd) {
-        mStart = aStart;
-        mDelta = aEnd - aStart;
+    public ConstantInterpolator(final double aValue) {
+        mValue = aValue;
     }
     /**
      * This method returns the point value for the specified path
@@ -53,11 +49,11 @@ public class LinearInterpolator implements IPrimitiveInterpolator {
      *         path location.
      */
     public double getValue(final double t) {
-        return mStart + t * mDelta;
+        return mValue;
     }
-    
-    public double getDerivative(final double t) {
-        return mDelta;
+
+    public double getDerivative(double aValue) {
+        return 0;
     }
 
 }

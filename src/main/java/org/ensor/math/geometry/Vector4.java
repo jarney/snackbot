@@ -28,32 +28,14 @@ package org.ensor.math.geometry;
  *
  * @author jona
  */
-public class Vector4 implements IVector<Vector4> {
-    public static final IValueExtractor<Vector4> XEXTRACTOR = new XValueExtractor();
-    public static final IValueExtractor<Vector4> YEXTRACTOR = new YValueExtractor();
-    public static final IValueExtractor<Vector4> ZEXTRACTOR = new ZValueExtractor();
-    public static final IValueExtractor<Vector4> WEXTRACTOR = new WValueExtractor();
+public class Vector4
+    implements
+        IHasX,
+        IHasY,
+        IHasZ,
+        IScalar<Vector4>,
+        IVector<Vector4> {
 
-    static class XValueExtractor implements IValueExtractor<Vector4> {
-        public double getValue(final Vector4 v) {
-            return v.getX();
-        }
-    }
-    static class YValueExtractor implements IValueExtractor<Vector4> {
-        public double getValue(final Vector4 v) {
-            return v.getY();
-        }
-    }
-    static class ZValueExtractor implements IValueExtractor<Vector4> {
-        public double getValue(final Vector4 v) {
-            return v.getZ();
-        }
-    }
-    static class WValueExtractor implements IValueExtractor<Vector4> {
-        public double getValue(final Vector4 v) {
-            return v.getW();
-        }
-    }
     private final double mX;
     private final double mY;
     private final double mZ;
@@ -85,12 +67,21 @@ public class Vector4 implements IVector<Vector4> {
         return mZ;
     }
 
+
     public Vector4 add(Vector4 aOther) {
         return new Vector4(
                 aOther.mX + mX,
                 aOther.mY + mY,
                 aOther.mZ + mZ,
                 aOther.mW + mW);
+    }
+
+    public Vector4 multiply(double aValue) {
+        return new Vector4(mX * aValue, mY * aValue, mZ * aValue, mW * aValue);
+    }
+
+    public Vector4 negate() {
+        return new Vector4(-mX, -mY, -mZ, -mW);
     }
 
 

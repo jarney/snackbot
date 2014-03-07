@@ -31,18 +31,16 @@
 package org.ensor.algorithms.astar.grid;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import org.ensor.algorithms.astar.grid.GridMap;
-import org.ensor.algorithms.astar.grid.GridMapCompassMoves;
-import org.ensor.algorithms.astar.grid.GridMover;
-import org.ensor.algorithms.astar.grid.GridNode;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.algorithms.astar.AStar;
+import org.ensor.data.atom.DictionaryAtom;
+import org.ensor.data.atom.ListAtom;
+import org.ensor.data.atom.json.JSONSerializer;
+import org.ensor.data.atom.json.JSONStringSerializer;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -236,58 +234,49 @@ public class TestGridMapJFrame extends javax.swing.JFrame {
             int width = mGridMap.getWidth();
             int height = mGridMap.getHeight();
 
-            JSONObject jsonMap = new JSONObject();
+            DictionaryAtom jsonMap = DictionaryAtom.newAtom();
 
             // Write the map
-            jsonMap.put("width", width);
-            jsonMap.put("height", height);
+            jsonMap.setInt("width", width);
+            jsonMap.setInt("height", height);
             
-            JSONArray mapmap = new JSONArray();
-            jsonMap.put("map", mapmap);
+            ListAtom mapmap = jsonMap.newList("map");
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     GridNode n = mGridMap.getNode(x, y);
                     if (n != null) {
-                        JSONObject node = new JSONObject();
-                        node.put("x", x);
-                        node.put("y", y);
-                        node.put("passableFlags", n.getMovementFlags());
-                        mapmap.put(node);
+                        DictionaryAtom node = mapmap.newDictionary();
+                        node.setInt("x", x);
+                        node.setInt("y", y);
+                        node.setInt("passableFlags", n.getMovementFlags());
                     }
                 }
             }
 
             // Write the start and end points.
             if (mStartPoint != null) {
-                JSONObject startPoint = new JSONObject();
-                startPoint.put("x", mStartPoint.x());
-                startPoint.put("y", mStartPoint.y());
+                DictionaryAtom startPoint = jsonMap.newDictionary("start");
+                startPoint.setInt("x", mStartPoint.x());
+                startPoint.setInt("y", mStartPoint.y());
 
-                jsonMap.put("start", startPoint);
             }
             if (mEndPoint != null) {
-                JSONObject endPoint = new JSONObject();
-                endPoint.put("x", mEndPoint.x());
-                endPoint.put("y", mEndPoint.y());
-
-                jsonMap.put("end", endPoint);
+                DictionaryAtom endPoint = jsonMap.newDictionary("end");
+                endPoint.setInt("x", mEndPoint.x());
+                endPoint.setInt("y", mEndPoint.y());
             }
             
             if (mPath != null) {
-                JSONArray path = new JSONArray();
+                ListAtom path = jsonMap.newList("path");
                 for (GridNode n : mPath) {
-                    JSONObject pathNode = new JSONObject();
-                    pathNode.put("x", n.x());
-                    pathNode.put("y", n.y());
-                    path.put(pathNode);
+                    DictionaryAtom pathNode = path.newDictionary();
+                    pathNode.setInt("x", n.x());
+                    pathNode.setInt("y", n.y());
                 }
-                jsonMap.put("path", path);
             }
             
-            
             // Write everything to the file.
-            String s = jsonMap.toString();
-            
+            String s = JSONStringSerializer.instance().serializeTo(jsonMap);
             FileOutputStream fos = new FileOutputStream("map.json");
             PrintStream ps = new PrintStream(fos);
             ps.println(s);

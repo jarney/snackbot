@@ -76,6 +76,7 @@
                 </executions>
                 <configuration>
                     <overview>${basedir}/src/main/javadoc/overview.html</overview>
+                    <show>public</show>
                 </configuration>
             </plugin>
             <plugin>    

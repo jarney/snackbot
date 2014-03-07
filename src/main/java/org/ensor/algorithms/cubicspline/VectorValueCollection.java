@@ -26,13 +26,12 @@ package org.ensor.algorithms.cubicspline;
 
 import java.util.List;
 import org.ensor.math.geometry.IValueExtractor;
-import org.ensor.math.geometry.Vector2;
 
 /**
  *
  * @author jona
  */
-class VectorValueCollection <VectorType> implements IValueCollection {
+class VectorValueCollection<VectorType> implements IValueCollection {
     private final List<VectorType> mValues;
     private final IValueExtractor<VectorType> mExtractor;
     public VectorValueCollection(

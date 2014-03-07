@@ -28,26 +28,13 @@ package org.ensor.math.geometry;
  *
  * @author jona
  */
-public class Vector3 implements IVector<Vector3> {
-    public static final XValueExtractor XEXTRACTOR = new XValueExtractor();
-    public static final YValueExtractor YEXTRACTOR = new YValueExtractor();
-    public static final ZValueExtractor ZEXTRACTOR = new ZValueExtractor();
-
-    static class XValueExtractor implements IValueExtractor<Vector3> {
-        public double getValue(final Vector3 v) {
-            return v.getX();
-        }
-    }
-    static class YValueExtractor implements IValueExtractor<Vector3> {
-        public double getValue(final Vector3 v) {
-            return v.getY();
-        }
-    }
-    static class ZValueExtractor implements IValueExtractor<Vector3> {
-        public double getValue(final Vector3 v) {
-            return v.getZ();
-        }
-    }
+public class Vector3
+    implements
+        IHasX,
+        IHasY,
+        IHasZ,
+        IScalar<Vector3>,
+        IVector<Vector3> {
 
     private final double mX;
     private final double mY;
@@ -75,5 +62,13 @@ public class Vector3 implements IVector<Vector3> {
     }
     public Vector3 add(Vector3 aOther) {
         return new Vector3(aOther.mX + mX, aOther.mY + mY, aOther.mZ + mZ);
+    }
+
+    public Vector3 multiply(double aValue) {
+        return new Vector3(mX * aValue, mY * aValue, mZ * aValue);
+    }
+
+    public Vector3 negate() {
+        return new Vector3(-mX, -mY, -mZ);
     }
 }

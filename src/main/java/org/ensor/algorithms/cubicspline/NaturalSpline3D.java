@@ -27,12 +27,15 @@ package org.ensor.algorithms.cubicspline;
 import java.util.List;
 import org.ensor.math.geometry.IPath;
 import org.ensor.math.geometry.Vector3;
+import org.ensor.math.geometry.XExtractor;
+import org.ensor.math.geometry.YExtractor;
+import org.ensor.math.geometry.ZExtractor;
 
 /**
  *
  * @author jona
  */
-public class NaturalSpline3D
+public final class NaturalSpline3D
     extends PathBase<Vector3>
     implements IPath<Vector3> {
 
@@ -54,18 +57,18 @@ public class NaturalSpline3D
 
         CubicInterpolatorFactory cif = new CubicInterpolatorFactory();
 
-        CubicInterpolator[] xInterp = cif.createInterpolators(
-                new VectorValueCollection(aPoints, Vector3.XEXTRACTOR));
-        CubicInterpolator[] yInterp = cif.createInterpolators(
-                new VectorValueCollection(aPoints, Vector3.YEXTRACTOR));
-        CubicInterpolator[] zInterp = cif.createInterpolators(
-                new VectorValueCollection(aPoints, Vector3.ZEXTRACTOR));
+        IPrimitiveInterpolator[] xInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, XExtractor.XEXTRACTOR));
+        IPrimitiveInterpolator[] yInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, YExtractor.YEXTRACTOR));
+        IPrimitiveInterpolator[] zInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, ZExtractor.ZEXTRACTOR));
 
         int num = xInterp.length;
         IInterpolator<Vector3>[] interpolators = new IInterpolator[num];
 
         for (int j = 0; j < num; j++) {
-            interpolators[j] = new CubicInterpolator3D(
+            interpolators[j] = new Vector3Interpolator(
                     xInterp[j], yInterp[j], zInterp[j]
             );
         }

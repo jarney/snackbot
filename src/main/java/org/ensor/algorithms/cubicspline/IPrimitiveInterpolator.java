@@ -30,4 +30,5 @@ package org.ensor.algorithms.cubicspline;
  */
 public interface IPrimitiveInterpolator {
     double getValue(double aValue);
+    double getDerivative(double aValue);
 }
