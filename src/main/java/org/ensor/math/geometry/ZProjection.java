@@ -22,13 +22,35 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.algorithms.cubicspline;
+package org.ensor.math.geometry;
 
 /**
- *
+ * This class is a
+ * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+ * projection</a>
+ * which returns a vector's 'Z'
+ * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+ * .
  * @author jona
  */
-public interface IPrimitiveInterpolator {
-    double getValue(double aValue);
-    double getDerivative(double aValue);
+public class ZProjection implements IRealValueProjection<IHasZ> {
+    /**
+     * The
+     * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+     * projection</a>
+     * which returns a vector's 'Z'
+     * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+     * .
+     */
+    public static final IRealValueProjection<IHasZ> PROJECTION =
+            new ZProjection();
+    /**
+     * Returns the 'Z' coordinate.
+     * @param aValue The vector to project.
+     * @return The 'Z' coordinate.
+     */
+    public double getValue(final IHasZ aValue) {
+         return aValue.getZ();
+     }
+
 }

@@ -25,9 +25,43 @@
 package org.ensor.math.geometry;
 
 /**
- *
+ * This interface represents an element of a
+ * <a href="http://en.wikipedia.org/wiki/Vector_space">vector space</a>.
+ * The element assumes that the
+ * <a href="http://en.wikipedia.org/wiki/Field_%28mathematics%29">field 'F'</a>
+ * of the vector space is
+ * the
+ * <a href="http://en.wikipedia.org/wiki/Real_number">
+ * real numbers</a>
+ * (as represented approximately by a double).
+ * @param <VectorType> The concrete type of the vector.
  * @author jona
  */
 public interface IVector<VectorType> {
-    double distance(VectorType aOther);
+    /**
+     * This method represents addition of two vectors to produce a third.
+     * @param aValue The vector to be added.
+     * @return The vector resulting from adding this vector to the given vector.
+     */
+    VectorType add(VectorType aValue);
+    /**
+     * This method represents subtraction of two vectors to produce a third.
+     * @param aValue The result of subtracting the given vector from this one.
+     * @return The vector resulting from subtracting the vectors.
+     */
+    VectorType subtract(VectorType aValue);
+    /**
+     * This method returns a new vector which is the result of multiplying this
+     * vector by the given number.
+     * @param aValue A number to multiply.
+     * @return The vector resulting from multiplying this vector by the given
+     *         number.
+     */
+    VectorType multiply(double aValue);
+    /**
+     * This method returns a new vector which is the result of multiplying this
+     * vector by minus-one (-1).
+     * @return The negation of this vector.
+     */
+    VectorType negate();
 }

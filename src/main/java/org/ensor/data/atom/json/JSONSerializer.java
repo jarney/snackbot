@@ -45,31 +45,44 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- *
+ * This is a serializer which sends data from a Dictionary or List
+ * into a JSONObject or JSONArray, respectively.
  * @author jona
  */
-public class JSONSerializer
+public final class JSONSerializer
     implements ISerializer<JSONObject, JSONArray> {
-    
-    private static final JSONSerializer mInstance = new JSONSerializer();
+
+    private static final JSONSerializer INSTANCE = new JSONSerializer();
     private JSONSerializer() {
     }
+    /**
+     * This method returns the static singleton instance of the serializer.
+     * @return A singleton instance of the serializer object.
+     */
     public static JSONSerializer instance() {
-        return mInstance;
+        return INSTANCE;
     }
-    
-    public JSONObject serializeTo(IDictionaryVisitable aDict) throws Exception {
+    /**
+     * This method converts a dictionary object into a JSONObject.
+     * @param aDict A dictionary object.
+     * @return A JSONObject which contains the same data as the dictionary.
+     * @throws Exception If a serialization problem occurs, this method
+     *                   throws an exception.
+     */
+    public JSONObject serializeTo(final IDictionaryVisitable aDict)
+            throws Exception {
         final JSONObject jso = new JSONObject();
-        
+
         IDictionaryVisitor visitor = new IDictionaryVisitor() {
-            public void visit(String key, Atom value) throws Exception {
+            public void visit(final String key, final Atom value)
+                    throws Exception {
                 switch (value.getType()) {
                     case Atom.ATOM_TYPE_BOOLEAN:
                         BoolAtom boolAtom = (BoolAtom) value;
                         jso.put(key, boolAtom.getValue());
                         break;
                     case Atom.ATOM_TYPE_DICTIONARY:
-                        IDictionaryVisitable dictionaryAtom = 
+                        IDictionaryVisitable dictionaryAtom =
                                 (IDictionaryVisitable) value;
                         jso.put(key, serializeTo(dictionaryAtom));
                         break;
@@ -89,22 +102,32 @@ public class JSONSerializer
                         StringAtom stringAtom = (StringAtom) value;
                         jso.put(key, stringAtom.toString());
                         break;
+                    default:
+                        throw new Exception("Unknown Atom type " +
+                                value.getType());
                 }
             }
-            
+
         };
-        
+
         aDict.visitPairs(visitor);
-        
+
         return jso;
     }
-
+    /**
+     * This method converts the given List object into a JSONArray object
+     * containing the same data.
+     * @param aListAtom A list object to convert.
+     * @return A JSONArray object containing the same data.
+     * @throws Exception If a serialization problem occurs, this method
+     *                   throws an exception.
+     */
     public JSONArray serializeTo(final IListVisitable aListAtom)
             throws Exception {
         final JSONArray jso = new JSONArray();
 
         IListVisitor visitor = new IListVisitor() {
-            public void visit(Atom value) throws Exception {
+            public void visit(final Atom value) throws Exception {
                 switch (value.getType()) {
                     case Atom.ATOM_TYPE_BOOLEAN:
                         BoolAtom boolAtom = (BoolAtom) value;
@@ -130,18 +153,29 @@ public class JSONSerializer
                         StringAtom stringAtom = (StringAtom) value;
                         jso.put(stringAtom.toString());
                         break;
+                    default:
+                        throw new Exception("Unknown Atom type " +
+                                value.getType());
                 }
             }
 
         };
-        
+
         aListAtom.visitAtoms(visitor);
-            
+
         return jso;
-        
+
     }
-    
-    public ImmutableDict serializeFrom(JSONObject aFrom) throws Exception {
+    /**
+     * This method converts the given JSONObject into a dictionary object
+     * containing the same data.
+     * @param aFrom The JSONObject to serialize data from.
+     * @return A Dictionary containing the same data as the JSONObject.
+     * @throws Exception If a serialization problem occurs, this method
+     *                   throws an exception.
+     */
+    public ImmutableDict serializeFrom(final JSONObject aFrom)
+            throws Exception {
         Iterator<String> it = aFrom.keys();
         List<Map.Entry<String, Atom>> entryList =
                 new ArrayList<Map.Entry<String, Atom>>();
@@ -181,13 +215,21 @@ public class JSONSerializer
         ImmutableDict dict = ImmutableDict.newAtom(entryList);
         return dict;
     }
-
-    public ImmutableList serializeFromList(JSONArray aArray) throws Exception {
+    /**
+     * This method converts the given JSONArray into a list object
+     * containing the same data.
+     * @param aFrom The JSONArray to serialize data from.
+     * @return A List containing the same data as the JSONArray.
+     * @throws Exception If a serialization problem occurs, this method
+     *                   throws an exception.
+     */
+    public ImmutableList serializeFromList(final JSONArray aFrom)
+            throws Exception {
         List<Atom> entryList =
                 new ArrayList<Atom>();
         int i;
-        for (i = 0; i < aArray.length(); i++) {
-            Object value = aArray.get(i);
+        for (i = 0; i < aFrom.length(); i++) {
+            Object value = aFrom.get(i);
             if (value instanceof Boolean) {
                 Boolean booleanValue = (Boolean) value;
                 entryList.add(BoolAtom.newAtom(booleanValue));

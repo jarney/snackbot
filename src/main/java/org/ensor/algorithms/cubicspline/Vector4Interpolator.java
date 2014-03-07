@@ -24,6 +24,9 @@
 
 package org.ensor.algorithms.cubicspline;
 
+import org.ensor.math.analysis.IDifferentiableFunction;
+import org.ensor.math.analysis.IFunctionT;
+import org.ensor.math.geometry.EuclideanMetric;
 import org.ensor.math.geometry.Vector4;
 
 /**
@@ -36,10 +39,10 @@ class Vector4Interpolator
     extends VectorInterpolatorBase<Vector4>
     implements IInterpolator<Vector4> {
 
-    private final IPrimitiveInterpolator mXInterpolator;
-    private final IPrimitiveInterpolator mYInterpolator;
-    private final IPrimitiveInterpolator mZInterpolator;
-    private final IPrimitiveInterpolator mWInterpolator;
+    private final IDifferentiableFunction mXInterpolator;
+    private final IDifferentiableFunction mYInterpolator;
+    private final IDifferentiableFunction mZInterpolator;
+    private final IDifferentiableFunction mWInterpolator;
 
     /**
      * This constructor creates a 2d cubic spline based a cubic interpolator
@@ -50,15 +53,26 @@ class Vector4Interpolator
      * @param aWInterp A cubic interpolator for the w coordinate.
      */
     public Vector4Interpolator(
-            final IPrimitiveInterpolator aXInterp,
-            final IPrimitiveInterpolator aYInterp,
-            final IPrimitiveInterpolator aZInterp,
-            final IPrimitiveInterpolator aWInterp
+            final IDifferentiableFunction aXInterp,
+            final IDifferentiableFunction aYInterp,
+            final IDifferentiableFunction aZInterp,
+            final IDifferentiableFunction aWInterp
     ) {
+        super(EuclideanMetric.VECTOR4);
         mXInterpolator = aXInterp;
         mYInterpolator = aYInterp;
         mZInterpolator = aZInterp;
         mWInterpolator = aWInterp;
+        mDerivative = new IFunctionT<Vector4>() {
+            public Vector4 getValue(final double t) {
+                return new Vector4(
+                        mXInterpolator.getDerivative().getValue(t),
+                        mYInterpolator.getDerivative().getValue(t),
+                        mZInterpolator.getDerivative().getValue(t),
+                        mWInterpolator.getDerivative().getValue(t)
+                );
+            }
+        };
     }
     /**
      * This method returns the position along the path for the given path
@@ -74,21 +88,4 @@ class Vector4Interpolator
                 mWInterpolator.getValue(t)
         );
     }
-    /**
-     * This method returns the first derivative of the path
-     * vector with respect to the path parameter 't'.  Essentially, this is
-     * the velocity vector with respect to 't'.
-     * @param t The input path parameter (running from 0 to 1).
-     * @return The velocity vector at the given path parameter 't'.
-     */
-    public Vector4 getDerivative(final double t) {
-        return new Vector4(
-                mXInterpolator.getDerivative(t),
-                mYInterpolator.getDerivative(t),
-                mZInterpolator.getDerivative(t),
-                mWInterpolator.getDerivative(t)
-        );
-    }
-
-
 }

@@ -43,7 +43,12 @@ public final class AtomLogger {
 
     private AtomLogger() {
     }
-    
+    /**
+     * This method dumps the given atom to the given logger.
+     * @param log A logger to use for writing the log.
+     * @param prefix A prefix to print before each atom element.
+     * @param aAtom An atom to dump to a log.
+     */
     public static void dump(
             final Logger log,
             final String prefix,
@@ -73,7 +78,16 @@ public final class AtomLogger {
                 });
         }
     }
-    public static void dump(Logger log, String prefix, BoolAtom aAtom) {
+    /**
+     * This method dumps a boolean atom to the log.
+     * @param log The log to dump data to.
+     * @param prefix A prefix to print before the atom value.
+     * @param aAtom The atom to dump.
+     */
+    public static void dump(
+            final Logger log,
+            final String prefix,
+            final BoolAtom aAtom) {
         if (aAtom.getValue()) {
             log.log(Level.INFO, "{0}: true (BoolAtom)", prefix);
         }
@@ -81,8 +95,16 @@ public final class AtomLogger {
             log.log(Level.INFO, "{0}: false (BoolAtom)", prefix);
         }
     }
-
-    public static void dump(Logger log, String prefix, DictionaryAtom aAtom) {
+    /**
+     * This method dumps a dictionary atom to the log.
+     * @param log The log to dump data to.
+     * @param prefix A prefix to print before the atom value.
+     * @param aAtom The atom to dump.
+     */
+    public static void dump(
+            final Logger log,
+            final String prefix,
+            final DictionaryAtom aAtom) {
         log.log(Level.INFO, "{0} (DictionaryAtom)", prefix);
         for (Map.Entry<String, Atom> entry : aAtom.entrySet()) {
             String key = entry.getKey();
@@ -98,7 +120,12 @@ public final class AtomLogger {
             }
         }
     }
-    
+    /**
+     * This method dumps an integer atom to the log.
+     * @param log The log to dump data to.
+     * @param prefix A prefix to print before the atom value.
+     * @param aAtom The atom to dump.
+     */
     public static void dump(
             final Logger log,
             final String prefix,
@@ -108,7 +135,12 @@ public final class AtomLogger {
             aAtom.getValue()
         });
     }
-
+    /**
+     * This method dumps a list atom to the log.
+     * @param log The log to dump data to.
+     * @param prefix A prefix to print before the atom value.
+     * @param aAtom The atom to dump.
+     */
     public static void dump(
             final Logger log,
             final String prefix,
@@ -120,6 +152,12 @@ public final class AtomLogger {
             i++;
         }
     }
+    /**
+     * This method dumps a real atom to the log.
+     * @param log The log to dump data to.
+     * @param prefix A prefix to print before the atom value.
+     * @param aAtom The atom to dump.
+     */
     public static void dump(
             final Logger log,
             final String prefix,
@@ -128,6 +166,12 @@ public final class AtomLogger {
             prefix, aAtom.getValue()
         });
     }
+    /**
+     * This method dumps a String atom to the log.
+     * @param log The log to dump data to.
+     * @param prefix A prefix to print before the atom value.
+     * @param aAtom The atom to dump.
+     */
     public static void dump(
             final Logger log,
             final String prefix,

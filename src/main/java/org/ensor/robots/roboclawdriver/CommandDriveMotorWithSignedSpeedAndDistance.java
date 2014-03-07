@@ -43,22 +43,20 @@ class CommandDriveMotorWithSignedSpeedAndDistance extends CommandResponseNone {
         mPulsesDistance = aPulsesDistance;
         mStopOtherCommands = aStopOtherCommands;
     }
-    
 
     @Override
-    protected byte[] getCommand(byte aAddress) {
+    protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[12];
-        
+
         int offset = 0;
         offset = setByte(b, offset, aAddress);
         byte command = (byte) ((mMotorId == 0) ? 41 : 42);
         offset = setByte(b, offset, command);
         offset = setLong(b, offset, mPulsesPerSecond);
         offset = setLong(b, offset, mPulsesDistance);
-        offset = setByte(b, offset, (byte)(mStopOtherCommands ? 1 : 0));
+        offset = setByte(b, offset, (byte) (mStopOtherCommands ? 1 : 0));
         setChecksum(b, offset);
-        
+
         return b;
     }
-    
 }

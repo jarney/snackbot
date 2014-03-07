@@ -25,11 +25,18 @@
 package org.ensor.math.geometry;
 
 /**
- *
+ * This method implements the concept of a
+ * <a href="http://en.wikipedia.org/wiki/Metric_%28mathematics%29">metric</a>.
+ * @param <VectorType> The type of value that this metric measures
+ *                     distance for.
  * @author jona
  */
-public interface IScalar<T> {
-    T add(T aValue);
-    T multiply(double aValue);
-    T negate();
+public interface IMetric<VectorType> {
+    /**
+     * The distance function inherent in this metric.
+     * @param aOne The first object to measure distance for.
+     * @param aTwo The second object to measure distance for.
+     * @return The distance between the two given objects.
+     */
+    double distance(VectorType aOne, VectorType aTwo);
 }

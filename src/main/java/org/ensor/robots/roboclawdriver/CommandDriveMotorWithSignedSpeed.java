@@ -52,5 +52,5 @@ class CommandDriveMotorWithSignedSpeed extends CommandResponseNone {
 
         return b;
     }
-    
+
 }

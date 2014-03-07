@@ -25,9 +25,15 @@
 package org.ensor.math.geometry;
 
 /**
- *
+ * This interface indicates that the object has a 'X' component
+ * of a vector.  The 2,3,4 dimensional vectors, for example, have this vector
+ * component.
  * @author jona
  */
 public interface IHasX {
+    /**
+     * The 'X' component of the vector.
+     * @return The value of the 'X' component of the vector.
+     */
     double getX();
 }

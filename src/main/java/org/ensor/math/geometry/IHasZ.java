@@ -25,9 +25,15 @@
 package org.ensor.math.geometry;
 
 /**
- *
+ * This interface indicates that the object has a 'Z' component
+ * of a vector.  The 2 and 3 dimensional vectors, for example, have this vector
+ * component.
  * @author jona
  */
 public interface IHasZ {
+    /**
+     * The 'Z' component of the vector.
+     * @return The value of the 'Z' component of the vector.
+     */
     double getZ();
 }

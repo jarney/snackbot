@@ -64,7 +64,7 @@ public class TopologicalSort<T> {
         }
         @Override
         public boolean equals(final Object other) {
-            return mNode.equals(((Node<T>)other).mNode);
+            return mNode.equals(((Node<T>) other).mNode);
         }
         @Override
         public int hashCode() {

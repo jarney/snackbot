@@ -49,7 +49,7 @@ public class Event {
                         atom.getImmutable())
             });
         }
-        public ImmutableDict serialize() {
+        public ImmutableDict getData() {
             return mEventData;
         }
 	public String getEventName() {

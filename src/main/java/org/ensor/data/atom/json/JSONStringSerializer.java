@@ -25,42 +25,75 @@
 package org.ensor.data.atom.json;
 
 import org.ensor.data.atom.ISerializer;
-import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.data.atom.IDictionaryVisitable;
 import org.ensor.data.atom.IListVisitable;
 import org.ensor.data.atom.ImmutableDict;
 import org.ensor.data.atom.ImmutableList;
-import org.ensor.data.atom.ListAtom;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- *
+ * This class implements a serializer which converts data from JSON strings
+ * into dictionaries and back again.
  * @author jona
  */
-public class JSONStringSerializer implements ISerializer<String, String> {
+public final class JSONStringSerializer implements ISerializer<String, String> {
 
-    private static final JSONStringSerializer mInstance = new JSONStringSerializer();
+    private static final JSONStringSerializer INSTANCE =
+            new JSONStringSerializer();
     private JSONStringSerializer() {
     }
+    /**
+     * This method returns the singleton instance of the serializer.
+     * @return The singleton instance of the JSON string serializer.
+     */
     public static JSONStringSerializer instance() {
-        return mInstance;
+        return INSTANCE;
     }
-    
-    public String serializeTo(IDictionaryVisitable aDict) throws Exception {
+    /**
+     * This method converts a dictionary into a JSON string
+     * containing the same data.
+     * @param aDict A dictionary.
+     * @return A JSON formatted string containing the same data.
+     * @throws Exception If a serialization problem occurs, this method
+     *                   throws an exception.
+     */
+    public String serializeTo(final IDictionaryVisitable aDict)
+            throws Exception {
         return JSONSerializer.instance().serializeTo(aDict).toString();
     }
-
-    public ImmutableDict serializeFrom(String aFrom) throws Exception {
+    /**
+     * This method converts a list into a JSON string
+     * containing the same data.
+     * @param aList A list.
+     * @return A JSON formatted string containing the same data.
+     * @throws Exception If a serialization problem occurs, this method
+     *                   throws an exception.
+     */
+    public String serializeTo(final IListVisitable aList) throws Exception {
+        return JSONSerializer.instance().serializeTo(aList).toString();
+    }
+    /**
+     * This method converts a JSON string into a dictionary.
+     * @param aFrom A JSON formatted string.
+     * @return A dictionary containing the same data.
+     * @throws Exception If a serialization problem occurs, this method
+     *                   throws an exception.
+     */
+    public ImmutableDict serializeFrom(final String aFrom)
+            throws Exception {
         JSONObject obj = new JSONObject(aFrom);
         return JSONSerializer.instance().serializeFrom(obj);
     }
-
-    public String serializeTo(IListVisitable aList) throws Exception {
-        return JSONSerializer.instance().serializeTo(aList).toString();
-    }
-
-    public ImmutableList serializeFromList(String aFrom) throws Exception {
+    /**
+     * This method converts a JSON string into a list.
+     * @param aFrom A JSON formatted string.
+     * @return A list containing the same data.
+     * @throws Exception If a serialization problem occurs, this method
+     *                   throws an exception.
+     */
+    public ImmutableList serializeFromList(final String aFrom)
+            throws Exception {
         JSONArray obj = new JSONArray(aFrom);
         return JSONSerializer.instance().serializeFromList(obj);
     }

@@ -24,13 +24,14 @@
 
 package org.ensor.algorithms.cubicspline;
 
+import org.ensor.math.analysis.IDifferentiableT;
+import org.ensor.math.analysis.IFunctionT;
+
 /**
  *
  * @param <T> The type of value being interpolated (vector type).
  * @author jona
  */
-interface IInterpolator<T> {
-    T getValue(double t);
-    T getDerivative(double t);
+interface IInterpolator<T> extends IFunctionT<T>, IDifferentiableT<T> {
     double getPathLength();
 }

@@ -25,49 +25,86 @@
 package org.ensor.math.geometry;
 
 /**
- *
+ * This method represents an element of a
+ * 3-dimensional
+ * <a href="http://en.wikipedia.org/wiki/Vector_space">vector space</a>
+ * .
  * @author jona
  */
-public class Vector3
+public final class Vector3
     implements
         IHasX,
         IHasY,
         IHasZ,
-        IScalar<Vector3>,
         IVector<Vector3> {
 
-    private final double mX;
-    private final double mY;
-    private final double mZ;
-    
-    public Vector3(double x, double y, double z) {
+    protected final double mX;
+    protected final double mY;
+    protected final double mZ;
+    /**
+     * The constructor creates a new vector from the given coordinate
+     * components.
+     * @param x The x coordinate of the vector to create.
+     * @param y The y coordinate of the vector to create.
+     * @param z The z coordinate of the vector to create.
+     */
+    public Vector3(final double x, final double y, final double z) {
         mX = x;
         mY = y;
         mZ = z;
     }
-    public double distance(Vector3 p2) {
-        double dx = (p2.mX - mX);
-        double dy = (p2.mY - mY);
-        double dz = (p2.mZ - mZ);
-        return dx * dx + dy * dy + dz * dz;
-    }
+    /**
+     * This method returns the 'X' component of the vector.
+     * @return The 'X' component of the vector.
+     */
     public double getX() {
         return mX;
     }
+    /**
+     * This method returns the 'Y' component of the vector.
+     * @return The 'Y' component of the vector.
+     */
     public double getY() {
         return mY;
     }
+    /**
+     * This method returns the 'Z' component of the vector.
+     * @return The 'Z' component of the vector.
+     */
     public double getZ() {
         return mZ;
     }
-    public Vector3 add(Vector3 aOther) {
-        return new Vector3(aOther.mX + mX, aOther.mY + mY, aOther.mZ + mZ);
+    /**
+     * This method returns the vector resulting from adding
+     * this vector to the given vector.
+     * @param aOther The vector to add.
+     * @return The result of adding the two vectors.
+     */
+    public Vector3 add(final Vector3 aOther) {
+        return new Vector3(mX + aOther.mX, mY + aOther.mY, mZ + aOther.mZ);
     }
-
-    public Vector3 multiply(double aValue) {
+    /**
+     * This method returns the vector resulting from subtracting the given
+     * vector from this vector.
+     * @param aValue The result of subtracting the given vector from this one.
+     * @return The vector resulting from subtracting the vectors.
+     */
+    public Vector3 subtract(final Vector3 aValue) {
+        return new Vector3(mX - aValue.mX, mY - aValue.mY, mZ - aValue.mZ);
+    }
+    /**
+     * This method returns the vector resulting from multiplying
+     * this vector by the given number.
+     * @param aValue The value to multiply.
+     * @return The vector resulting from the multiplication.
+     */
+    public Vector3 multiply(final double aValue) {
         return new Vector3(mX * aValue, mY * aValue, mZ * aValue);
     }
-
+    /**
+     * This method returns the negative of this vector.
+     * @return The vector resulting from negating this vector.
+     */
     public Vector3 negate() {
         return new Vector3(-mX, -mY, -mZ);
     }

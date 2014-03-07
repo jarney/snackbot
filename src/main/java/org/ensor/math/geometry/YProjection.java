@@ -21,50 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.ensor.robots.roboclawdriver;
+
+package org.ensor.math.geometry;
 
 /**
- *
+ * This class is a
+ * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+ * projection</a>
+ * which returns a vector's 'Y'
+ * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+ * .
  * @author jona
  */
-class CommandDriveMotorWithSignedDutyAccel extends CommandResponseNone {
-    private final int mMotorId;
-    private final double mDutyCycle;
-    private final long mAccel;
-
-    protected CommandDriveMotorWithSignedDutyAccel(
-            final int aMotorId,
-            final double aDutyCycle,
-            final long aAccel) {
-        mMotorId = aMotorId;
-        mDutyCycle = aDutyCycle;
-        mAccel = aAccel;
-    }
-
-    @Override
-    protected byte[] getCommand(final byte aAddress) {
-        byte[] b = new byte[7];
-
-        b[0] = aAddress;
-        b[1] = (byte) ((mMotorId == 0) ? 52 : 53);
-
-        long dutyCycle;
-
-        dutyCycle = (long) (mDutyCycle * 1500);
-
-        if (dutyCycle < -1500) {
-            dutyCycle = 1500;
-        }
-        else if (dutyCycle > 1500) {
-            dutyCycle = 1500;
-        }
-
-        setShort(b, 2, (int) dutyCycle);
-        setShort(b, 4, (int) mAccel);
-
-        b[6] = calculateChecksum(b);
-
-        return b;
-    }
+public final class YProjection implements IRealValueProjection<IHasY> {
+    /**
+     * The
+     * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+     * projection</a>
+     * which returns a vector's 'Y'
+     * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+     * .
+     */
+    public static final IRealValueProjection<IHasY> PROJECTION =
+            new YProjection();
+    /**
+     * Returns the 'Y' coordinate.
+     * @param aValue The vector to project.
+     * @return The 'Y' coordinate.
+     */
+    public double getValue(final IHasY aValue) {
+         return aValue.getY();
+     }
 
 }

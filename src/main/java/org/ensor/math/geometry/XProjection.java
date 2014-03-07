@@ -25,14 +25,34 @@
 package org.ensor.math.geometry;
 
 /**
- *
+ * This class is a
+ * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+ * projection</a>
+ * which returns a vector's 'X'
+ * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+ * .
  * @author jona
  */
-public class ZExtractor implements IValueExtractor<IHasZ> {
-    public static final IValueExtractor<IHasZ> ZEXTRACTOR = new ZExtractor();
-    
-    public double getValue(IHasZ aValue) {
-         return aValue.getZ();
+public final class XProjection implements IRealValueProjection<IHasX> {
+    /**
+     * The
+     * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+     * projection</a>
+     * which returns a vector's 'X'
+     * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+     * .
+     */
+    public static final IRealValueProjection<IHasX> PROJECTION =
+            new XProjection();
+    private XProjection() {
+    }
+    /**
+     * Returns the 'X' coordinate.
+     * @param aValue The vector to project.
+     * @return The 'X' coordinate.
+     */
+    public double getValue(final IHasX aValue) {
+         return aValue.getX();
      }
 
 }

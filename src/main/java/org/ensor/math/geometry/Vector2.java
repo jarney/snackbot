@@ -25,42 +25,75 @@
 package org.ensor.math.geometry;
 
 /**
- *
+ * This method represents an element of a
+ * 2-dimensional
+ * <a href="http://en.wikipedia.org/wiki/Vector_space">vector space</a>
+ * .
  * @author jona
  */
-public class Vector2 
+public class Vector2
     implements
         IHasX,
         IHasY,
-        IVector<Vector2>,
-        IScalar<Vector2> {
+        IVector<Vector2> {
 
-    private final double mX;
-    private final double mY;
-    
-    public Vector2(double x, double y) {
+    protected final double mX;
+    protected final double mY;
+    /**
+     * The constructor creates a new vector from the given coordinate
+     * components.
+     * @param x The x coordinate of the vector to create.
+     * @param y The y coordinate of the vector to create.
+     */
+    public Vector2(final double x, final double y) {
         mX = x;
         mY = y;
     }
-    public double distance(Vector2 p2) {
-        double dx = (p2.mX - mX);
-        double dy = (p2.mY - mY);
-        return dx * dx + dy * dy;
-    }
+    /**
+     * This method returns the 'X' component of the vector.
+     * @return The 'X' component of the vector.
+     */
     public double getX() {
         return mX;
     }
+    /**
+     * This method returns the 'Y' component of the vector.
+     * @return The 'Y' component of the vector.
+     */
     public double getY() {
         return mY;
     }
-    public Vector2 add(Vector2 aOther) {
-        return new Vector2(aOther.mX + mX, aOther.mY + mY);
+    /**
+     * This method returns the vector resulting from adding
+     * this vector to the given vector.
+     * @param aOther The vector to add.
+     * @return The result of adding the two vectors.
+     */
+    public Vector2 add(final Vector2 aOther) {
+        return new Vector2(mX + aOther.mX, mY + aOther.mY);
     }
-
-    public Vector2 multiply(double aValue) {
+    /**
+     * This method returns the vector resulting from subtracting the given
+     * vector from this vector.
+     * @param aValue The result of subtracting the given vector from this one.
+     * @return The vector resulting from subtracting the vectors.
+     */
+    public Vector2 subtract(final Vector2 aValue) {
+        return new Vector2(mX - aValue.mX, mY - aValue.mY);
+    }
+    /**
+     * This method returns the vector resulting from multiplying
+     * this vector by the given number.
+     * @param aValue The value to multiply.
+     * @return The vector resulting from the multiplication.
+     */
+    public Vector2 multiply(final double aValue) {
         return new Vector2(mX * aValue, mY * aValue);
     }
-
+    /**
+     * This method returns the negative of this vector.
+     * @return The vector resulting from negating this vector.
+     */
     public Vector2 negate() {
         return new Vector2(-mX, -mY);
     }

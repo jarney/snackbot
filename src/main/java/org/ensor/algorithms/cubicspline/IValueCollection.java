@@ -25,10 +25,24 @@
 package org.ensor.algorithms.cubicspline;
 
 /**
- *
+ * This interface represents a collection of double precision
+ * floating point numbers.  The structure of the underlying collection
+ * is abstract, but this interface provides a way to adapt many different
+ * types of collection and representation to this interface.
  * @author jona
  */
 public interface IValueCollection {
-    double getValue(int i);
+    /**
+     * This method retrieves the member at index 'i' of the collection.  The
+     * index must be greater than or equal to '0' and strictly less than the
+     * length.
+     * @param i An index into the collection.
+     * @return The value of the member at index 'i'.
+     */
+    double getValue(final int i);
+    /**
+     * The number of elements in the collection.
+     * @return The number of elements in the collection.
+     */
     int length();
 }

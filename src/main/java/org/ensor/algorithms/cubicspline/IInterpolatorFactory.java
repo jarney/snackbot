@@ -25,9 +25,15 @@
 package org.ensor.algorithms.cubicspline;
 
 /**
- *
+ * This interface defines an interpolator factory which is capable of returning
+ * a set of interpolators from a given set of values.
  * @author jona
  */
 interface IInterpolatorFactory<InterpolatorType> {
-    public InterpolatorType[] createInterpolators(IValueCollection aValues);
+    /**
+     * This method creates a set of interpolators from the given set of values.
+     * @param aValues A collection of values.
+     * @return A set of interpolators which can be used to define a path.
+     */
+    InterpolatorType[] createInterpolators(IValueCollection aValues);
 }

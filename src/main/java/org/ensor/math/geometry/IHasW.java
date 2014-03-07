@@ -25,9 +25,15 @@
 package org.ensor.math.geometry;
 
 /**
- *
+ * This interface indicates that the object has a 'W' component
+ * of a vector.  The 4 dimensional vector, for example, has this vector
+ * component.
  * @author jona
  */
 public interface IHasW {
+    /**
+     * The 'W' component of the vector.
+     * @return The value of the 'W' component of the vector.
+     */
     double getW();
 }

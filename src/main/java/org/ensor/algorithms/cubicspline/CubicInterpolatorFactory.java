@@ -24,45 +24,70 @@
 
 package org.ensor.algorithms.cubicspline;
 
+import org.ensor.math.analysis.ConstantFunction;
+import org.ensor.math.analysis.LinearFunction;
+import org.ensor.math.analysis.CubicFunction;
+import org.ensor.math.analysis.IDifferentiableFunction;
+
 /**
- *
+ * This factory creates a set of interpolators for the given set of points.
+ * Each interpolator returned will have a path parameter over the interval
+ * from 0 to 1 inclusive.
+ * The interpolators returned will have the following properties:
+ * <ul>
+ * <li>Interval running from 0 to 1.
+ * <li>Path runs through each control point.
+ * <li>Path has zero second derivative at each control point.
+ * <li>First derivative of each path segment's end
+ *     is equal to the first derivative of the next path segment's start.
+ * </ul>
  * @author jona
  */
 class CubicInterpolatorFactory
-    implements IInterpolatorFactory<IPrimitiveInterpolator> {
+    implements IInterpolatorFactory<IDifferentiableFunction> {
 
-    private static final double TWO = 2.0;
-    private static final double THREE = 3.0;
-    private static final double FOUR = 4.0;
+    private static final double K2 = 2.0;
+    private static final double K3 = 3.0;
+    private static final double K4 = 4.0;
 
-    public IPrimitiveInterpolator[] createInterpolators(
+    /**
+     * This method returns a collection of interpolators for the given set of
+     * control points.  If no points are given, null is returned.  If one point
+     * is given, a 'constant' interpolator is generated.  If two points are
+     * given, a linear interpolator is generated.  If three or more points are
+     * given, a set of natural cubic splines is generated.
+     * @param aPoints A set of control points for which to build an
+     *                interpolator.
+     * @return A set of interpolators.
+     */
+    public IDifferentiableFunction[] createInterpolators(
             final IValueCollection aPoints) {
-        
+
         int nPoints = aPoints.length();
-        
+
         // We must have some points in order to make this work.
         if (nPoints == 0) {
             return null;
         }
         // If we have only 1 point, just return a constant interpolator.
         if (nPoints == 1) {
-            IPrimitiveInterpolator[] ci = new IPrimitiveInterpolator[1];
-            ci[0] = new ConstantInterpolator(aPoints.getValue(0));
+            IDifferentiableFunction[] ci = new IDifferentiableFunction[1];
+            ci[0] = new ConstantFunction(aPoints.getValue(0));
             return ci;
         }
         if (nPoints == 2) {
-            IPrimitiveInterpolator[] ci = new IPrimitiveInterpolator[1];
-            ci[0] = new LinearInterpolator(
+            IDifferentiableFunction[] ci = new IDifferentiableFunction[1];
+            ci[0] = new LinearFunction(
                     aPoints.getValue(0),
-                    aPoints.getValue(1));
+                    aPoints.getValue(1) - aPoints.getValue(1));
             return ci;
         }
         int num = nPoints - 1;
         // If there are 'n' points, then there are
         // n-1 path segments between them.
-        
-        IPrimitiveInterpolator[] ci = new IPrimitiveInterpolator[num];
-        
+
+        IDifferentiableFunction[] ci = new IDifferentiableFunction[num];
+
         /*
              We solve the equation
             [2 1       ] [D[0]]   [3(x[1] - x[0])  ]
@@ -80,27 +105,27 @@ class CubicInterpolatorFactory
         double[] delta = new double[num + 1];
         double[] dd = new double[num + 1];
 
-        gamma[0] = 1.0 / TWO;
+        gamma[0] = 1.0 / K2;
         for (int i = 1; i < num; i++) {
-           gamma[i] = 1.0 / (FOUR - gamma[i - 1]);
+           gamma[i] = 1.0 / (K4 - gamma[i - 1]);
         }
-        gamma[num] = 1.0 / (TWO - gamma[num - 1]);
+        gamma[num] = 1.0 / (K2 - gamma[num - 1]);
 
         double p0 = (double) aPoints.getValue(0);
         double p1 = (double) aPoints.getValue(1);
 
-        delta[0] = THREE * (p1 - p0) * gamma[0];
+        delta[0] = K3 * (p1 - p0) * gamma[0];
 
         for (int i = 1; i < num; i++) {
             p0 = (double) aPoints.getValue(i - 1);
             p1 = (double) aPoints.getValue(i);
-            delta[i] = (THREE * (p1 - p0) - delta[i - 1]) * gamma[i];
+            delta[i] = (K3 * (p1 - p0) - delta[i - 1]) * gamma[i];
         }
-        
+
         p0 = (double) aPoints.getValue(num - 1);
         p1 = (double) aPoints.getValue(num);
 
-        delta[num] = (THREE * (p1 - p0) - delta[num - 1]) * gamma[num];
+        delta[num] = (K3 * (p1 - p0) - delta[num - 1]) * gamma[num];
 
         dd[num] = delta[num];
         for (int i = num - 1; i >= 0; i--) {
@@ -115,11 +140,11 @@ class CubicInterpolatorFactory
             p0 = (double) aPoints.getValue(i);
             p1 = (double) aPoints.getValue(i + 1);
 
-            CubicInterpolator cit = new CubicInterpolator(
+            CubicFunction cit = new CubicFunction(
                     p0,
                     dd[i],
-                    THREE * (p1 - p0) - TWO * dd[i] - dd[i + 1],
-                    TWO * (p0 - p1) + dd[i] + dd[i + 1]
+                    K3 * (p1 - p0) - K2 * dd[i] - dd[i + 1],
+                    K2 * (p0 - p1) + dd[i] + dd[i + 1]
             );
 
             ci[i] = cit;

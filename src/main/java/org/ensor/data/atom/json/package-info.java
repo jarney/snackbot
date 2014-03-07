@@ -21,5 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+/**
+ * This package contains serializers to convert the Dictionary and List
+ * structures into JSON and back again.
+ */
 package org.ensor.data.atom.json;

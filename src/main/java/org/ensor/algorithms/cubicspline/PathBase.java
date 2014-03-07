@@ -46,7 +46,7 @@ class PathBase<ValueType>
 
     // 1/(start-end)
     protected final double[] segmentLengthInverses;
-    
+
     // Total length of the path.
     // It is a bit of a hack that this is not final.
     protected final double mPathLength;
@@ -56,7 +56,7 @@ class PathBase<ValueType>
         segmentStarts = new double[mPathSegments];
         segmentLengthInverses = new double[mPathSegments];
         mSegments = aInterpolators;
-        
+
         // Calculate the length of each segment
         // and the overall path position start.
         double lastSegmentEnd = 0;
@@ -89,7 +89,7 @@ class PathBase<ValueType>
                 return i - 1;
             }
         }
-        return segmentStarts.length-1;
+        return segmentStarts.length - 1;
     }
 
     /**
@@ -148,7 +148,7 @@ class PathBase<ValueType>
         // From 't', we calculate the derivative
         // by evaluating the cubic polynomial's derivative
         // which in turn is a quadratic polynomial.
-        ValueType v = mSegments[segment].getDerivative(t);
+        ValueType v = mSegments[segment].getDerivative().getValue(t);
         return v;
     }
 

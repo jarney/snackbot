@@ -32,28 +32,28 @@ class CommandDriveMotorWithSignedSpeedAndAccel extends CommandResponseNone {
     private final long mPulsesPerSecond;
     private final long mPulsesPerSecondPerSecond;
 
-    protected CommandDriveMotorWithSignedSpeedAndAccel(int aMotorId, 
-            long aPulsesPerSecond,
-            long aPulsesPerSecondPerSecond) {
+    protected CommandDriveMotorWithSignedSpeedAndAccel(
+            final int aMotorId,
+            final long aPulsesPerSecond,
+            final long aPulsesPerSecondPerSecond) {
         mMotorId = aMotorId;
         mPulsesPerSecond = aPulsesPerSecond;
         mPulsesPerSecondPerSecond = aPulsesPerSecondPerSecond;
     }
-    
 
     @Override
-    protected byte[] getCommand(byte aAddress) {
+    protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[11];
-        
+
         b[0] = aAddress;
         b[1] = (byte) ((mMotorId == 0) ? 38 : 39);
-        
+
         setLong(b, 2, mPulsesPerSecondPerSecond);
         setLong(b, 6, mPulsesPerSecond);
-        
+
         b[10] = calculateChecksum(b);
-        
+
         return b;
     }
-    
+
 }

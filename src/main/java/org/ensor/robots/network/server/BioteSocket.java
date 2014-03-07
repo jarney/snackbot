@@ -56,7 +56,7 @@ public class BioteSocket implements
 
     public void sendMessage(Event aEvent) throws Exception {
         String jsonData = JSONStringSerializer.instance().serializeTo(
-                aEvent.serialize());
+                aEvent.getData());
         mConnection.sendMessage(jsonData);
     }
 

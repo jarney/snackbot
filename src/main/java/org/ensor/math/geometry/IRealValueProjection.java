@@ -22,42 +22,28 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.algorithms.cubicspline;
+package org.ensor.math.geometry;
 
 /**
- * This class implements an interpolator which is based on a linear
- * relation between the input parameter and the distance traveled from
- * start to end.
+ * This interface represents a way to project an object
+ * into the
+  * <a href="http://en.wikipedia.org/wiki/Real_number">
+ * real numbers</a>.  This is
+ * particularly useful as a
+ * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+ * projection</a>
+ * which extracts a particular
+ * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+ * from
+ * a vector for example.
+ * @param <T> Type of value to extract data from.
  * @author jona
  */
-public class LinearInterpolator implements IPrimitiveInterpolator {
-
-    private final double mStart;
-    private final double mDelta;
-
+public interface IRealValueProjection<T> {
     /**
-     * The constructor creates a linear interpolator which runs from the start
-     * to the end point.
-     * @param aStart Start point of the interpolation for t=0.
-     * @param aEnd End point of the interpolation for t=1.
+     * The value of the projection for this object.
+     * @param aValue The object to project into the real numbers.
+     * @return The value of the projection for the given object.
      */
-    public LinearInterpolator(final double aStart, final double aEnd) {
-        mStart = aStart;
-        mDelta = aEnd - aStart;
-    }
-    /**
-     * This method returns the point value for the specified path
-     * parameter.  The path parameter runs from 0 to 1.
-     * @param t Path parameter.
-     * @return The point between start and end of path corresponding to this
-     *         path location.
-     */
-    public double getValue(final double t) {
-        return mStart + t * mDelta;
-    }
-    
-    public double getDerivative(final double t) {
-        return mDelta;
-    }
-
+    double getValue(final T aValue);
 }

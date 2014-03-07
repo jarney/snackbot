@@ -22,17 +22,23 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.math.geometry;
+package org.ensor.math.analysis;
 
 /**
- *
+ * This interface represents a
+ * <a href="http://en.wikipedia.org/wiki/Function_%28mathematics%29">
+ * function</a>
+ * mapping R into &lt;Type&gt; expressed
+ * approximately using a double precision floating point.
+ * @param <Type> The type returned by this function.
  * @author jona
  */
-public class YExtractor implements IValueExtractor<IHasY> {
-    public static final IValueExtractor<IHasY> YEXTRACTOR = new YExtractor();
-    
-    public double getValue(IHasY aValue) {
-         return aValue.getY();
-     }
+public interface IFunctionT<Type> {
+    /**
+     * This method returns the value of the function at the given point.
+     * @param aValue The point for which to calculate the value of the function.
+     * @return The value of the function at the given point.
+     */
+    Type getValue(double aValue);
 
 }

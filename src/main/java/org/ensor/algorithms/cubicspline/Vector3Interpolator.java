@@ -24,6 +24,9 @@
 
 package org.ensor.algorithms.cubicspline;
 
+import org.ensor.math.analysis.IDifferentiableFunction;
+import org.ensor.math.analysis.IFunctionT;
+import org.ensor.math.geometry.EuclideanMetric;
 import org.ensor.math.geometry.Vector3;
 
 /**
@@ -36,9 +39,9 @@ class Vector3Interpolator
     extends VectorInterpolatorBase<Vector3>
     implements IInterpolator<Vector3> {
 
-    private final IPrimitiveInterpolator mXInterpolator;
-    private final IPrimitiveInterpolator mYInterpolator;
-    private final IPrimitiveInterpolator mZInterpolator;
+    private final IDifferentiableFunction mXInterpolator;
+    private final IDifferentiableFunction mYInterpolator;
+    private final IDifferentiableFunction mZInterpolator;
 
     /**
      * This constructor creates a 2d cubic spline based a cubic interpolator
@@ -48,13 +51,24 @@ class Vector3Interpolator
      * @param aZInterp A cubic interpolator for the z coordinate.
      */
     public Vector3Interpolator(
-            final IPrimitiveInterpolator aXInterp,
-            final IPrimitiveInterpolator aYInterp,
-            final IPrimitiveInterpolator aZInterp
+            final IDifferentiableFunction aXInterp,
+            final IDifferentiableFunction aYInterp,
+            final IDifferentiableFunction aZInterp
     ) {
+        super(EuclideanMetric.VECTOR3);
         mXInterpolator = aXInterp;
         mYInterpolator = aYInterp;
         mZInterpolator = aZInterp;
+        mDerivative = new IFunctionT<Vector3>() {
+            public Vector3 getValue(final double t) {
+                return new Vector3(
+                        mXInterpolator.getDerivative().getValue(t),
+                        mYInterpolator.getDerivative().getValue(t),
+                        mZInterpolator.getDerivative().getValue(t)
+                );
+            }
+
+        };
     }
     /**
      * This method returns the position along the path for the given path
@@ -69,20 +83,4 @@ class Vector3Interpolator
                 mZInterpolator.getValue(t)
         );
     }
-    /**
-     * This method returns the first derivative of the path
-     * vector with respect to the path parameter 't'.  Essentially, this is
-     * the velocity vector with respect to 't'.
-     * @param t The input path parameter (running from 0 to 1).
-     * @return The velocity vector at the given path parameter 't'.
-     */
-    public Vector3 getDerivative(final double t) {
-        return new Vector3(
-                mXInterpolator.getDerivative(t),
-                mYInterpolator.getDerivative(t),
-                mZInterpolator.getDerivative(t)
-        );
-    }
-
-
 }

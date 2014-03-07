@@ -22,24 +22,30 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.algorithms.cubicspline;
+package org.ensor.math.analysis;
 
 /**
- * This class represents an interpolator which returns a constant value
- * for the entire interval.
+ * This class implements a
+ * <a href="http://en.wikipedia.org/wiki/Linear_function">
+ * linear function</a>.
  * @author jona
  */
-public class ConstantInterpolator implements IPrimitiveInterpolator {
+public class LinearFunction implements IDifferentiableFunction {
 
-    private final double mValue;
+    private final double mStart;
+    private final double mDelta;
+    private final ConstantFunction mFirstDerivative;
 
     /**
-     * The constructor creates an interpolator which returns the
-     * same value for the entire interval.
-     * @param aValue The constant value of the interpolation for the interval.
+     * The constructor creates a linear interpolator which runs from the start
+     * to the end point.
+     * @param aStart Start point of the interpolation for t=0.
+     * @param aDelta Slope of the line.
      */
-    public ConstantInterpolator(final double aValue) {
-        mValue = aValue;
+    public LinearFunction(final double aStart, final double aDelta) {
+        mStart = aStart;
+        mDelta = aDelta;
+        mFirstDerivative = new ConstantFunction(mDelta);
     }
     /**
      * This method returns the point value for the specified path
@@ -49,11 +55,17 @@ public class ConstantInterpolator implements IPrimitiveInterpolator {
      *         path location.
      */
     public double getValue(final double t) {
-        return mValue;
+        return mStart + t * mDelta;
     }
-
-    public double getDerivative(double aValue) {
-        return 0;
+    /**
+     * This method returns the first derivative of the linear function.
+     * This is always a constant function which represents the slope
+     * of the line.
+     * @return The (constant) differentiable function which is the slope of this
+     *         linear function.
+     */
+    public ConstantFunction getDerivative() {
+        return mFirstDerivative;
     }
 
 }

@@ -21,5 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+/**
+ * This package contains utility classes to help
+ * with logging of the Atom, Dictionary, and List structures.
+ */
 package org.ensor.data.atom.log;

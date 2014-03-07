@@ -167,7 +167,7 @@ public abstract class Biote {
                 for( IEventHandler h : subscribers ) {
                     h.process(msg);
                     log(Constants.LOG_BIOTE_CORE, "Biote.processEvents():" + eventName);
-                    log(Constants.LOG_BIOTE_CORE, "Biote.processEvent:", msg.serialize());
+                    log(Constants.LOG_BIOTE_CORE, "Biote.processEvent:", msg.getData());
                 }
             }
             catch (Exception ex) {

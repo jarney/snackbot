@@ -25,10 +25,33 @@
 package org.ensor.math.geometry;
 
 /**
- *
- * @param<T> Type of value to extract data from.
+ * This class is a
+ * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+ * projection</a>
+ * which returns a vector's 'W'
+ * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+ * .
  * @author jona
  */
-public interface IValueExtractor<T> {
-    double getValue(final T aValue);
+public final class WProjection implements IRealValueProjection<IHasW> {
+    /**
+     * The
+     * <a href="http://en.wikipedia.org/wiki/Projection_%28mathematics%29">
+     * projection</a>
+     * which returns a vector's 'W'
+     * <a href="http://en.wikipedia.org/wiki/Coordinate_system">coordinate</a>
+     * .
+     */
+    public static final IRealValueProjection<IHasW> PROJECTION =
+            new WProjection();
+    private WProjection() {
+    }
+    /**
+     * Returns the 'W' coordinate.
+     * @param aValue The vector to project.
+     * @return The 'W' coordinate.
+     */
+    public double getValue(final IHasW aValue) {
+        return aValue.getW();
+    }
 }

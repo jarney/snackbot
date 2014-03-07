@@ -33,11 +33,11 @@ package org.ensor.robots.roboclawdriver;
  */
 abstract class Command {
     private final int mReadMode;
-    
+
     protected static final int READ_MODE_NONE = 0;
     protected static final int READ_MODE_NULL_TERMINATED = 1;
     protected static final int READ_MODE_FIXED = 2;
-    
+
     /**
      * The constructor creates a new command with the response semantics
      * according to the type given.
@@ -48,8 +48,6 @@ abstract class Command {
     protected Command(final int aReadMode) {
         mReadMode = aReadMode;
     }
-    
-    
     /**
      * For commands, this returns the sequence of bytes
      * to send in the command.
@@ -59,7 +57,6 @@ abstract class Command {
      * @return The sequence of bytes to send.
      */
     protected abstract byte[] getCommand(byte aAddress);
-    
     /**
      * This method handles the response from the command and
      * delegates any side-effects of the response to the appropriate
@@ -72,7 +69,6 @@ abstract class Command {
     protected abstract void onResponse(
             final byte[] aResponseBuffer,
             final int aResponseLength);
-    
     /**
      * For commands which need to read a fixed length
      * response, this method should return the number
@@ -81,11 +77,11 @@ abstract class Command {
      *         as a response from this command.
      */
     protected abstract int getResponseLength();
-    
+
     protected int getReadMode() {
         return mReadMode;
     }
-    
+
     /**
      * This method returns the checksum calculated for the
      * given byte array.
@@ -96,7 +92,7 @@ abstract class Command {
     protected byte calculateChecksum(final byte[] aBytes) {
         return calculateChecksum(aBytes, aBytes.length - 1);
     }
-    
+
     protected byte calculateChecksum(final byte[] aBytes, final int aLength) {
         int cs = 0;
 
@@ -104,7 +100,7 @@ abstract class Command {
         for (i = 0; i < aLength; i++) {
             cs += (aBytes[i]);
         }
-        
+
         return (byte) (cs & 0x7f);
     }
     protected byte calculateChecksum(
@@ -121,10 +117,10 @@ abstract class Command {
         for (i = 0; i < aLength2; i++) {
             cs += (aBytes2[i]);
         }
-        
+
         return (byte) (cs & 0x7f);
     }
-    
+
     protected int setLong(
             final byte[] b,
             final int aOffset,
@@ -157,7 +153,7 @@ abstract class Command {
         b[aOffset] = (byte) aValue;
         return aOffset + 1;
     }
-    
+
     protected int setChecksum(
             final byte[] b,
             final int aOffset) {

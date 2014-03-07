@@ -24,15 +24,20 @@
 
 package org.ensor.algorithms.cubicspline;
 
+import org.ensor.math.analysis.IDifferentiableFunction;
 import java.util.List;
 import org.ensor.math.geometry.IPath;
 import org.ensor.math.geometry.Vector3;
-import org.ensor.math.geometry.XExtractor;
-import org.ensor.math.geometry.YExtractor;
-import org.ensor.math.geometry.ZExtractor;
+import org.ensor.math.geometry.XProjection;
+import org.ensor.math.geometry.YProjection;
+import org.ensor.math.geometry.ZProjection;
 
 /**
- *
+ * This class implements a natural
+ * <a href="http://en.wikipedia.org/wiki/Spline_interpolation">cubic spline</a>.
+ * A natural cubic spline is a cubic spline which passes through each of the
+ * control points and which is everywhere smooth and differentiable and for
+ * which the second derivative is zero at all of the control points.
  * @author jona
  */
 public final class NaturalSpline3D
@@ -57,12 +62,12 @@ public final class NaturalSpline3D
 
         CubicInterpolatorFactory cif = new CubicInterpolatorFactory();
 
-        IPrimitiveInterpolator[] xInterp = cif.createInterpolators(
-                new VectorValueCollection(aPoints, XExtractor.XEXTRACTOR));
-        IPrimitiveInterpolator[] yInterp = cif.createInterpolators(
-                new VectorValueCollection(aPoints, YExtractor.YEXTRACTOR));
-        IPrimitiveInterpolator[] zInterp = cif.createInterpolators(
-                new VectorValueCollection(aPoints, ZExtractor.ZEXTRACTOR));
+        IDifferentiableFunction[] xInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, XProjection.PROJECTION));
+        IDifferentiableFunction[] yInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, YProjection.PROJECTION));
+        IDifferentiableFunction[] zInterp = cif.createInterpolators(
+                new VectorValueCollection(aPoints, ZProjection.PROJECTION));
 
         int num = xInterp.length;
         IInterpolator<Vector3>[] interpolators = new IInterpolator[num];

@@ -27,7 +27,7 @@ package org.ensor.math.geometry;
 /**
  * This interface models a smooth path function which is capable of returning
  * a vector position for any arbitrary point in time "t" along the path.
- *
+ * @param <VectorType> The type of position value returned by the path.
  * @author jona
  */
 public interface IPath<VectorType> {
@@ -50,7 +50,7 @@ public interface IPath<VectorType> {
      *         point in time.
      */
     VectorType getDirection(double aTime);
-    
+
     /**
      * Returns the overall length of the path.  Note that this is
      * the actual length traveled, not the 'as the crow flies' distance
@@ -61,5 +61,5 @@ public interface IPath<VectorType> {
      * @return The path length traveled from start to end.
      */
     double getLength();
-    
+
 }

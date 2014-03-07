@@ -24,21 +24,28 @@
 
 package org.ensor.algorithms.cubicspline;
 
-import org.ensor.math.geometry.IVector;
-import org.ensor.math.geometry.Vector3;
+import org.ensor.math.analysis.IFunctionT;
+import org.ensor.math.geometry.IMetric;
 
 /**
- *
+ * This is the abstract base class for vector interpolators.
  * @author jona
  */
-abstract class VectorInterpolatorBase<VectorType extends IVector> {
-    
+abstract class VectorInterpolatorBase<VectorType> {
+
     private static final double QUARTER = 0.25;
     private static final double HALFWAY = 0.5;
     private static final double THREEQUARTERS = 0.75;
 
+    protected IFunctionT<VectorType> mDerivative;
+    private final IMetric<VectorType> mMetric;
+
     public abstract VectorType getValue(double aPosition);
-    
+
+    public VectorInterpolatorBase(final IMetric<VectorType> aMetric) {
+        mMetric = aMetric;
+    }
+
     /**
      * This method estimates the length of the spline by dividing it into
      * 4 equal segments and then measuring the point-to-point distance of
@@ -55,11 +62,24 @@ abstract class VectorInterpolatorBase<VectorType extends IVector> {
             VectorType p4 = getValue(THREEQUARTERS);
             VectorType p5 = getValue(1);
 
-            double d = p1.distance(p2) +
-                    p2.distance(p3) +
-                    p3.distance(p4) +
-                    p4.distance(p5);
+            double d = mMetric.distance(p1, p2) +
+                    mMetric.distance(p2, p3) +
+                    mMetric.distance(p3, p4) +
+                    mMetric.distance(p4, p5);
+
             return d;
     }
+    /**
+     * This method returns the first derivative of the path
+     * vector with respect to the path parameter 't'.  Essentially, this is
+     * the velocity vector with respect to 't'.
+     * @param t The input path parameter (running from 0 to 1).
+     * @return The velocity vector at the given path parameter 't'.
+     */
+    public IFunctionT<VectorType> getDerivative() {
+        return mDerivative;
+    }
+
+
 
 }

@@ -25,18 +25,22 @@
 package org.ensor.algorithms.cubicspline;
 
 import java.util.List;
-import org.ensor.math.geometry.IValueExtractor;
+import org.ensor.math.geometry.IRealValueProjection;
 
 /**
- *
+ * This class implements a collection of values of abstract type
+ * &lt;VectorType&gt; for which there exists a way to map them into
+ * R by providing a value extractor.  This is useful for extacting the 'X'
+ * component of a Vector3 object, for example without making a separate
+ * container to hold a collection of 'double' values.
  * @author jona
  */
 class VectorValueCollection<VectorType> implements IValueCollection {
     private final List<VectorType> mValues;
-    private final IValueExtractor<VectorType> mExtractor;
+    private final IRealValueProjection<VectorType> mExtractor;
     public VectorValueCollection(
             final List<VectorType> aValues,
-            final IValueExtractor<VectorType> aExtractor) {
+            final IRealValueProjection<VectorType> aExtractor) {
         mValues = aValues;
         mExtractor = aExtractor;
     }

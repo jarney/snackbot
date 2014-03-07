@@ -21,19 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.ensor.math.geometry;
-
 /**
- *
- * @author jona
+ * This package contains the simulation code required to control a robot
+ * to follow a particular path laid out by the navigation system.
  */
-public class WExtractor implements IValueExtractor<IHasW> {
-    public static final IValueExtractor<IHasW> WEXTRACTOR = new WExtractor();
-    private WExtractor() {
-    }
-    public double getValue(IHasW aValue) {
-         return aValue.getW();
-     }
-
-}
+package org.ensor.robots.pathfollower;

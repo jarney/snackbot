@@ -22,6 +22,7 @@ Any value defined here will override the pom.xml file value but is only applicab
         <word>Kinect</word>
         <word>ms</word>
         <word>RoboClaw</word>
+        <word>serializer</word>
         <word>Servlet</word>
         <word>SnackBot</word>
         <word>threadsafe</word>

@@ -31,18 +31,20 @@ class CommandDriveMotorsWithDutyCycle  extends CommandResponseNone {
     private final double mDutyCycle1;
     private final double mDutyCycle2;
 
-    protected CommandDriveMotorsWithDutyCycle(double aDutyCycle1, double aDutyCycle2) {
+    protected CommandDriveMotorsWithDutyCycle(
+            final double aDutyCycle1,
+            final double aDutyCycle2) {
         mDutyCycle1 = aDutyCycle1;
         mDutyCycle2 = aDutyCycle2;
     }
-    
+
     @Override
-    protected byte[] getCommand(byte aAddress) {
+    protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[7];
-        
+
         b[0] = aAddress;
         b[1] = (byte) 34;
-        
+
         int dc1 = (int) (mDutyCycle1 * 1500);
 
         if (dc1 > 1500) {
@@ -51,7 +53,7 @@ class CommandDriveMotorsWithDutyCycle  extends CommandResponseNone {
         if (dc1 < -1500) {
             dc1 = -1500;
         }
-        
+
         setShort(b, 2, dc1);
 
         int dc2 = (int) (mDutyCycle2 * 1500);
@@ -64,10 +66,10 @@ class CommandDriveMotorsWithDutyCycle  extends CommandResponseNone {
         }
 
         setShort(b, 4, dc2);
-        
+
         b[6] = calculateChecksum(b);
-        
+
         return b;
     }
-    
+
 }

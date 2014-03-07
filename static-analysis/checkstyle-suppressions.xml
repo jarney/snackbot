@@ -6,5 +6,6 @@
 
 <suppressions>
   <suppress checks="MagicNumberCheck" files="org[\\/]ensor[\\/]robots[\\/]roboclawdriver[\\/]Command" />
+  <suppress checks="AvoidInlineConditionals" files="org[\\/]ensor[\\/]robots[\\/]roboclawdriver[\\/]Command" />
 </suppressions>
 

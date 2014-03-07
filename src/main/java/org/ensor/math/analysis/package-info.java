@@ -21,50 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.ensor.robots.roboclawdriver;
 
 /**
- *
- * @author jona
+ * This package contains code and interfaces representing
+ * <a href="http://en.wikipedia.org/wiki/Real_analysis">Real Analysis</a>.
+ * The techniques of real analysis are applicable to a wide variety of problems
+ * and specific techniques.
  */
-class CommandDriveMotorWithSignedDutyAccel extends CommandResponseNone {
-    private final int mMotorId;
-    private final double mDutyCycle;
-    private final long mAccel;
-
-    protected CommandDriveMotorWithSignedDutyAccel(
-            final int aMotorId,
-            final double aDutyCycle,
-            final long aAccel) {
-        mMotorId = aMotorId;
-        mDutyCycle = aDutyCycle;
-        mAccel = aAccel;
-    }
-
-    @Override
-    protected byte[] getCommand(final byte aAddress) {
-        byte[] b = new byte[7];
-
-        b[0] = aAddress;
-        b[1] = (byte) ((mMotorId == 0) ? 52 : 53);
-
-        long dutyCycle;
-
-        dutyCycle = (long) (mDutyCycle * 1500);
-
-        if (dutyCycle < -1500) {
-            dutyCycle = 1500;
-        }
-        else if (dutyCycle > 1500) {
-            dutyCycle = 1500;
-        }
-
-        setShort(b, 2, (int) dutyCycle);
-        setShort(b, 4, (int) mAccel);
-
-        b[6] = calculateChecksum(b);
-
-        return b;
-    }
-
-}
+package org.ensor.math.analysis;

@@ -53,7 +53,7 @@ class CommandDriveMotorWithSpeedAccelDecelPos extends CommandResponseNone {
     @Override
     protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[20];
-        
+
         byte cmd = (byte) ((mMotorId == 0) ? 65 : 66);
 
         int offset = 0;
@@ -65,8 +65,7 @@ class CommandDriveMotorWithSpeedAccelDecelPos extends CommandResponseNone {
         offset = setLong(b, offset, mPos);
         offset = setByte(b, offset, (mBuffer ? 1 : 0));
         setChecksum(b, offset);
-                
+
         return b;
     }
-    
 }

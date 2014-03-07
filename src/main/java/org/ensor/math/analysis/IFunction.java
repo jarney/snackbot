@@ -22,19 +22,22 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.math.geometry;
+package org.ensor.math.analysis;
 
 /**
- *
+ * This interface represents a
+ * <a href="http://en.wikipedia.org/wiki/Function_%28mathematics%29">
+ * function</a>
+ * mapping R into R expressed approximately
+ * using a double precision floating point.
  * @author jona
  */
-public class XExtractor implements IValueExtractor<IHasX> {
-    public static final IValueExtractor<IHasX> XEXTRACTOR = new XExtractor();
-    private XExtractor() {
-    }
-
-    public double getValue(IHasX aValue) {
-         return aValue.getX();
-     }
+public interface IFunction {
+    /**
+     * This method returns the value of the function at the given point.
+     * @param aValue The point for which to calculate the value of the function.
+     * @return The value of the function at the given point.
+     */
+    double getValue(double aValue);
 
 }

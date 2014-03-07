@@ -21,5 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+/**
+ * This package contains a serialzier for writing
+ * the dictionary and list objects to XML documents and
+ * reading them back again.
+ */
 package org.ensor.data.atom.xml;

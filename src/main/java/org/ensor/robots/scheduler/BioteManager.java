@@ -265,7 +265,7 @@ public class BioteManager {
                 }
                 targetBiote.__protected_friend_BioteManager__enqueueStimulus(this, msg);
                 logString(Constants.LOG_BIOTE_MANAGER, targetBiote.getBioteId(), "BioteManager.sendStimulus:" + msg.getEventName());
-                logString(Constants.LOG_BIOTE_MANAGER, targetBiote.getBioteId(), "BioteManager.sendStimulus", msg.serialize());
+                logString(Constants.LOG_BIOTE_MANAGER, targetBiote.getBioteId(), "BioteManager.sendStimulus", msg.getData());
                 return true;
         }
         protected void __protected_friend_Biote__scheduleBiote(Biote b, boolean useBlockingQueue) {

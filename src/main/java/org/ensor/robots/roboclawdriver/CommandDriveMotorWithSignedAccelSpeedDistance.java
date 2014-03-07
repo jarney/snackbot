@@ -27,7 +27,7 @@ package org.ensor.robots.roboclawdriver;
  *
  * @author jona
  */
-class CommandDriveMotorWithSignedAccelSpeedDistance 
+class CommandDriveMotorWithSignedAccelSpeedDistance
         extends CommandResponseNone {
     private final int mMotorId;
     private final long mPulsesPerSecond;
@@ -36,7 +36,7 @@ class CommandDriveMotorWithSignedAccelSpeedDistance
     private final boolean mStopOtherCommands;
 
     protected CommandDriveMotorWithSignedAccelSpeedDistance(
-            final int aMotorId, 
+            final int aMotorId,
             final long aPulsesPerSecondPerSecond,
             final long aPulsesPerSecond,
             final long aPulsesDistance,
@@ -47,24 +47,23 @@ class CommandDriveMotorWithSignedAccelSpeedDistance
         mPulsesDistance = aPulsesDistance;
         mStopOtherCommands = aStopOtherCommands;
     }
-    
+
     @Override
     protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[16];
-        
+
         int offset = 0;
         offset = setByte(b, offset, aAddress);
         offset = setByte(b, offset, ((mMotorId == 0) ? 44 : 45));
-        
+
         offset = setLong(b, offset, mPulsesPerSecondPerSecond);
         offset = setLong(b, offset, mPulsesPerSecond);
         offset = setLong(b, offset, mPulsesDistance);
-        
+
         offset = setByte(b, offset, (mStopOtherCommands ? 1 : 0));
-        
+
         setChecksum(b, offset);
-        
+
         return b;
     }
-    
 }
