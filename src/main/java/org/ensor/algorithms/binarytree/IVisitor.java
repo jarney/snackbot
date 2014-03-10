@@ -22,10 +22,18 @@
  * THE SOFTWARE.
  */
 
+package org.ensor.algorithms.binarytree;
+
 /**
- * This package contains a thread handler for handling
- * asynchronous activities.  These activities are associated
- * with operations such as device interactions and other event-based
- * asynchronous communications.
+ * This is a generic visitor interface.
+ * @author jona
+ * @param <DataType>
  */
-package org.ensor.robots.scheduler;
+public interface IVisitor<DataType> {
+    /**
+     * This method is called once for each time the
+     * an element of the collection is visited.
+     * @param aData The element of the collection being visited.
+     */
+    void visit(DataType aData);
+}

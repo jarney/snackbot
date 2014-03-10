@@ -22,20 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.math.analysis;
-
-import org.ensor.math.geometry.IVector;
-
 /**
- * This class defines a
- * <a href="http://en.wikipedia.org/wiki/Function_%28mathematics%29">
- * function</a> over the real numbers (simulated by double precision number)
- * which is
- * <a href="http://en.wikipedia.org/wiki/Differentiable_function">
- * differentiable</a>.
- * @param <VectorType> Type of vector for this function.
- * @author jona
+ * This package contains classes to perform basic tank drive
+ * navigation.  It transforms the basic direction/velocity
+ * in a navigation coordinate system into the direction/velocity
+ * with which to drive two motors in a tank-drive style steering
+ * system.
  */
-public interface IDifferentiableFunction<VectorType>
-    extends IFunction, IDifferentiable, IVector<VectorType> {
-}
+
+package org.ensor.robots.motors.differentialdrive;

@@ -27,9 +27,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.ensor.data.atom.json.JSONStringSerializer;
-import org.ensor.robots.scheduler.Biote;
-import org.ensor.robots.scheduler.BioteManager;
-import org.ensor.robots.scheduler.Event;
+import org.ensor.threads.biote.Biote;
+import org.ensor.threads.biote.BioteManager;
+import org.ensor.threads.biote.Event;
 
 /**
  *

@@ -22,20 +22,32 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.math.analysis;
-
-import org.ensor.math.geometry.IVector;
+package org.ensor.threads.biote;
 
 /**
- * This class defines a
- * <a href="http://en.wikipedia.org/wiki/Function_%28mathematics%29">
- * function</a> over the real numbers (simulated by double precision number)
- * which is
- * <a href="http://en.wikipedia.org/wiki/Differentiable_function">
- * differentiable</a>.
- * @param <VectorType> Type of vector for this function.
- * @author jona
+ * This is the base event handler object.  It is abstract and should mainly be
+ * used to instantiate anonymous objects for the purpose of subscribing to
+ * events.
+ * Typical use of this object is during event subscriptions as in the following:
+ *
+ * <pre>
+ *
+ * subscribe("Event-StaticData-LoadComplete", new EventHandler() {
+ *         public void process(EPropTree msg) throws Exception {
+ *              onStaticDataLoadComplete(msg);
+ *          }
+ *       });
+ *
+ * </pre>
+ * @author Jon
  */
-public interface IDifferentiableFunction<VectorType>
-    extends IFunction, IDifferentiable, IVector<VectorType> {
-}
+public interface IEventHandler {
+    /**
+     * This method is the handler for this event.  The method is called
+     * when the event is received.
+     * @param msg The event to be handled.
+     * @throws Exception Any exceptions thrown by the handler will be
+     *                   caught and logged by the Biote manager.
+     */
+    void process(Event msg) throws Exception;
+};

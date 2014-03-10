@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.scheduler;
+package org.ensor.threads.biote;
 
 import org.ensor.data.atom.Atom;
 
@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import java.nio.channels.SocketChannel;
 /**
  * The Biote is the primitive implementation element in this system.  A Biote
  * has the following properties:
@@ -53,21 +52,21 @@ import java.nio.channels.SocketChannel;
  */
 public abstract class Biote {
     private final BioteManager mBioteManager;
-	private final HashMap<String,LinkedList<IEventHandler> >                 mEventSubscriptions;
-	private int								mBioteId;
-        protected final boolean                                                 mUseBlockingQueue;
+    private final HashMap<String,LinkedList<IEventHandler> > mEventSubscriptions;
+    private int                                     mBioteId;
+    protected final boolean                         mUseBlockingQueue;
 
-        private static final int                                                BIOTE_STATE_IDLE = 0;
-        private static final int                                                BIOTE_STATE_QUEUED = 1;
-        private static final int                                                BIOTE_STATE_PROCESSING = 2;
-        private static final int                                                BIOTE_STATE_TERMINATING = 3;
+    private static final int                                                BIOTE_STATE_IDLE = 0;
+    private static final int                                                BIOTE_STATE_QUEUED = 1;
+    private static final int                                                BIOTE_STATE_PROCESSING = 2;
+    private static final int                                                BIOTE_STATE_TERMINATING = 3;
 
-        // The state lock must always be accquired prior to manipulating the event queue and processing state.
-        // both members should be manipulated together in an atomic manner
-        private final Object                                                    mStateLock;
-        private final HashMap<String,Integer>                                   mEventRouting;
-	private final Queue<Event>                                       	mRequest;
-        private int                                                             mProcessingState;
+    // The state lock must always be accquired prior to manipulating the event queue and processing state.
+    // both members should be manipulated together in an atomic manner
+    private final Object                                                    mStateLock;
+    private final HashMap<String,Integer>                                   mEventRouting;
+    private final Queue<Event>                                       	mRequest;
+    private int                                                             mProcessingState;
 
         /**
          * The constructor for a biote should never be called explicitly.  To create a new biote, register
@@ -126,13 +125,23 @@ public abstract class Biote {
         protected abstract void onFinalize(Event message) throws Exception;
 
         /**
-         * Subscribe this biote to the given event.  When that event is stimulated, the given handler's process
-         * function will be called.
-         * 
+         * Returns the Biote manager that runs this Biote.
+         * @return The Biote manager that runs this Biote.
+         */
+        public BioteManager getBioteManager() {
+            return mBioteManager;
+        }
+        
+        /**
+         * Subscribe this Biote to the given event.  When that event is
+         * stimulated, the given handler's process function will be called.
+         *
          * @param event Name of event to subscribe to.
          * @param h Event handler to be called when the event is received.
          */
-	public void subscribe(String event, IEventHandler h) {
+	public void subscribe(
+                final String event,
+                final IEventHandler h) {
             LinkedList<IEventHandler> subscribers = mEventSubscriptions.get(event);
             if (subscribers == null) {
                     subscribers = new LinkedList<IEventHandler>();
@@ -359,16 +368,5 @@ public abstract class Biote {
                 bioteManager.__protected_friend_Biote__scheduleBiote(this, mUseBlockingQueue);
             else if( dropped )
                 log(true, "Event '" + msg.getEventName() + "' was dropped because this biote is terminating...");
-        }
-        @Override
-        public void finalize() throws Throwable {
-            try {
-                mEventRouting.clear();
-                mRequest.clear();
-                mEventSubscriptions.clear();
-            }
-            finally {
-                super.finalize();
-            }
         }
 };

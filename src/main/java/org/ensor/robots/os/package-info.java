@@ -21,21 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.ensor.math.analysis;
-
-import org.ensor.math.geometry.IVector;
-
 /**
- * This class defines a
- * <a href="http://en.wikipedia.org/wiki/Function_%28mathematics%29">
- * function</a> over the real numbers (simulated by double precision number)
- * which is
- * <a href="http://en.wikipedia.org/wiki/Differentiable_function">
- * differentiable</a>.
- * @param <VectorType> Type of vector for this function.
- * @author jona
+ * This package contains the mail operating system services.  Mainly, this
+ * package contains the code to load the various modules which make up the
+ * robot's systems and provides the facilities to allocate various parts of
+ * the robot to subsystems which can manage them.
  */
-public interface IDifferentiableFunction<VectorType>
-    extends IFunction, IDifferentiable, IVector<VectorType> {
-}
+package org.ensor.robots.os;

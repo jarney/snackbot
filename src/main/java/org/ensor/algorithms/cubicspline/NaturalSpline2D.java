@@ -52,13 +52,17 @@ public final class NaturalSpline2D
      *
      * @param aPoints The list of points to interpolate between.
      */
-    public NaturalSpline2D(final List<Vector2> aPoints) {
-        super(createInterpolators(aPoints));
+    private NaturalSpline2D(final IInterpolator<Vector2>[] interpolators) {
+        super(interpolators);
     }
 
-    private static IInterpolator<Vector2>[] createInterpolators(
+    public static NaturalSpline2D createInterpolators(
             final List<Vector2> aPoints) {
 
+        if (aPoints == null) {
+            return null;
+        }
+        
         CubicInterpolatorFactory cif = new CubicInterpolatorFactory();
 
         IDifferentiableFunction[] xInterp = cif.createInterpolators(
@@ -66,6 +70,10 @@ public final class NaturalSpline2D
         IDifferentiableFunction[] yInterp = cif.createInterpolators(
                 new VectorValueCollection(aPoints, YProjection.PROJECTION));
 
+        if (xInterp == null || yInterp == null) {
+            return null;
+        }
+        
         int num = xInterp.length;
         IInterpolator<Vector2>[] interpolators = new IInterpolator[num];
 
@@ -75,6 +83,6 @@ public final class NaturalSpline2D
             );
         }
 
-        return interpolators;
+        return new NaturalSpline2D(interpolators);
     }
 }

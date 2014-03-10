@@ -22,20 +22,10 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.math.analysis;
-
-import org.ensor.math.geometry.IVector;
-
 /**
- * This class defines a
- * <a href="http://en.wikipedia.org/wiki/Function_%28mathematics%29">
- * function</a> over the real numbers (simulated by double precision number)
- * which is
- * <a href="http://en.wikipedia.org/wiki/Differentiable_function">
- * differentiable</a>.
- * @param <VectorType> Type of vector for this function.
- * @author jona
+ * This package contains a thread handler for handling
+ * asynchronous activities.  These activities are associated
+ * with operations such as device interactions and other event-based
+ * asynchronous communications.
  */
-public interface IDifferentiableFunction<VectorType>
-    extends IFunction, IDifferentiable, IVector<VectorType> {
-}
+package org.ensor.threads.biote;

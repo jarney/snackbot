@@ -21,44 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.ensor.robots.scheduler;
-
-import java.util.Properties;
-import org.ensor.robots.os.IModule;
-import org.ensor.robots.os.IModuleManager;
-
 /**
- *
- * @author jona
+ * This package contains the code relating to the robot's network services.
+ * The robot acts as a web server and a Web Sockets server providing the ability
+ * to communicate in a traditional web browser sense as well as providing
+ * streaming communications.
  */
-public class Module implements IModule {
-
-    private BioteManager mBioteManager;
-    
-    public Module() {
-        mBioteManager = null;
-    }
-    
-    public Class[] getDependencies() {
-        Class[] deps = {
-        };
-        return deps;
-    }
-
-    public void start(IModuleManager aManager) {
-        Properties bioteManagerProperties = new Properties();
-        mBioteManager = new BioteManager(
-                "rootInstance",
-                bioteManagerProperties);
-    }
-
-    public void shutdown(IModuleManager aManager) {
-        mBioteManager.shutdown();
-    }
-    
-    public BioteManager getBioteManager() {
-        return mBioteManager;
-    }
-
-}
+package org.ensor.robots.network.server;

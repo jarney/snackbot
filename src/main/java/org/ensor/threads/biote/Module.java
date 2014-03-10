@@ -21,12 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.ensor.robots.motors.tankdrive;
+
+package org.ensor.threads.biote;
+
+import java.util.Properties;
+import org.ensor.robots.os.IModule;
+import org.ensor.robots.os.IModuleManager;
 
 /**
  *
  * @author jona
  */
-public class TankDrive {
+public class Module implements IModule {
+
+    private BioteManager mBioteManager;
+    
+    public Module() {
+        mBioteManager = null;
+    }
+    
+    public Class[] getDependencies() {
+        Class[] deps = {
+        };
+        return deps;
+    }
+
+    public void start(IModuleManager aManager) {
+        mBioteManager = new BioteManager("rootInstance");
+    }
+
+    public void shutdown(IModuleManager aManager) {
+        mBioteManager.shutdown();
+    }
+    
+    public BioteManager getBioteManager() {
+        return mBioteManager;
+    }
 
 }

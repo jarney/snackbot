@@ -29,7 +29,8 @@ package org.ensor.math.analysis;
  * for the entire interval.
  * @author jona
  */
-public class ConstantFunction implements IDifferentiableFunction {
+public class ConstantFunction
+    implements IDifferentiableFunction<ConstantFunction> {
     /**
      * This field represents the constant function which returns zero in all
      * locations.
@@ -46,6 +47,13 @@ public class ConstantFunction implements IDifferentiableFunction {
      */
     public ConstantFunction(final double aValue) {
         mValue = aValue;
+    }
+    /**
+     * Returns the constant-order term.
+     * @return Returns the constant-order term.
+     */
+    public double getA() {
+        return mValue;
     }
     /**
      * This method returns the point value for the specified path
@@ -65,6 +73,40 @@ public class ConstantFunction implements IDifferentiableFunction {
      */
     public IDifferentiableFunction getDerivative() {
         return ZERO;
+    }
+    /**
+     * Returns the constant function resulting from adding this function to
+     * the given function.
+     * @param aValue The function to add.
+     * @return The sum of the two constant functions.
+     */
+    public ConstantFunction add(ConstantFunction aValue) {
+        return new ConstantFunction(mValue + aValue.mValue);
+    }
+    /**
+     * Returns the constant function resulting from subtracting the given
+     * function from this one.
+     * @param aValue The function to subtract.
+     * @return The resulting constant function.
+     */
+    public ConstantFunction subtract(ConstantFunction aValue) {
+        return new ConstantFunction(mValue - aValue.mValue);
+    }
+    /**
+     * The constant function resulting from multiplying this function
+     * by the given factor.
+     * @param aValue The factor to multiply.
+     * @return The resulting function.
+     */
+    public ConstantFunction multiply(double aValue) {
+        return new ConstantFunction(mValue * aValue);
+    }
+    /**
+     * Returns the constant function which is the negation of this one.
+     * @return The negated function.
+     */
+    public ConstantFunction negate() {
+        return new ConstantFunction(-mValue);
     }
 
 }

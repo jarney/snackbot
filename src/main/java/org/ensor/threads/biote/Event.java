@@ -1,4 +1,4 @@
-package org.ensor.robots.scheduler;
+package org.ensor.threads.biote;
 
 import org.ensor.data.atom.Atom;
 import org.ensor.data.atom.DictionaryAtom;
@@ -23,8 +23,7 @@ public class Event {
         private final ImmutableDict  mEventData;
         
         public Event(final String eventName) {
-            mEventName = eventName;
-            mEventData = ImmutableDict.newAtom();
+            this(eventName, ImmutableDict.newAtom());
         }
         
         public Event(final String eventName, final DictionaryAtom atom) {
@@ -50,10 +49,10 @@ public class Event {
             });
         }
         public ImmutableDict getData() {
-            return mEventData;
+            return mEventData.getDictionary("event-data");
         }
 	public String getEventName() {
-            return mEventName;
+            return mEventData.getString("event-name");
 	}
 };
 

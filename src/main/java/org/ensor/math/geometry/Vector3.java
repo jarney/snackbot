@@ -36,7 +36,7 @@ public final class Vector3
         IHasX,
         IHasY,
         IHasZ,
-        IVector<Vector3> {
+        IVectorWithNorm<Vector3> {
 
     protected final double mX;
     protected final double mY;
@@ -107,5 +107,13 @@ public final class Vector3
      */
     public Vector3 negate() {
         return new Vector3(-mX, -mY, -mZ);
+    }
+    /**
+     * Computes the Euclidean length of this
+     * vector.
+     * @return Euclidean length.
+     */
+    public double length() {
+        return EuclideanMetric.VECTOR3.distance(this, this);
     }
 }

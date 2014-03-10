@@ -31,11 +31,14 @@ import org.ensor.data.atom.Atom;
 import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.data.atom.ImmutableDict;
 import org.ensor.data.atom.ImmutableList;
+import org.ensor.math.analysis.IFunction;
+import org.ensor.math.analysis.LinearFunction;
+import org.ensor.math.analysis.QuadraticFunction;
 import org.ensor.math.geometry.Vector3;
-import org.ensor.robots.scheduler.Biote;
-import org.ensor.robots.scheduler.BioteManager;
-import org.ensor.robots.scheduler.Event;
-import org.ensor.robots.scheduler.IEventHandler;
+import org.ensor.threads.biote.Biote;
+import org.ensor.threads.biote.BioteManager;
+import org.ensor.threads.biote.Event;
+import org.ensor.threads.biote.IEventHandler;
 
 /**
  * This Biote allows a path to be planned and followed.  It requires a mover
@@ -48,6 +51,43 @@ import org.ensor.robots.scheduler.IEventHandler;
  * so that the position and direction can be re-updated to match the latest
  * estimates.  When the path has been finished, a path completion event is
  * raised back to the Biote who requested the path to be followed.
+ *
+ * The objective of following the path smoothly
+ * is to begin at our initial velocity v0 and accelerate
+ * at acceleration parameter 'a' up to final cruising speed 'vc'
+ * and hold that speed until it is time to decelerate down to the final
+ * velocity v1.
+ * <pre>
+ *          vc
+ *    /-----------------\
+ *   /                   \
+ *  /                     \
+ * / v0                    \ v1
+ *
+ * </pre>
+ *
+ * Planning for this begins as follows:
+ * <ul>
+ * <li>Calculate the cubic spline between the waypoints and from that, the
+ *     overall path length.
+ * <li>Calculate the time we spend accelerating and decelerating.
+ * <li>Calculate the distance we spend accelerating and decelerating.
+ * <li>Obtain the total path length and subtract the distance of acceleration
+ *     to obtain the distance we spend at cruise speed.
+ * <li>Divide by cruise velocity to find the cruise time.
+ * <li>Add up all of the times to determine the total time to traverse the
+ *     path.
+ * <li>Create a piecewise linear function mapping time 't' into distance
+ *     traveled: d = f(t).
+ * <li>Create a piecewise linear function mapping time 't' into the
+ *     velocity we should be at right now.
+ * <li>Divide this piecewise function by the total distance to travel to obtain
+ *     a piecewise function mapping time (t) into the path interval [0-1].
+ * <li>During the 'tick' function, we can now simply evaluate the time elapsed
+ *     to obtain an estimate of where we 'should' be.
+ * <li>We then plot a course based on where we 'should' be for the next tick
+ *     and where we are now.
+ * </ul>
  * @author jona
  */
 public class PathFollower extends Biote {
@@ -61,19 +101,30 @@ public class PathFollower extends Biote {
     /// The most recent location estimate.
     private Vector3 mLastLocation;
     private Vector3 mLastVel;
+    /// The last time we received a location update (in ms).
+    private Integer mLastLocationTime;
+    
+    private Integer mPathStartTime;
+    
 
     /// The goal location and velocity.
     private Vector3 mGoalLocation;
     private Vector3 mGoalVel;
-    
-    /// The last time we received a location update (in ms).
-    private Integer mLastLocationTime;
-    
+
+    private IFunction mDistanceFunction;
+
     /// The biote to notify when the path
     // has been completed.
     private Integer mCompleteNotify;
     
     private NaturalSpline3D mSpline;
+    
+    // Roughly one tenth of a second.
+    private static final int TICK_DURATION_MILLISECONDS = 100;
+    private static final double MILLISECONDS_PER_SECOND = 1000.0;
+    private static final double TICK_DURATION_SECONDS =
+                            (double) TICK_DURATION_MILLISECONDS /
+                                     MILLISECONDS_PER_SECOND;
     /**
      *
      * @param aBioteManager
@@ -150,9 +201,58 @@ public class PathFollower extends Biote {
             points.add(p);
         }
         
-        mSpline = new NaturalSpline3D(points);
+        // Input parameters
+        // of the system, these are properties
+        // of the robot as the maximum acceleration and
+        // maximum deceleration, and maximum cruising speed.
+        double mAccel = 1;
+        double mDecel = 1;
+        double mVMax = 1;
         
-        mTimerId = startTimer(100, TICK_EVENT, false);
+        // Starting and ending velocity.
+        double v0 = mLastVel.length();
+        double v1 = mGoalVel.length();
+        
+        mSpline = NaturalSpline3D.createInterpolators(points);
+        
+        // Calculate the cubic spline between the waypoints and from that, the
+        // overall path length.
+        double dPath = mSpline.getLength();
+        
+        // Calculate the time we spend accelerating and decelerating.
+        double tAccel = (mVMax - v0) / mAccel;
+        double tDecel = (mVMax - v1) / mDecel;
+
+        // Calculate the distance we spend accelerating and decelerating.
+        double dAccel = v0 * tAccel + mAccel * tAccel * tAccel / 2;
+        double dDecel = v0 * tDecel + mDecel * tDecel * tDecel / 2;
+        
+        double dCruising = dPath - dAccel - dDecel;
+        
+        // If the total cruising distance is negative, then this means
+        // we don't reach top speed before decelerating.  Therefore
+        // we need to adjust our times and distances.
+        if (dCruising < 0) {
+            dCruising = 0;
+            // XXX: TODO: Recalculate tAccel and tDecel because we're
+            //            in this region.
+        }
+
+        // d = d0 + v0t + v(t)*t;
+        // d = d0 + v0t + at^2
+
+        // Accelerating from 0 to tAccel
+        QuadraticFunction distance1 = new QuadraticFunction(0, v0, mAccel);
+
+        LinearFunction distance2 = new LinearFunction(dAccel, mVMax);
+        
+        // Decelerating from tCruise to tCruise + tDecel
+        QuadraticFunction distance3 = new QuadraticFunction(dCruising, v0, mAccel);
+
+        // Compose these together.
+        mDistanceFunction = distance3;
+        
+        mTimerId = startTimer(TICK_DURATION_MILLISECONDS, TICK_EVENT, false);
     }
     
     protected Vector3 readPoint(ImmutableDict aDict) {
@@ -173,19 +273,57 @@ public class PathFollower extends Biote {
         
     }
     private void onPathTick(final Event aEvent) {
+        
+        // Obtain the amount of time elapsed along the curve.
+        double relativeTime = getElapsed();
+        // From this, obtain the position along the spline corresponding
+        // to the time we expect the next tick to occur.
+        double dNext = mDistanceFunction.getValue(
+                relativeTime + TICK_DURATION_SECONDS);
+
+        // From the spline, this is the location
+        // of where we expect to be for the next tick.
+        Vector3 nextLocation = mSpline.getPosition(dNext);
+
+        // This is the amount of distance
+        // we need to cover for the next tick.
+        Vector3 direction = nextLocation.subtract(mLastLocation);
+        
         double dir = 0;
         double vel = 0;
+
+        // If the distance we need to travel is small enough, we
+        // leave the velocity and direction zero.
+        double directionLength = direction.length();
+        if (directionLength >= 0) {
+            // Therefore, this is the velocity
+            // we need to get.
+            vel = directionLength / TICK_DURATION_SECONDS;
+
+            // Normalize the vector to 1.
+            direction = direction.multiply(1 / directionLength);
+
+            // This is the angle we need to head.
+            dir = Math.atan2(direction.getX(), direction.getY());
+        }
         
-        // XXX Calculate the direction and velocity
-        // from our current position back to the
-        // path we wish to follow.
-
-
         // Send the movement request to the mover.
+        // Velocity is absolute while
+        // direction is relative to our present direction.
         DictionaryAtom move = DictionaryAtom.newAtom();
         move.setReal("direction", dir);
         move.setReal("velocity", vel);
         Event moveRequest = new Event("Mover-MoveRequest", move);
         sendStimulus(this.mMoverBioteId, moveRequest);
+    }
+    /**
+     * Returns the amount of time which has elapsed since we began following
+     * the path.
+     * @return The number of seconds elapsed since we began following
+     *         the path.
+     */
+    private double getElapsed() {
+        long tms = System.currentTimeMillis() - mPathStartTime;
+        return (double) tms / MILLISECONDS_PER_SECOND;
     }
 }

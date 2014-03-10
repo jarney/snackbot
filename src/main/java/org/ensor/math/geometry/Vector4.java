@@ -36,7 +36,8 @@ public class Vector4
         IHasX,
         IHasY,
         IHasZ,
-        IVector<Vector4> {
+        IHasW,
+        IVectorWithNorm<Vector4> {
 
     protected final double mX;
     protected final double mY;
@@ -86,7 +87,7 @@ public class Vector4
      * @return The 'W' component of the vector.
      */
     public double getW() {
-        return mZ;
+        return mW;
     }
     /**
      * This method returns the vector resulting from adding
@@ -130,7 +131,12 @@ public class Vector4
     public Vector4 negate() {
         return new Vector4(-mX, -mY, -mZ, -mW);
     }
-
-
-
+    /**
+     * Computes the Euclidean length of this
+     * vector.
+     * @return Euclidean length.
+     */
+    public double length() {
+        return EuclideanMetric.VECTOR4.distance(this, this);
+    }
 }

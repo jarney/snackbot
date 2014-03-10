@@ -21,33 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.ensor.robots.scheduler;
-
 /**
- * This is the base event handler object.  It is abstract and should mainly be
- * used to instantiate anonymous objects for the purpose of subscribing to
- * events.
- * Typical use of this object is during event subscriptions as in the following:
- *
- * <pre>
- *
- * subscribe("Event-StaticData-LoadComplete", new EventHandler() {
- *         public void process(EPropTree msg) throws Exception {
- *              onStaticDataLoadComplete(msg);
- *          }
- *       });
- *
- * </pre>
- * @author Jon
+ * This package contains a client to the Robot's systems
+ * allowing data to be passed back and forth between the robot
+ * and a host computer.
  */
-public interface IEventHandler {
-    /**
-     * This method is the handler for this event.  The method is called
-     * when the event is received.
-     * @param msg The event to be handled.
-     * @throws Exception Any exceptions thrown by the handler will be
-     *                   caught and logged by the Biote manager.
-     */
-    void process(Event msg) throws Exception;
-};
+package org.ensor.robots.network.client;

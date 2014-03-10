@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.scheduler;
+package org.ensor.threads.biote;
 
 import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.data.atom.ListAtom;
@@ -36,6 +36,7 @@ import java.io.StringWriter;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.data.atom.log.AtomLogger;
 
@@ -89,11 +90,15 @@ public class BioteManager {
 
         protected final String mInstanceId;
         
-        private final Properties mProperties;
+        public BioteManager(final String aInstanceId) {
+            this(aInstanceId, 4, 1);
+        }
         
-        public BioteManager(String aInstanceId, Properties aProperties) {
+        public BioteManager(
+                final String aInstanceId,
+                final int aThreadPoolSize,
+                final int aBlockingThreadPoolSize) {
                 mInstanceId = aInstanceId;
-                mProperties = aProperties;
                 
                 mInstances.put(mInstanceId, this);
 		mTimerIds = new AtomicInteger(0);
@@ -106,7 +111,7 @@ public class BioteManager {
                 // Initialize the normal event handling threads
                 mThreadTimes = new ConcurrentHashMap<Long, Long>();
 		mReadyBiotes = new ConcurrentLinkedQueue<Biote>();
-                mThreadPoolSize = Math.max(Math.min(getShardVariable("threadPoolSize", 4), 40), 1);
+                mThreadPoolSize = Math.max(Math.min(aThreadPoolSize, 40), 1);
                 mLogger.warning(mInstanceId + ":Normal thread pool is " + mThreadPoolSize);
 
                 mThreadPool = Executors.newFixedThreadPool(mThreadPoolSize);
@@ -116,7 +121,7 @@ public class BioteManager {
                 
                 // Initialize the event handling threads for events that block, and use low cpu
 		mReadyBlockingBiotes = new ConcurrentLinkedQueue<Biote>();
-                mBlockingThreadPoolSize = Math.max(Math.min(getShardVariable("blockingThreadPoolSize", 4), 40), 1);
+                mBlockingThreadPoolSize = Math.max(Math.min(aBlockingThreadPoolSize, 40), 1);
                 mLogger.warning(mInstanceId + ":Blocking thread pool is " + mBlockingThreadPoolSize);
 
                 mBlockingThreadPool = Executors.newFixedThreadPool(mBlockingThreadPoolSize);
@@ -129,6 +134,30 @@ public class BioteManager {
         public Object clone() throws CloneNotSupportedException {
             throw new CloneNotSupportedException();
         }
+        /**
+         * This method waits for the Biote manager to be shut down.
+         * If the Biote manager is running as a server, it may not shut down
+         * immediately, in fact, it may be configured not to ever shut down
+         * and thus this method would never exit.
+         */
+        public void waitForShutdown() {
+            while (mRunning.get()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(BioteManager.class.getName()).log(
+                            Level.SEVERE, "Sleep Interrupted", ex);
+                }
+            }
+        }
+        /**
+         * This method returns true if the Biote manager is still running,
+         * providing threads for Biotes to process.
+         * @return True if the Biote manager is still running.
+         */
+        public boolean isRunning() {
+            return mRunning.get();
+        }
 	public void shutdown() {
             logString(true, 0, "Beginning BioteManager shutdown sequence...");
             mRunning.set(false);
@@ -136,13 +165,19 @@ public class BioteManager {
                 mThreadPool.shutdown();
                 mThreadPool.awaitTermination(30, TimeUnit.SECONDS);
             }
-            catch( InterruptedException error ) {
+            catch (InterruptedException error ) {
+            }
+            catch (Exception ex) {
+                mLogger.log(Level.SEVERE, "Exception shutting down", ex);
             }
             try {
                 mBlockingThreadPool.shutdown();
                 mBlockingThreadPool.awaitTermination(30, TimeUnit.SECONDS);
             }
             catch( InterruptedException error ) {
+            }
+            catch (Exception ex) {
+                mLogger.log(Level.SEVERE, "Exception shutting down", ex);
             }
             
             mTimer.cancel();
@@ -335,19 +370,6 @@ public class BioteManager {
             pw.flush();
             sw.flush();
             return sw.toString();
-        }
-        public int getShardVariable(String variableName, int defaultValue) {
-            String strValue = getShardVariable(variableName, "" + defaultValue);
-            try {
-                return Integer.parseInt(strValue);
-            }
-            catch (Exception ex) {
-                return defaultValue;
-            }
-        }
-        public String getShardVariable(String variableName, String defaultValue)
-        {
-            return mProperties.getProperty(variableName, defaultValue);
         }
         public void sampleStat(String statName) {
             sampleStat(statName, 1);

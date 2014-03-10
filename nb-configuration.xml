@@ -18,6 +18,7 @@ Any value defined here will override the pom.xml file value but is only applicab
     <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
         <word>Biote</word>
         <word>Biote's</word>
+        <word>Biotes</word>
         <word>interpolators</word>
         <word>Kinect</word>
         <word>ms</word>

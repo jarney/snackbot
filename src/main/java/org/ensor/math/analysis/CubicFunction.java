@@ -24,12 +24,16 @@
 
 package org.ensor.math.analysis;
 
+import org.ensor.math.geometry.IVector;
+
 /**
  * This class represents a
  * <a href="http://en.wikipedia.org/wiki/Cubic_function">cubic polynomial</a>.
  * @author jona
  */
-public class CubicFunction implements IDifferentiableFunction {
+public class CubicFunction
+    implements
+        IDifferentiableFunction<CubicFunction> {
 
     private final QuadraticFunction mFirstDerivative;
 
@@ -73,6 +77,46 @@ public class CubicFunction implements IDifferentiableFunction {
         );
     }
     /**
+     * This constructor creates a cubic expression evaluator
+     * which calculates the value of the expression 'a+bt+ct^2+dt^3'.
+     * @param aQuadratic Quadratic function to cast as cubic.
+     */
+    public CubicFunction(
+            final QuadraticFunction aQuadratic) {
+        this(aQuadratic.getA(),
+                aQuadratic.getB(),
+                aQuadratic.getC(),
+                0);
+    }
+    /**
+     * Returns the constant-order coefficient.
+     * @return The constant-order coefficient.
+     */
+    protected double getA() {
+        return mA;
+    }
+    /**
+     * Returns the linear-order coefficient.
+     * @return The linear-order coefficient.
+     */
+    protected double getB() {
+        return mB;
+    }
+    /**
+     * Returns the quadratic-order coefficient.
+     * @return The quadratic-order coefficient.
+     */
+    protected double getC() {
+        return mC;
+    }
+    /**
+     * Returns the cubic-order coefficient.
+     * @return The cubic-order coefficient.
+     */
+    protected double getD() {
+        return mD;
+    }
+    /**
     * This method evaluates the cubic expression for the given path parameter
     * and returns the value of the cubic expression at that point.
     * @param t The path parameter.
@@ -89,5 +133,61 @@ public class CubicFunction implements IDifferentiableFunction {
     */
     public QuadraticFunction getDerivative() {
         return mFirstDerivative;
+    }
+
+    /**
+     * This method returns the cubic function
+     * described by adding this cubic function to the given one.
+     * @param aValue A cubic function to add to this one.
+     * @return The cubic function resulting from adding these two
+     *         together.
+     */
+    public CubicFunction add(
+            final CubicFunction aValue) {
+        return new CubicFunction(
+                mA + aValue.mA,
+                mB + aValue.mB,
+                mC + aValue.mC,
+                mD + aValue.mD);
+    }
+    /**
+     * This method subtracts the given cubic function from this one
+     * and returns the result as a new cubic function.
+     * @param aValue The cubic function to subtract.
+     * @return The resulting cubic function.
+     */
+    public CubicFunction subtract(
+            final CubicFunction aValue) {
+        return new CubicFunction(
+                mA - aValue.mA,
+                mB - aValue.mB,
+                mC - aValue.mC,
+                mD - aValue.mD);
+    }
+    /**
+     * This method multiplies the given cubic function by a constant
+     * value and returns the result as a new cubic function.
+     * @param aValue The value to multiply.
+     * @return The resulting cubic function.
+     */
+    public CubicFunction multiply(
+            final double aValue) {
+        return new CubicFunction(
+                mA * aValue,
+                mB * aValue,
+                mC * aValue,
+                mD * aValue);
+    }
+    /**
+     * This method negates this cubic function and returns a copy of
+     * the negated function.
+     * @return The resulting (negated) cubic function.
+     */
+    public CubicFunction negate() {
+        return new CubicFunction(
+                -mA,
+                -mB,
+                -mC,
+                -mD);
     }
 }

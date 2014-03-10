@@ -22,36 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.scheduler;
+package org.ensor.math.geometry;
 
 /**
- *
- * @author Jon
+ * This interface represents a vector with a norm.
+ * @author jona
+ * @param <VectorType>
  */
-
-class SystemStat {
-    public String mName;
-    public int mMin;
-    public int mMax;
-    public int mTotal;
-    public int mSamples;
-    public SystemStat(String name) {
-        mName = name;
-        mMin = 0;
-        mMax = 0;
-        mTotal = 0;
-        mSamples = 0;
-    }
-    public void sample(int value) {
-        mTotal += value;
-        if (mSamples == 0) {
-            mMin = value;
-            mMax = value;
-        }
-        else {
-            if (mMin > value) mMin = value;
-            if (mMax < value) mMax = value;
-        }
-        mSamples++;
-    }
-};
+public interface IVectorWithNorm<VectorType>
+    extends IVector<VectorType>, INorm {
+}

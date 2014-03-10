@@ -22,20 +22,18 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.math.analysis;
-
-import org.ensor.math.geometry.IVector;
+package org.ensor.math.geometry;
 
 /**
- * This class defines a
- * <a href="http://en.wikipedia.org/wiki/Function_%28mathematics%29">
- * function</a> over the real numbers (simulated by double precision number)
- * which is
- * <a href="http://en.wikipedia.org/wiki/Differentiable_function">
- * differentiable</a>.
- * @param <VectorType> Type of vector for this function.
+ *
  * @author jona
  */
-public interface IDifferentiableFunction<VectorType>
-    extends IFunction, IDifferentiable, IVector<VectorType> {
+public interface INorm {
+    /**
+     * Computes the Euclidean length of this
+     * vector.
+     * @return Euclidean length.
+     */
+    double length();
+
 }

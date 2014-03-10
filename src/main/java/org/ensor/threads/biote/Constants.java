@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.ensor.robots.scheduler;
+package org.ensor.threads.biote;
 
 /**
  * Constant values mainly for the purpose of enabling and disabling

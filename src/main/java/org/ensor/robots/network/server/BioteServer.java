@@ -30,7 +30,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.ensor.robots.scheduler.BioteManager;
+import org.ensor.threads.biote.BioteManager;
 
 
 /**
@@ -52,10 +52,7 @@ public class BioteServer {
         Server server = new Server(ROBOT_DEFAULT_HTTP_PORT);
         server.setGracefulShutdown(2000);
         
-        Properties bioteManagerProperties = new Properties();
-        BioteManager bioteManager = new BioteManager(
-                "rootInstance",
-                bioteManagerProperties);
+        BioteManager bioteManager = new BioteManager("rootInstance");
         
         ServletContextHandler servletHandler = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         servletHandler.setContextPath("/");

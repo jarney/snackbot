@@ -35,7 +35,7 @@ public class Vector2
     implements
         IHasX,
         IHasY,
-        IVector<Vector2> {
+        IVectorWithNorm<Vector2> {
 
     protected final double mX;
     protected final double mY;
@@ -96,5 +96,13 @@ public class Vector2
      */
     public Vector2 negate() {
         return new Vector2(-mX, -mY);
+    }
+    /**
+     * Computes the Euclidean length of this
+     * vector.
+     * @return Euclidean length.
+     */
+    public double length() {
+        return EuclideanMetric.VECTOR2.distance(this, this);
     }
 }

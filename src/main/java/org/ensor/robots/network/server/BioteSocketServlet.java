@@ -27,7 +27,7 @@ package org.ensor.robots.network.server;
 import javax.servlet.http.HttpServletRequest;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
-import org.ensor.robots.scheduler.BioteManager;
+import org.ensor.threads.biote.BioteManager;
 
 /**
  *

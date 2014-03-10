@@ -26,10 +26,10 @@ package org.ensor.robots.network.server;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ensor.robots.scheduler.Biote;
-import org.ensor.robots.scheduler.BioteManager;
-import org.ensor.robots.scheduler.Event;
-import org.ensor.robots.scheduler.IEventHandler;
+import org.ensor.threads.biote.Biote;
+import org.ensor.threads.biote.BioteManager;
+import org.ensor.threads.biote.Event;
+import org.ensor.threads.biote.IEventHandler;
 
 /**
  *

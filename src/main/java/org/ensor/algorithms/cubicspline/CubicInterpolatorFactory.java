@@ -79,7 +79,7 @@ class CubicInterpolatorFactory
             IDifferentiableFunction[] ci = new IDifferentiableFunction[1];
             ci[0] = new LinearFunction(
                     aPoints.getValue(0),
-                    aPoints.getValue(1) - aPoints.getValue(1));
+                    aPoints.getValue(1) - aPoints.getValue(0));
             return ci;
         }
         int num = nPoints - 1;

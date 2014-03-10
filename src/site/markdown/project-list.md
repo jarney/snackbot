@@ -16,7 +16,7 @@ This project involves finding a path from a starting location to a goal
 location.  It assumes that the starting location, ending location, and map
 of the world are available (each of those is its own project).
 
-## [Smooth Running](project-smooth-running.html)
+## [Smooth Running : Done](project-smooth-running.html)
 
 This project assumes that a list of waypoints has been found which correspond to
 the shortest path to the goal.  In order to get from "a" to "b" smoothly,

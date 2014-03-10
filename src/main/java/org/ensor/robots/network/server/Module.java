@@ -34,7 +34,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.ensor.robots.os.IModule;
 import org.ensor.robots.os.IModuleManager;
-import org.ensor.robots.scheduler.BioteManager;
+import org.ensor.threads.biote.BioteManager;
 
 /**
  *
@@ -42,11 +42,11 @@ import org.ensor.robots.scheduler.BioteManager;
  */
 public class Module implements IModule {
     private Server mServer;
-    private final org.ensor.robots.scheduler.Module mBioteModule;
+    private final org.ensor.threads.biote.Module mBioteModule;
     private static final int ROBOT_DEFAULT_HTTP_PORT = 8080;
 
     public Module(
-            final org.ensor.robots.scheduler.Module aBioteModule
+            final org.ensor.threads.biote.Module aBioteModule
     ) {
         mBioteModule = aBioteModule;
     }
@@ -54,7 +54,7 @@ public class Module implements IModule {
     
     public Class[] getDependencies() {
         Class [] deps = {
-            org.ensor.robots.scheduler.Module.class
+            org.ensor.threads.biote.Module.class
         };
         return deps;
     }

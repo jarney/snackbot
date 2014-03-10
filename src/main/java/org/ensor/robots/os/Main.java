@@ -34,8 +34,8 @@ public class Main {
         ModuleManager moduleManager = new ModuleManager();
         
         
-        org.ensor.robots.scheduler.Module bioteModule =
-                new org.ensor.robots.scheduler.Module();
+        org.ensor.threads.biote.Module bioteModule =
+                new org.ensor.threads.biote.Module();
         moduleManager.register(bioteModule);
         
         org.ensor.robots.network.server.Module networkModule =

@@ -44,6 +44,10 @@ public final class NaturalSpline3D
     extends PathBase<Vector3>
     implements IPath<Vector3> {
 
+    private NaturalSpline3D(final IInterpolator<Vector3>[] interpolators) {
+        super(interpolators);
+    }
+
     /**
      * The constructor creates a natural cubic spline path
      * which can interpolate between the various points given
@@ -53,12 +57,12 @@ public final class NaturalSpline3D
      *
      * @param aPoints The list of points to interpolate between.
      */
-    public NaturalSpline3D(final List<Vector3> aPoints) {
-        super(createInterpolators(aPoints));
-    }
-
-    private static IInterpolator<Vector3>[] createInterpolators(
+    public static NaturalSpline3D createInterpolators(
             final List<Vector3> aPoints) {
+        
+        if (aPoints == null) {
+            return null;
+        }
 
         CubicInterpolatorFactory cif = new CubicInterpolatorFactory();
 
@@ -69,6 +73,10 @@ public final class NaturalSpline3D
         IDifferentiableFunction[] zInterp = cif.createInterpolators(
                 new VectorValueCollection(aPoints, ZProjection.PROJECTION));
 
+        if (xInterp == null || yInterp == null || zInterp == null) {
+            return null;
+        }
+        
         int num = xInterp.length;
         IInterpolator<Vector3>[] interpolators = new IInterpolator[num];
 
@@ -78,7 +86,7 @@ public final class NaturalSpline3D
             );
         }
 
-        return interpolators;
+        return new NaturalSpline3D(interpolators);
     }
 
 }

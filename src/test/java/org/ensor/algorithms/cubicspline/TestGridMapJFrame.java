@@ -142,7 +142,7 @@ public class TestGridMapJFrame extends javax.swing.JFrame {
                     path.add(v);
                 }
                 
-                mSpline = new NaturalSpline2D(path);
+                mSpline = NaturalSpline2D.createInterpolators(path);
             }
         }
         mTestCanvas.repaint();

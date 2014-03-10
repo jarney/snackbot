@@ -54,12 +54,16 @@ public final class NaturalSpline4D
      *
      * @param aPoints The list of points to interpolate between.
      */
-    public NaturalSpline4D(final List<Vector4> aPoints) {
-        super(createInterpolators(aPoints));
+    public NaturalSpline4D(final IInterpolator<Vector4>[] interpolators) {
+        super(interpolators);
     }
 
-    private static IInterpolator<Vector4>[] createInterpolators(
+    public static NaturalSpline4D createInterpolators(
             final List<Vector4> aPoints) {
+        
+        if (aPoints == null) {
+            return null;
+        }
 
         CubicInterpolatorFactory cif = new CubicInterpolatorFactory();
 
@@ -72,6 +76,13 @@ public final class NaturalSpline4D
         IDifferentiableFunction[] wInterp = cif.createInterpolators(
                 new VectorValueCollection(aPoints, WProjection.PROJECTION));
 
+        if (xInterp == null ||
+            yInterp == null ||
+            zInterp == null ||
+            wInterp == null) {
+            return null;
+        }
+        
         int num = xInterp.length;
         IInterpolator<Vector4>[] interpolators = new IInterpolator[num];
 
@@ -81,7 +92,7 @@ public final class NaturalSpline4D
             );
         }
 
-        return interpolators;
+        return new NaturalSpline4D(interpolators);
     }
 
 }

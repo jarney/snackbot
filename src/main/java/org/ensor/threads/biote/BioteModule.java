@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.scheduler;
+package org.ensor.threads.biote;
 
 /**
  * The Biote module class provides the capability to add functionality
