@@ -24,7 +24,9 @@
 
 package org.ensor.threads.biote;
 
+import org.ensor.data.atom.Atom;
 import org.ensor.data.atom.DictionaryAtom;
+import org.ensor.data.atom.ListAtom;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -105,6 +107,8 @@ public class TestBioteManager {
             
         @Override
         protected void onInit(final Event message) throws Exception {
+            Assert.assertEquals(2, getBioteManager().getBioteCount());
+            
             this.subscribe("on-timer", new IEventHandler() {
                 public void process(final Event msg) throws Exception {
                     onTimer(msg);
@@ -126,7 +130,11 @@ public class TestBioteManager {
             DictionaryAtom dict = DictionaryAtom.newAtom();
             dict.setInt("biote-one-id", this.getBioteId());
             Event eventFromOne = new Event("event-from-one", dict);
-            this.sendStimulus(mBioteOneId, eventFromOne);
+            sendStimulus(mBioteOneId, eventFromOne);
+            
+            // While we're at it, let's try starting a timer for a biote
+            // which doesn't exist to see how it gets handled.
+            getBioteManager().startTimer(99, 10, message, false);
         }
 
 
@@ -187,6 +195,31 @@ public class TestBioteManager {
         // Dump activity on the threads.
         bioteManager.checkThreadActivity();
         Assert.assertFalse(bioteManager.isRunning());
+        
+        ListAtom listStats = bioteManager.flushStats();
+        bioteManager.logString(true, 0, "Stats:", listStats);
+        
+        DictionaryAtom stimulate = null;
+        DictionaryAtom startTimer = null;
+        DictionaryAtom sendStimulus = null;
+        
+        for (Atom a : listStats) {
+            DictionaryAtom d = (DictionaryAtom) a;
+            if (d.getString("name").equals("Biote.java:stimulate")) {
+                stimulate = d;
+            }
+            if (d.getString("name").equals("BioteManager.java:startTimer")) {
+                startTimer = d;
+            }
+            if (d.getString("name").equals("BioteManager.java:sendStimulus")) {
+                sendStimulus = d;
+            }
+        }
+
+        Assert.assertNotNull(stimulate);
+        Assert.assertNotNull(startTimer);
+        Assert.assertNotNull(sendStimulus);
+        
         
     }
     

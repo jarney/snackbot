@@ -50,19 +50,11 @@ public class BooleanSet {
         mHandler = handler;
         mMessage = msg;
         mSet = new HashMap<String,Boolean>();
-        mSilentLogs = false;
-    }
-    public BooleanSet(Event msg, IEventHandler handler, boolean silenceLogs) {
-        mSilentLogs = silenceLogs;
-        mHandler = handler;
-        mMessage = msg;
-        mSet = new HashMap<String, Boolean>();
     }
     public BooleanSet(String msg, IEventHandler handler) {
         mHandler = handler;
         mMessage = new Event(msg);
         mSet = new HashMap<String, Boolean>();
-        mSilentLogs = false;
     }
     /**
      * Adds the given itemName to the list of things that this boolean set is waiting for.

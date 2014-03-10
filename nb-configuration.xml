@@ -27,6 +27,7 @@ Any value defined here will override the pom.xml file value but is only applicab
         <word>Servlet</word>
         <word>SnackBot</word>
         <word>threadsafe</word>
+        <word>Throwable</word>
         <word>unsubscribe</word>
         <word>voxel</word>
         <word>waypoints</word>

@@ -29,6 +29,7 @@ import org.ensor.data.atom.Atom;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import org.ensor.java.utilities.StackTrace;
 
 /**
  * The Biote is the primitive implementation element in this system.  A Biote
@@ -181,7 +182,7 @@ public abstract class Biote {
             }
             catch (Exception ex) {
                 log(true, "Biote.stimulate():" + ex.toString());
-                log(true, BioteManager.getStackTrace(ex));
+                log(true, StackTrace.getStackTrace(ex));
             }
         }
         /**

@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.data.atom.log.AtomLogger;
+import org.ensor.java.utilities.StackTrace;
 
 public class BioteManager {
         protected final static Logger mLogger = Logger.getLogger(BioteManager.class .getName()); 
@@ -158,31 +159,45 @@ public class BioteManager {
         public boolean isRunning() {
             return mRunning.get();
         }
+        
+
+        private void doPrivateShutdown() {
+                logString(true, 0, "Beginning BioteManager shutdown sequence...");
+                mRunning.set(false);
+                try {
+                    mThreadPool.shutdown();
+                    mThreadPool.awaitTermination(30, TimeUnit.SECONDS);
+                }
+                catch (InterruptedException error ) {
+                }
+                catch (Exception ex) {
+                    mLogger.log(Level.SEVERE, "Exception shutting down", ex);
+                }
+                try {
+                    mBlockingThreadPool.shutdown();
+                    mBlockingThreadPool.awaitTermination(30, TimeUnit.SECONDS);
+                }
+                catch( InterruptedException error ) {
+                }
+                catch (Exception ex) {
+                    mLogger.log(Level.SEVERE, "Exception shutting down", ex);
+                }
+
+                mTimer.cancel();
+
+                logString(true, 0, "Biote manager is no longer running.  Ther server is effectively down.");
+        }
+        
+        class ShutdownRunnable implements Runnable {
+            public void run() {
+                doPrivateShutdown();
+            }
+        };
 	public void shutdown() {
-            logString(true, 0, "Beginning BioteManager shutdown sequence...");
-            mRunning.set(false);
-            try {
-                mThreadPool.shutdown();
-                mThreadPool.awaitTermination(30, TimeUnit.SECONDS);
-            }
-            catch (InterruptedException error ) {
-            }
-            catch (Exception ex) {
-                mLogger.log(Level.SEVERE, "Exception shutting down", ex);
-            }
-            try {
-                mBlockingThreadPool.shutdown();
-                mBlockingThreadPool.awaitTermination(30, TimeUnit.SECONDS);
-            }
-            catch( InterruptedException error ) {
-            }
-            catch (Exception ex) {
-                mLogger.log(Level.SEVERE, "Exception shutting down", ex);
-            }
+            ShutdownRunnable shutdownRunnable = new ShutdownRunnable();
+            Thread t = new Thread(shutdownRunnable);
+            t.start();
             
-            mTimer.cancel();
-            
-            logString(true, 0, "Biote manager is no longer running.  Ther server is effectively down.");
 	}
         protected void logString(boolean system, int bioteId, String message) {
             if (!system) return;
@@ -357,20 +372,6 @@ public class BioteManager {
             }
             task.cancel();
 	}
-        /**
-         * This function is a static utility method for returning a stack trace for a given exception.
-         * @param t Throwable exception to examine to find a stack trace.
-         * @return Returns a string representation of a stack trace for the given event.
-         */
-        public static String getStackTrace(Throwable t)
-        {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw, true);
-            t.printStackTrace(pw);
-            pw.flush();
-            sw.flush();
-            return sw.toString();
-        }
         public void sampleStat(String statName) {
             sampleStat(statName, 1);
         }
@@ -404,18 +405,28 @@ class BioteThread implements Runnable {
 	private final ConcurrentLinkedQueue<Biote>      mReadyBiotes;
         private final ConcurrentMap<Long, Long>         mTimeMap;
         private final BioteManager                      mBioteManager;
-	BioteThread(ConcurrentLinkedQueue<Biote> readyBiotes, ConcurrentMap<Long, Long> aTimeMap, AtomicBoolean running, BioteManager aBioteManager) {
-		mReadyBiotes = readyBiotes;
-                mTimeMap = aTimeMap;
-                mRunning = running;
-                mBioteManager = aBioteManager;
+	BioteThread(
+                final ConcurrentLinkedQueue<Biote> readyBiotes,
+                final ConcurrentMap<Long, Long> aTimeMap,
+                final AtomicBoolean running,
+                final BioteManager aBioteManager) {
+            mReadyBiotes = readyBiotes;
+            mTimeMap = aTimeMap;
+            mRunning = running;
+            mBioteManager = aBioteManager;
 	}
 	public void run() {
-                mBioteManager.logString(Constants.LOG_BIOTE_MANAGER, 0, "Starting event handling thread...");
+                mBioteManager.logString(
+                        Constants.LOG_BIOTE_MANAGER,
+                        0,
+                        "Starting event handling thread...");
 		while (mRunning.get()) {
 			checkBiotes();
 		}
-                mBioteManager.logString(Constants.LOG_BIOTE_MANAGER, 0, "Terminating event handling thread...");
+                mBioteManager.logString(
+                        Constants.LOG_BIOTE_MANAGER,
+                        0,
+                        "Terminating event handling thread...");
 	}
 	public void checkBiotes() {
             Biote b = mReadyBiotes.poll();
@@ -425,14 +436,22 @@ class BioteThread implements Runnable {
                 try {
                     markStart();
                     b.__protected_friend_BioteThread__processEvents();
-                    markStop();
                 }
                 catch (Exception ex) {
-                    mBioteManager.mLogger.severe("BioteManager:Exception -> " + ex.toString() + "\n\r" + BioteManager.getStackTrace(ex));
+                    BioteManager.mLogger.severe(
+                            "BioteManager:Exception -> " +
+                            ex.toString() + "\n\r" +
+                            StackTrace.getStackTrace(ex));
                 }
-                catch( Error ex ) {
-                    mBioteManager.mLogger.severe("BioteManager:Error -> " + ex.toString() + "\n\r" + BioteManager.getStackTrace(ex));
+                catch (Error ex) {
+                    BioteManager.mLogger.severe(
+                            "BioteManager:Error -> " +
+                                    ex.toString() + "\n\r" +
+                                    StackTrace.getStackTrace(ex));
                     mBioteManager.shutdown();
+                }
+                finally {
+                    markStop();
                 }
             }
             // If we did not have any messages for any biotes to process
@@ -448,46 +467,62 @@ class BioteThread implements Runnable {
 	}
 
         private void markStart() {
-            if( mTimeMap != null )
+            if (mTimeMap != null) {
                 mTimeMap.put(Thread.currentThread().getId(), System.nanoTime());
+            }
         }
 
         private void markStop() {
-            if( mTimeMap != null )
+            if (mTimeMap != null) {
                 mTimeMap.remove(Thread.currentThread().getId());
+            }
         }
 };
 
 class StimulateEventTask extends TimerTask {
-	private int			mBioteId;
-	private Event               mEPropTree;
+	private final int               mBioteId;
+	private final Event             mEPropTree;
         private boolean                 mRepeating;
-        private int                     mTimerId;
-        private BioteManager            mBioteManager;
+        private final int               mTimerId;
+        private final BioteManager      mBioteManager;
         
-	StimulateEventTask(int bioteId, Event msg, boolean repeating, int timerId, BioteManager aBioteManager) {
-		mBioteId = bioteId;
-		mEPropTree = msg;
-                mRepeating = repeating;
-                mTimerId = timerId;
-                mBioteManager = aBioteManager;
+	StimulateEventTask(
+                final int bioteId,
+                final Event msg,
+                final boolean repeating,
+                final int timerId,
+                final BioteManager aBioteManager) {
+            mBioteId = bioteId;
+            mEPropTree = msg;
+            mRepeating = repeating;
+            mTimerId = timerId;
+            mBioteManager = aBioteManager;
 	}
 	public void run() {
 		try {
-			boolean rc = mBioteManager.sendStimulus(mBioteId, mEPropTree, mBioteId);
+			boolean rc = mBioteManager.sendStimulus(
+                                mBioteId,
+                                mEPropTree,
+                                mBioteId);
                         if (!rc) {
                             mRepeating = false;
                         }
 		}
                 catch (Exception ex) {
-                    mBioteManager.logString(true, mBioteId, "StimulateEventTask:Exception -> " + ex.toString() + "\n\r" + BioteManager.getStackTrace(ex));
+                    mBioteManager.logString(true, mBioteId,
+                            "StimulateEventTask:Exception -> " +
+                                    ex.toString() + "\n\r" +
+                            StackTrace.getStackTrace(ex));
                 }
-                catch( AssertionError ex ) {
-                    mBioteManager.logString(true, mBioteId, "BioteManager:Error -> " + ex.toString() + "\n\r" + BioteManager.getStackTrace(ex));
+                catch (AssertionError ex) {
+                    mBioteManager.logString(true, mBioteId,
+                            "BioteManager:Error -> " +
+                                    ex.toString() + "\n\r" +
+                            StackTrace.getStackTrace(ex));
                     mBioteManager.shutdown();
                 }
 
-                if( !mRepeating ) {
+                if (!mRepeating) {
                     mBioteManager.cancelTimer(mTimerId);
                 }
 	}
