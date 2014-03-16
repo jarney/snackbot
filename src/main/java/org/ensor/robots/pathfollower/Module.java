@@ -21,32 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.ensor.robots.motors;
+
+package org.ensor.robots.pathfollower;
+
+import org.ensor.robots.os.IModule;
+import org.ensor.robots.os.IModuleManager;
+import org.ensor.threads.biote.BioteManager;
 
 /**
  *
  * @author jona
  */
-public interface IMotorWithEncoder extends IMotor {
-    /**
-     * This method returns the current position of the quadrature encoder
-     * register.
-     * @return The current value of the quadrature encoder register.
-     */
-    long getEncoderPosition();
+public class Module implements IModule {
+    
+    private final org.ensor.threads.biote.Module mBioteModule;
 
-    /**
-     * This method returns the current speed of the motor in terms of
-     * quadrature encoder pulses per second.
-     * @return The number of pulses per second of the quadrature encoder.
-     */
-    long getEncoderSpeed();
+    
+    public Module(
+            final org.ensor.threads.biote.Module aBioteModule
+    ) {
+        mBioteModule = aBioteModule;
+    }
 
-    /**
-     * This method returns true if the motor has a quadrature encoder
-     * and 'false' if the motor has an absolute position encoder.
-     * @return True if the motor has a quadrature encoder.
-     */
-    boolean getEncoderQuatratureMode();
+    public Class[] getDependencies() {
+        Class [] deps = {
+            org.ensor.threads.biote.Module.class,
+            org.ensor.robots.roboclawdriver.Module.class
+        };
+        return deps;
+    }
+
+    public void start(IModuleManager aManager) throws Exception {
+        
+        BioteManager mgr = mBioteModule.getBioteManager();
+        DifferentialDriveBiote ddBiote = new DifferentialDriveBiote(mgr);
+        mgr.createBiote(ddBiote);
+        PathFollower pathFollower = new PathFollower(mgr, ddBiote.getBioteId());
+        mgr.createBiote(pathFollower);
+    }
+
+    public void shutdown(IModuleManager aManager) throws Exception {
+    }
+    
 
 }

@@ -57,8 +57,10 @@ public class DifferentialDrive {
     
     public void recalculateTrajectory() {
         
-        // Input: velocity at the start, velocity at end.
-        // time: time between samples (dt)
+        // Input:
+        //   velocity at the start (m/s)
+        //   acceleration at the start (m/s^2)
+        //   time: time between samples (dt)
         Vector2 v0 = new Vector2(1,1);
         Vector2 a = new Vector2(1,1);
         

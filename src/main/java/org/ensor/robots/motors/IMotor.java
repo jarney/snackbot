@@ -32,7 +32,7 @@ package org.ensor.robots.motors;
  *
  * @author jona
  */
-public interface IMotor extends ICurrentMeasurable {
+public interface IMotor {
 
     /**
      * This method drives the motor according to the

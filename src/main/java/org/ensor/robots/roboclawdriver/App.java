@@ -23,11 +23,11 @@
  */
 package org.ensor.robots.roboclawdriver;
 
-import java.io.FileNotFoundException;
-import java.util.List;
 import org.ensor.robots.motors.ComponentManager;
 import org.ensor.robots.motors.IComponent;
-import org.ensor.robots.motors.IMotorWithEncoder;
+import org.ensor.robots.motors.ICurrentMeasurable;
+import org.ensor.robots.motors.IEncoder;
+import org.ensor.robots.motors.IMotor;
 
 /**
  * This class is a simple test application to verify
@@ -38,7 +38,10 @@ public final class App {
     private App() {}
     
     public static void poll(RoboClaw roboClaw,
-            IMotorWithEncoder m1, IMotorWithEncoder m2) {
+            IEncoder m1,
+            ICurrentMeasurable c1,
+            IEncoder m2,
+            ICurrentMeasurable c2) {
         
         roboClaw.updateData();
         System.out.println("Firmware revision: " + 
@@ -50,13 +53,13 @@ public final class App {
         
         long enc1pos = m1.getEncoderPosition();
         long enc1v = m1.getEncoderSpeed();
-        double m1I = m1.getCurrentDraw();
+        double m1I = c1.getCurrentDraw();
         
         System.out.println("motor1 pos " + enc1pos + " v = " + enc1v + " I = " + m1I);
         
         long enc2pos = m2.getEncoderPosition();
         long enc2v = m2.getEncoderSpeed();
-        double m2I = m2.getCurrentDraw();
+        double m2I = c2.getCurrentDraw();
         
         System.out.println("motor2 pos " + enc2pos + " v = " + enc2v + " I = " + m2I);
         
@@ -70,32 +73,37 @@ public final class App {
         IComponent c1 = ComponentManager.getComponent("roboclaw-0-motor0");
         IComponent c2 = ComponentManager.getComponent("roboclaw-0-motor1");
         
-        IMotorWithEncoder m1 = c1.getMotorWithEncoderInterface();
-        IMotorWithEncoder m2 = c2.getMotorWithEncoderInterface();
+        ICurrentMeasurable cc1 = c1.getElectricalMonitor();
+        IEncoder ce1 = c1.getEncoder();
+        ICurrentMeasurable cc2 = c2.getElectricalMonitor();
+        IEncoder ce2 = c2.getEncoder();
         
-        poll(roboClaw, m1, m2);
+        IMotor m1 = c1.getMotorInterface();
+        IMotor m2 = c2.getMotorInterface();
+        
+        poll(roboClaw, ce1, cc1, ce2, cc2);
         
         m1.setDutyCycle(1.0);
         m2.setDutyCycle(0.5);
         
         Thread.sleep(500);
-        poll(roboClaw, m1, m2);
-        poll(roboClaw, m1, m2);
-        poll(roboClaw, m1, m2);
-        poll(roboClaw, m1, m2);
-        poll(roboClaw, m1, m2);
+        poll(roboClaw, ce1, cc1, ce2, cc2);
+        poll(roboClaw, ce1, cc1, ce2, cc2);
+        poll(roboClaw, ce1, cc1, ce2, cc2);
+        poll(roboClaw, ce1, cc1, ce2, cc2);
+        poll(roboClaw, ce1, cc1, ce2, cc2);
  
         m1.setDutyCycle(0.0);
         m2.setDutyCycle(0.0);
         
         Thread.sleep(500);
-        poll(roboClaw, m1, m2);
+        poll(roboClaw, ce1, cc1, ce2, cc2);
  
         m1.setDutyCycle(-0.5);
         m2.setDutyCycle(-1);
         
         Thread.sleep(500);
-        poll(roboClaw, m1, m2);
+        poll(roboClaw, ce1, cc1, ce2, cc2);
         
         m1.setDutyCycle(0.0);
         m2.setDutyCycle(0.0);

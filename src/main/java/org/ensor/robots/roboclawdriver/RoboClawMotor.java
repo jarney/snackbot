@@ -25,8 +25,9 @@ package org.ensor.robots.roboclawdriver;
 
 import org.ensor.robots.motors.IComponent;
 import org.ensor.robots.motors.IConfigurable;
+import org.ensor.robots.motors.ICurrentMeasurable;
+import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
-import org.ensor.robots.motors.IMotorWithEncoder;
 import org.ensor.robots.motors.IServo;
 import org.ensor.robots.motors.ITemperatureSensor;
 
@@ -36,7 +37,9 @@ import org.ensor.robots.motors.ITemperatureSensor;
  */
 class RoboClawMotor implements
         IComponent,
-        IMotorWithEncoder {
+        IMotor,
+        ICurrentMeasurable,
+        IEncoder {
 
     private final RoboClaw mMotorController;
     private final int mMotorId;
@@ -57,7 +60,7 @@ class RoboClawMotor implements
 
     private final SpeedServo mSpeedServo;
     private final PositionServo mPositionServo;
-            
+
     class SpeedServo implements IServo {
 
         public void setPosition(final long aPosition) {
@@ -116,10 +119,6 @@ class RoboClawMotor implements
         return this;
     }
 
-    public IMotorWithEncoder getMotorWithEncoderInterface() {
-        return this;
-    }
-
     public IConfigurable getConfigurableInterface() {
         return null;
     }
@@ -135,6 +134,15 @@ class RoboClawMotor implements
     public ITemperatureSensor getTemperatureSensor() {
         return null;
     }
+    
+    public ICurrentMeasurable getElectricalMonitor() {
+        return this;
+    }
+
+    public IEncoder getEncoder() {
+        return this;
+    }
+            
     
     public int getPConstant() {
         return mPConstant;

@@ -36,13 +36,30 @@ package org.ensor.robots.os;
 public interface IModule {
 
     /**
+     * This method returns the list of dependencies of this
+     * module which in turn is the list of classes which must
+     * be first initialized before this module can be initialized.
      *
-     * @return
+     * @return A list of dependent modules.
      */
     Class[] getDependencies();
-    
-    void start(IModuleManager aManager);
-    
-    void shutdown(IModuleManager aManager);
+
+    /**
+     * This method implements the procedure necessary to start the
+     * module's systems.
+     * @param aManager The module manager object.
+     * @throws Exception If an exception occurs during startup, it is
+     *                   propagated back up to the module manager so that
+     *                   the other modules can be shut down.
+     */
+    void start(IModuleManager aManager) throws Exception;
+
+    /**
+     * This method implements the shutdown procedure for a module.
+     * @param aManager The manager managing these modules.
+     * @throws Exception If an exception occurs during shutdown, nothing
+     *                   can really be done about it other than to log it.
+     */
+    void shutdown(IModuleManager aManager) throws Exception;
     
 }

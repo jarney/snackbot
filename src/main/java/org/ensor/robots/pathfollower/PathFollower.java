@@ -31,6 +31,7 @@ import org.ensor.data.atom.Atom;
 import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.data.atom.ImmutableDict;
 import org.ensor.data.atom.ImmutableList;
+import org.ensor.data.atom.ListAtom;
 import org.ensor.math.analysis.IFunction;
 import org.ensor.math.analysis.LinearFunction;
 import org.ensor.math.analysis.QuadraticFunction;
@@ -104,20 +105,25 @@ public class PathFollower extends Biote {
     /// The last time we received a location update (in ms).
     private Integer mLastLocationTime;
     
-    private Integer mPathStartTime;
-    
+    private Long mPathStartTime;
+
+    // 0.5 m/s top speed.
+    private double mVMax = 0.5;
 
     /// The goal location and velocity.
     private Vector3 mGoalLocation;
     private Vector3 mGoalVel;
 
     private IFunction mDistanceFunction;
-
+    private double mTotalPathLength;
+    
     /// The biote to notify when the path
     // has been completed.
     private Integer mCompleteNotify;
     
     private NaturalSpline3D mSpline;
+    
+    private double mDir = 0;
     
     // Roughly one tenth of a second.
     private static final int TICK_DURATION_MILLISECONDS = 100;
@@ -126,12 +132,18 @@ public class PathFollower extends Biote {
                             (double) TICK_DURATION_MILLISECONDS /
                                      MILLISECONDS_PER_SECOND;
     /**
-     *
-     * @param aBioteManager
+     * This is a path following Biote which is responsible
+     * for receiving a planned path and executing it by sending events
+     * to the object responsible for executing the
+     * position and direction movement.
+     * @param aBioteManager Biote manager.
      */
-    public PathFollower(final BioteManager aBioteManager) {
+    public PathFollower(
+            final BioteManager aBioteManager,
+            final int aMover) {
         super(aBioteManager, false);
         mTimerId = null;
+        mMoverBioteId = aMover;
     }
 
     @Override
@@ -142,20 +154,22 @@ public class PathFollower extends Biote {
             }
         });
         subscribe("Navigation-LocationEstimate", new IEventHandler() {
-            public void process(Event msg) throws Exception {
+            public void process(final Event msg) throws Exception {
                 onLocationUpdated(msg);
             }
         });
         subscribe("PathFollower-PathFinished", new IEventHandler() {
-            public void process(Event msg) throws Exception {
+            public void process(final Event msg) throws Exception {
                 onPathFinished(msg);
             }
         });
         subscribe("PathFollower-Tick", new IEventHandler() {
-            public void process(Event msg) throws Exception {
+            public void process(final Event msg) throws Exception {
                 onPathTick(msg);
             }
         });
+        // Start running the path again...
+        onPathFinished(null);
     }
 
     @Override
@@ -182,9 +196,10 @@ public class PathFollower extends Biote {
      *               the planning system.
      */
     private void onPathPlanned(final Event aEvent) {
+        mCompleteNotify = aEvent.getData().getInt("complete-notify-biote");
+        
         ImmutableDict start = aEvent.getData().getDictionary("start");
         ImmutableDict startVel = aEvent.getData().getDictionary("start-vel");
-        mCompleteNotify = aEvent.getData().getInt("complete-notify-biote");
         mLastLocation = readPoint(start);
         mLastVel = readPoint(startVel);
         ImmutableDict end = aEvent.getData().getDictionary("end");
@@ -200,74 +215,107 @@ public class PathFollower extends Biote {
             Vector3 p = readPoint(point);
             points.add(p);
         }
-        
-        // Input parameters
-        // of the system, these are properties
-        // of the robot as the maximum acceleration and
-        // maximum deceleration, and maximum cruising speed.
-        double mAccel = 1;
-        double mDecel = 1;
-        double mVMax = 1;
-        
-        // Starting and ending velocity.
-        double v0 = mLastVel.length();
-        double v1 = mGoalVel.length();
-        
+        mPathStartTime = System.currentTimeMillis();
         mSpline = NaturalSpline3D.createInterpolators(points);
         
         // Calculate the cubic spline between the waypoints and from that, the
         // overall path length.
-        double dPath = mSpline.getLength();
-        
-        // Calculate the time we spend accelerating and decelerating.
-        double tAccel = (mVMax - v0) / mAccel;
-        double tDecel = (mVMax - v1) / mDecel;
-
-        // Calculate the distance we spend accelerating and decelerating.
-        double dAccel = v0 * tAccel + mAccel * tAccel * tAccel / 2;
-        double dDecel = v0 * tDecel + mDecel * tDecel * tDecel / 2;
-        
-        double dCruising = dPath - dAccel - dDecel;
-        
-        // If the total cruising distance is negative, then this means
-        // we don't reach top speed before decelerating.  Therefore
-        // we need to adjust our times and distances.
-        if (dCruising < 0) {
-            dCruising = 0;
-            // XXX: TODO: Recalculate tAccel and tDecel because we're
-            //            in this region.
-        }
-
-        // d = d0 + v0t + v(t)*t;
-        // d = d0 + v0t + at^2
-
-        // Accelerating from 0 to tAccel
-        QuadraticFunction distance1 = new QuadraticFunction(0, v0, mAccel);
-
-        LinearFunction distance2 = new LinearFunction(dAccel, mVMax);
-        
-        // Decelerating from tCruise to tCruise + tDecel
-        QuadraticFunction distance3 = new QuadraticFunction(dCruising, v0, mAccel);
-
-        // Compose these together.
-        mDistanceFunction = distance3;
-        
-        mTimerId = startTimer(TICK_DURATION_MILLISECONDS, TICK_EVENT, false);
+        mTotalPathLength = mSpline.getLength();
+//        
+//        // Input parameters
+//        // of the system, these are properties
+//        // of the robot as the maximum acceleration and
+//        // maximum deceleration, and maximum cruising speed.
+//        double mAccel = 1;
+//        double mDecel = 1;
+//        double mVMax = 1;
+//        
+//        // Starting and ending velocity.
+//        double v0 = mLastVel.length();
+//        double v1 = mGoalVel.length();
+//        
+//        // Calculate the time we spend accelerating and decelerating.
+//        double tAccel = (mVMax - v0) / mAccel;
+//        double tDecel = (mVMax - v1) / mDecel;
+//
+//        // Calculate the distance we spend accelerating and decelerating.
+//        double dAccel = v0 * tAccel + mAccel * tAccel * tAccel / 2;
+//        double dDecel = v0 * tDecel + mDecel * tDecel * tDecel / 2;
+//        
+//        double dCruising = dPath - dAccel - dDecel;
+//        
+//        // If the total cruising distance is negative, then this means
+//        // we don't reach top speed before decelerating.  Therefore
+//        // we need to adjust our times and distances.
+//        if (dCruising < 0) {
+//            dCruising = 0;
+//            // XXX: TODO: Recalculate tAccel and tDecel because we're
+//            //            in this region.
+//        }
+//
+//        // d = d0 + v0t + v(t)*t;
+//        // d = d0 + v0t + at^2
+//
+//        // Accelerating from 0 to tAccel
+//        QuadraticFunction distance1 = new QuadraticFunction(0, v0, mAccel);
+//
+//        LinearFunction distance2 = new LinearFunction(dAccel, mVMax);
+//        
+//        // Decelerating from tCruise to tCruise + tDecel
+//        QuadraticFunction distance3 = new QuadraticFunction(dCruising, v0, mAccel);
+//
+//        // Compose these together.
+//        mDistanceFunction = distance3;
+//        
+        mTimerId = startTimer(TICK_DURATION_MILLISECONDS, TICK_EVENT, true);
     }
     
-    protected Vector3 readPoint(ImmutableDict aDict) {
+    protected Vector3 readPoint(final ImmutableDict aDict) {
         return new Vector3(
                 aDict.getReal("x"),
                 aDict.getReal("y"),
                 aDict.getReal("z"));
     }
     
+    protected void writePoint(final DictionaryAtom aDict, Vector3 aPoint) {
+        aDict.setReal("x", aPoint.getX());
+        aDict.setReal("y", aPoint.getY());
+        aDict.setReal("z", aPoint.getZ());
+    }
+    
     private void onPathFinished(final Event aEvent) {
+
+        DictionaryAtom pathDict = DictionaryAtom.newAtom();
+        pathDict.setInt("complete-notify-biote", getBioteId());
+        // This is a closed path.
+        Vector3 start = new Vector3(0, 0, 0);
+        Vector3 startVel = new Vector3(0, 0, 0);
+        writePoint(pathDict.newDictionary("start"), start);
+        writePoint(pathDict.newDictionary("start-vel"), startVel);
+        writePoint(pathDict.newDictionary("end"), start);
+        writePoint(pathDict.newDictionary("end-vel"), startVel);
+
+        // Trace a square path beginning and ending at the
+        // same point.
+        ListAtom pointList = pathDict.newList("path");
+        Vector3 p0 = new Vector3(0, 1, 0);
+        writePoint(pointList.newDictionary(), p0);
+        Vector3 p1 = new Vector3(1, 1, 0);
+        writePoint(pointList.newDictionary(), p1);
+        Vector3 p2 = new Vector3(1, 0, 0);
+        writePoint(pointList.newDictionary(), p2);
+        Vector3 p3 = new Vector3(0, 0, 0);
+        writePoint(pointList.newDictionary(), p3);
+
+        Event planNewPath = new Event("Navigation-PathPlanned", pathDict);
+        sendStimulus(getBioteId(), planNewPath);
+
+
         // If our caller asked us to, let's notify them
         // of the path completion.
-        if (mCompleteNotify != null) {
-            sendStimulus(mCompleteNotify, aEvent);
-        }
+//        if (mCompleteNotify != null) {
+//            sendStimulus(mCompleteNotify, aEvent);
+//        }
     }
     private void onLocationUpdated(final Event aEvent) {
         
@@ -278,12 +326,22 @@ public class PathFollower extends Biote {
         double relativeTime = getElapsed();
         // From this, obtain the position along the spline corresponding
         // to the time we expect the next tick to occur.
-        double dNext = mDistanceFunction.getValue(
-                relativeTime + TICK_DURATION_SECONDS);
-
+//        double dNext = mDistanceFunction.getValue(
+//                relativeTime + TICK_DURATION_SECONDS);
+        double dNext = mVMax * relativeTime + TICK_DURATION_SECONDS;
+        double pathFraction = (dNext / mTotalPathLength);
+        if (pathFraction > 1.0) {
+            cancelTimer(mTimerId);
+            Event evt = new Event("PathFollower-PathFinished");
+            sendStimulus(getBioteId(), evt);
+            return;
+        }
+        
+        System.out.println("d = " + dNext + " pfract = " + pathFraction);
+        
         // From the spline, this is the location
         // of where we expect to be for the next tick.
-        Vector3 nextLocation = mSpline.getPosition(dNext);
+        Vector3 nextLocation = mSpline.getPosition(pathFraction);
 
         // This is the amount of distance
         // we need to cover for the next tick.
@@ -306,15 +364,21 @@ public class PathFollower extends Biote {
             // This is the angle we need to head.
             dir = Math.atan2(direction.getX(), direction.getY());
         }
+
+        int idir = (int) (dir * 360 / Math.PI * 2);
+        System.out.println("v = " + vel + " d = " + idir);
         
         // Send the movement request to the mover.
         // Velocity is absolute while
         // direction is relative to our present direction.
         DictionaryAtom move = DictionaryAtom.newAtom();
-        move.setReal("direction", dir);
+        move.setReal("direction", dir - mDir);
         move.setReal("velocity", vel);
+        move.setReal("delta_time", TICK_DURATION_SECONDS);
         Event moveRequest = new Event("Mover-MoveRequest", move);
-        sendStimulus(this.mMoverBioteId, moveRequest);
+        sendStimulus(mMoverBioteId, moveRequest);
+        
+        mDir = dir;
     }
     /**
      * Returns the amount of time which has elapsed since we began following

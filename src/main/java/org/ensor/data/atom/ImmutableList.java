@@ -34,6 +34,13 @@ import java.util.Iterator;
 public final class ImmutableList extends ListBase implements
         Iterable<Atom> {
 
+    private static final ImmutableList EMPTY_LIST = new ImmutableList();
+    /**
+     * This method constructs a new empty dictionary.
+     */
+    private ImmutableList() {
+        super();
+    }
     private ImmutableList(final Iterable<Atom> aAtoms) {
         super();
         for (Atom value : aAtoms) {
@@ -47,6 +54,13 @@ public final class ImmutableList extends ListBase implements
             Atom ivalue = value.getImmutable();
             mList.add(ivalue);
         }
+    }
+    /**
+     * Returns the empty immutable list.
+     * @return An instance of an empty list.
+     */
+    public static ImmutableList newAtom() {
+        return EMPTY_LIST;
     }
     /**
      * This method creates a new immutable list from the given collection of

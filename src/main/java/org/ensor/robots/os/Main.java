@@ -30,21 +30,24 @@ package org.ensor.robots.os;
  */
 public class Main {
 
-    public static void main(String []args) {
+    public static void main(String []args) throws Exception {
         ModuleManager moduleManager = new ModuleManager();
         
+        org.ensor.robots.roboclawdriver.Module roboClawModule = 
+                new org.ensor.robots.roboclawdriver.Module();
+        moduleManager.register(roboClawModule);
         
         org.ensor.threads.biote.Module bioteModule =
                 new org.ensor.threads.biote.Module();
         moduleManager.register(bioteModule);
+
+        org.ensor.robots.pathfollower.Module pathModule =
+                new org.ensor.robots.pathfollower.Module(bioteModule);
+        moduleManager.register(pathModule);
         
-        org.ensor.robots.network.server.Module networkModule =
-            new org.ensor.robots.network.server.Module(bioteModule);
-                
-        moduleManager.register(networkModule);
-        
-//      moduleManager.register(
-//            org.ensor.robots.roboclawdriver.Module());
+//        org.ensor.robots.network.server.Module networkModule =
+//            new org.ensor.robots.network.server.Module(bioteModule);
+//        moduleManager.register(networkModule);
         
         moduleManager.startAll();
     }

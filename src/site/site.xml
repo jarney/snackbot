@@ -2,11 +2,11 @@
 <project name="Snackbot">
   <bannerLeft>
     <name>Snackbot</name>
-    <src>http://maven.apache.org/images/apache-maven-project.png</src>
-    <href>http://maven.apache.org/</href>
+    <src>snackbot-logo.png</src>
+    <href>http://jarney.github.io/snackbot/</href>
   </bannerLeft>
   <bannerRight>
-    <src>http://maven.apache.org/images/maven-small.gif</src>
+    <src>snackbot-logo.png</src>
   </bannerRight>
   <body>
     <links>

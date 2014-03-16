@@ -29,10 +29,8 @@ package org.ensor.robots.os;
  * @author jona
  */
 public interface IModuleManager {
-    void register(final IModule aModule);
+    void startAll() throws Exception;
     
-    void startAll();
-    
-    void shutdownAll();
+    void shutdownAll() throws Exception;
 
 }

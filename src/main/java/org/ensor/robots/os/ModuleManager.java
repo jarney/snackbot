@@ -92,7 +92,7 @@ public class ModuleManager implements IModuleManager {
      * The modules are then started in order of dependency thereby assuring
      * that they are started in the correct order.
      */
-    public void startAll() {
+    public void startAll() throws Exception {
         List<INode<IModule>> moduleNodes = getAllNodes();
         TopologicalSort<IModule> topologicalSort =
                 new TopologicalSort<IModule>();
@@ -110,7 +110,7 @@ public class ModuleManager implements IModuleManager {
      * reverse order of the startup.  This ensures that when dependent modules
      * are shut down, they don't have their dependency shut down first.
      */
-    public void shutdownAll() {
+    public void shutdownAll() throws Exception {
         List<INode<IModule>> moduleNodes = getAllNodes();
         TopologicalSort<IModule> topologicalSort =
                 new TopologicalSort<IModule>();

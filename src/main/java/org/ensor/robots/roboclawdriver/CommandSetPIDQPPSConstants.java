@@ -35,11 +35,11 @@ class CommandSetPIDQPPSConstants extends CommandResponseNone {
     private final int mQPPS;
 
     protected CommandSetPIDQPPSConstants(
-            int aMotorId,
-            int aP,
-            int aI,
-            int aD,
-            int aQPPS) {
+            final int aMotorId,
+            final int aP,
+            final int aI,
+            final int aD,
+            final int aQPPS) {
         mMotorId = aMotorId;
         mP = aP;
         mI = aI;

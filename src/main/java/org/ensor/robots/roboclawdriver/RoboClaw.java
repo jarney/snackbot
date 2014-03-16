@@ -23,13 +23,9 @@
  */
 package org.ensor.robots.roboclawdriver;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.robots.comm.ITTY;
@@ -37,8 +33,9 @@ import org.ensor.robots.comm.TTYFactory;
 import org.ensor.robots.motors.ComponentManager;
 import org.ensor.robots.motors.IComponent;
 import org.ensor.robots.motors.IConfigurable;
+import org.ensor.robots.motors.ICurrentMeasurable;
+import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
-import org.ensor.robots.motors.IMotorWithEncoder;
 import org.ensor.robots.motors.IServo;
 import org.ensor.robots.motors.ITemperatureSensor;
 
@@ -55,7 +52,7 @@ public class RoboClaw implements
      * This is the default address of the RoboClaw
      * on a packet-serial device.
      */
-    public static final byte ADDRESS_DEFAULT = (byte)0x80;
+    public static final byte ADDRESS_DEFAULT = (byte) 0x80;
     
     private final byte mAddress;
     private final OutputStream mOutputStream;
@@ -91,7 +88,7 @@ public class RoboClaw implements
      * and only one RoboClaw will be found on each of the virtual TTY devices.
      * @param aTTY The TTY on which to find the RoboClaw.
      * @param aAddress The address of the RoboClaw when in packet serial mode.
-     * @throws FileNotFoundException This exception is thrown if the TTY
+     * @throws Exception This exception is thrown if the TTY
      *                               device could not be found.
      */
     public RoboClaw(final String aTTY, final byte aAddress)
@@ -187,7 +184,7 @@ public class RoboClaw implements
      * This method handles a command to the RoboClaw controller.
      * The given command is serialized and sent to the RoboClaw
      * and the response is read and given to the command to handle.
-     * 
+     *
      * @param aCommand The command to execute.
      */
     protected void handleCommand(Command aCommand) {
@@ -339,10 +336,6 @@ public class RoboClaw implements
         return null;
     }
 
-    public IMotorWithEncoder getMotorWithEncoderInterface() {
-        return null;
-    }
-
     public IConfigurable getConfigurableInterface() {
         return this;
     }
@@ -357,6 +350,14 @@ public class RoboClaw implements
 
     public ITemperatureSensor getTemperatureSensor() {
         return this;
+    }
+
+    public ICurrentMeasurable getElectricalMonitor() {
+        return null;
+    }
+
+    public IEncoder getEncoder() {
+        return null;
     }
     
 }

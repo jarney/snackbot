@@ -61,6 +61,9 @@ public class XMLSerializer implements ISerializer<Document, Document> {
     
     public ImmutableDict serializeFrom(Document aFrom) throws Exception {
         Element root = aFrom.getDocumentElement();
+        if (root == null) {
+            return ImmutableDict.newAtom();
+        }
         XMLDictionaryReader xdw = new XMLDictionaryReader(root);
         ImmutableDict dict = xdw.read();
         return dict;
@@ -68,6 +71,9 @@ public class XMLSerializer implements ISerializer<Document, Document> {
 
     public ImmutableList serializeFromList(Document aFrom) throws Exception {
         Element root = aFrom.getDocumentElement();
+        if (root == null) {
+            return ImmutableList.newAtom();
+        }
         XMLListReader xdw = new XMLListReader(root);
         ImmutableList dict = xdw.read();
         return dict;

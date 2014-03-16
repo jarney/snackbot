@@ -40,12 +40,19 @@ public interface IComponent {
     IMotor getMotorInterface();
 
     /**
+     * This method returns an object which can monitor
+     * current and voltage.
+     * @return A current and voltage monitoring object.
+     */
+    ICurrentMeasurable getElectricalMonitor();
+    
+    /**
      * This method returns the IMotorWithEncoder
      * interface associated with this object.
      *
      * @return The IMotorWithEncoder interface.
      */
-    IMotorWithEncoder getMotorWithEncoderInterface();
+    IEncoder getEncoder();
 
     /**
      * This method returns the object associated with configuring this

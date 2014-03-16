@@ -26,8 +26,10 @@ package org.ensor.robots.roboclawdriver;
 
 import org.ensor.robots.motors.ComponentManager;
 import org.ensor.robots.motors.IComponent;
-import org.ensor.robots.motors.IMotorWithEncoder;
+import org.ensor.robots.motors.ICurrentMeasurable;
+import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IServo;
+import static org.ensor.robots.roboclawdriver.App.poll;
 
 /**
  *
@@ -35,28 +37,6 @@ import org.ensor.robots.motors.IServo;
  */
 public class AppTestSpeedServo {
 
-    public static void poll(RoboClaw roboClaw,
-            IMotorWithEncoder m1, IMotorWithEncoder m2) {
-        
-        roboClaw.updateData();
-        
-        long enc1pos = m1.getEncoderPosition();
-        long enc1v = m1.getEncoderSpeed();
-        double m1I = m1.getCurrentDraw();
-        
-        String enc1posstr = String.format("%8x", enc1pos);
-        String mode1 = m1.getEncoderQuatratureMode() ? "quad" : "abs";
-        
-        System.out.println("motor1 pos " + mode1 + " " + enc1posstr + " " + enc1pos + " v = " + enc1v + " I = " + m1I);
-        
-        long enc2pos = m2.getEncoderPosition();
-        long enc2v = m2.getEncoderSpeed();
-        double m2I = m2.getCurrentDraw();
-        String enc2posstr = String.format("%8x", enc2pos);
-        String mode2 = m1.getEncoderQuatratureMode() ? "quad" : "abs";
-
-        System.out.println("motor2 pos " + mode2 + " " + enc2posstr + " " + enc2pos + " v = " + enc2v + " I = " + m2I);
-    }
     
     public static void main(String[] args) throws Exception {
         RoboClaw roboClaw = new RoboClaw("/dev/ttyACM0");
@@ -64,8 +44,10 @@ public class AppTestSpeedServo {
         IComponent c1 = ComponentManager.getComponent("roboclaw-0-motor0");
         IComponent c2 = ComponentManager.getComponent("roboclaw-0-motor1");
         
-        IMotorWithEncoder m1 = c1.getMotorWithEncoderInterface();
-        IMotorWithEncoder m2 = c2.getMotorWithEncoderInterface();
+        ICurrentMeasurable ce1 = c1.getElectricalMonitor();
+        ICurrentMeasurable ce2 = c2.getElectricalMonitor();
+        IEncoder e1 = c1.getEncoder();
+        IEncoder e2 = c2.getEncoder();
 
         IServo s1 = c1.getSpeedServo();
         IServo s2 = c2.getSpeedServo();
@@ -74,7 +56,7 @@ public class AppTestSpeedServo {
         s2.setPosition(2000);
         
         while (true) {
-            poll(roboClaw, m1, m2);
+            poll(roboClaw, e1, ce1, e2, ce2);
 
             Thread.sleep(50);
         }

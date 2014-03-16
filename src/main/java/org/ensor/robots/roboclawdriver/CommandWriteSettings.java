@@ -30,10 +30,11 @@ package org.ensor.robots.roboclawdriver;
 class CommandWriteSettings extends CommandResponseNone {
 
     @Override
-    protected byte[] getCommand(byte aAddress) {
+    protected byte[] getCommand(final byte aAddress) {
         byte[]b = new byte[2];
-        b[0] = aAddress;
-        b[1] = 94;
+        int offset = 0;
+        offset = setByte(b, offset, aAddress);
+        setByte(b, offset, 94);
         return b;
     }
 }

@@ -47,6 +47,12 @@ public final class ListAtom extends ListBase implements
             mList.add(a.getMutable());
         }
     }
+    private ListAtom(final ListAtom aList) {
+        super();
+        for (Atom a : aList) {
+            mList.add(a.getMutable());
+        }
+    }
     /**
      * This method creates a new list object which contains the given
      * elements.
@@ -73,6 +79,15 @@ public final class ListAtom extends ListBase implements
         return new ListAtom(aList);
     }
     /**
+     * This method creates a new list from the given immutable
+     * list.  This essentially creates a mutable copy of an immutable object.
+     * @param aList A list to copy.
+     * @return A mutable copy of the list.
+     */
+    public static ListAtom newAtom(final ListAtom aList) {
+        return new ListAtom(aList);
+    }
+    /**
      * This method adds the specified element to the end of the list.
      * @param aAtom The element to add to the list.
      */
@@ -88,6 +103,22 @@ public final class ListAtom extends ListBase implements
         ListAtom list = ListAtom.newAtom();
         mList.add(list);
         return list;
+    }
+    /**
+     * This method appends a copy of the given list to the list.
+     * @param aList A list to copy and append.
+     */
+    public void append(ListAtom aList) {
+        ListAtom list = ListAtom.newAtom(aList);
+        mList.add(list);
+    }
+    /**
+     * This method appends a copy of the given dictionary to the list.
+     * @param aList A dictionary to copy and append.
+     */
+    public void append(DictionaryAtom aList) {
+        DictionaryAtom list = DictionaryAtom.newAtom(aList);
+        mList.add(list);
     }
     /**
      * This method creates a new dictionary and adds it as a child of this
