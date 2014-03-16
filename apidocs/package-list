@@ -7,9 +7,15 @@ org.ensor.data.atom
 org.ensor.data.atom.json
 org.ensor.data.atom.log
 org.ensor.data.atom.xml
+org.ensor.io.fileformats.xml
+org.ensor.java.utilities
 org.ensor.math.analysis
 org.ensor.math.geometry
 org.ensor.robots.comm
+org.ensor.robots.editor
+org.ensor.robots.editor.cookers
+org.ensor.robots.editor.editors
+org.ensor.robots.editor.objects
 org.ensor.robots.motors
 org.ensor.robots.motors.differentialdrive
 org.ensor.robots.network.client
@@ -17,4 +23,8 @@ org.ensor.robots.network.server
 org.ensor.robots.os
 org.ensor.robots.pathfollower
 org.ensor.robots.roboclawdriver
+org.ensor.robots.simulator
 org.ensor.threads.biote
+org.ensor.tools.editor.base
+org.ensor.tools.editor.base.components
+org.ensor.tools.editor.base.resource
