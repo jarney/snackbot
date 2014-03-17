@@ -64,10 +64,34 @@ class TTYLinux implements ITTY {
         commandList.add("-F");
         commandList.add(aTTY);
         commandList.add("raw");
-        commandList.add("time");
-        commandList.add("10");
-        commandList.add("min");
-        commandList.add("0");
+        commandList.add("-hupcl");
+        commandList.add("eof");
+        commandList.add("");
+        commandList.add("intr");
+        commandList.add("");
+        commandList.add("erase");
+        commandList.add("");
+        commandList.add("kill");
+        commandList.add("");
+        commandList.add("start");
+        commandList.add("");
+        commandList.add("stop");
+        commandList.add("");
+        commandList.add("susp");
+        commandList.add("");
+        commandList.add("flush");
+        commandList.add("");
+        commandList.add("lnext");
+        commandList.add("");
+        commandList.add("werase");
+        commandList.add("");
+        commandList.add("rprnt");
+        commandList.add("");
+        
+//        commandList.add("time");
+//        commandList.add("10");
+//        commandList.add("min");
+//        commandList.add("0");
 
         int rc = runCommand(commandList);
 

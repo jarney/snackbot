@@ -137,16 +137,16 @@ public class RoboClaw implements
     }
     
     public final void updateData() {
-        handleCommand(new CommandReadMainBatteryVoltage(this));
-        handleCommand(new CommandReadLogicBatteryVoltage(this));
-        handleCommand(new CommandReadMotorCurrents(m1, m2));
-        handleCommand(new CommandReadTemperature(this));
-        handleCommand(new CommandReadErrorStatus(this));
-        handleCommand(new CommandReadEncoderMode(m1, m2));
-        handleCommand(new CommandReadEncoderPosition(m1));
-        handleCommand(new CommandReadEncoderPosition(m2));
-        handleCommand(new CommandReadEncoderSpeed(m1));
-        handleCommand(new CommandReadEncoderSpeed(m2));
+//        handleCommand(new CommandReadMainBatteryVoltage(this));
+//        handleCommand(new CommandReadLogicBatteryVoltage(this));
+//        handleCommand(new CommandReadMotorCurrents(m1, m2));
+//        handleCommand(new CommandReadTemperature(this));
+//        handleCommand(new CommandReadErrorStatus(this));
+//        handleCommand(new CommandReadEncoderMode(m1, m2));
+//        handleCommand(new CommandReadEncoderPosition(m1));
+//        handleCommand(new CommandReadEncoderPosition(m2));
+//        handleCommand(new CommandReadEncoderSpeed(m1));
+//        handleCommand(new CommandReadEncoderSpeed(m2));
     }
     
     public String getFirmwareVersion() {
@@ -192,20 +192,18 @@ public class RoboClaw implements
         // First, get sequence of bytes to send.
         byte[] commandBytes = aCommand.getCommand((byte) mAddress);
         
+        System.out.println("Command : " + aCommand);
         // Next, we send them to the device.
         try {
+            for (int i = 0; i < commandBytes.length; i++) {
+                System.out.println("" + i + ">>> " + (int)commandBytes[i]);
+            }
             mOutputStream.write(commandBytes);
             mOutputStream.flush();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(RoboClaw.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
         // Now, check the read mode of the command and handle it
         // accordingly.
         try {
@@ -213,12 +211,18 @@ public class RoboClaw implements
                 case Command.READ_MODE_FIXED:
                     int length = aCommand.getResponseLength();
                     byte[] fixedResponse = new byte[length];
-                    int bytesRead = mInputStream.read(fixedResponse);
+                    int bytesRead = readUntilFull(mInputStream,
+                                fixedResponse,
+                                fixedResponse.length);
                     if (bytesRead != length) {
                         System.out.println("Command returned " + bytesRead +
                                 " but was expected to return " + length);
                     }
                     else {
+                        System.out.println("Received " + bytesRead);
+                        for (int i = 0; i < bytesRead; i++) {
+                            System.out.println("" + i + "<<< " + (int)fixedResponse[i]);
+                        }
                         byte checksum = aCommand.calculateChecksum(
                                 commandBytes, commandBytes.length,
                                 fixedResponse, bytesRead - 1);
@@ -237,7 +241,8 @@ public class RoboClaw implements
                     break;
                 case Command.READ_MODE_NULL_TERMINATED:
                     byte[] variableResponse = new byte[32];
-                    int bytesRead2 = mInputStream.read(variableResponse);
+                    int bytesRead2 = readUntilNull(mInputStream, variableResponse);
+                    System.out.println("Read " + bytesRead2);
                     aCommand.onResponse(variableResponse, bytesRead2);
                     break;
             }
@@ -246,6 +251,36 @@ public class RoboClaw implements
         }
         
     }
+    
+    private int readUntilFull(InputStream aInputStream, byte[] fixedResponse, int length) throws IOException {
+        int i;
+        for (i = 0; i < length; i++) {
+            int b = aInputStream.read();
+            if (b == -1) {
+                break;
+            }
+            fixedResponse[i] = (byte) b;
+        }
+        return i;
+    }
+    
+    private int readUntilNull(InputStream aInputStream, byte[] variableResponse) throws IOException {
+        int bytesRead = 0;
+        while (true) {
+            int b = aInputStream.read();
+            if (b == -1 || b == 0) {
+                break;
+            }
+            variableResponse[bytesRead] = (byte) b;
+            bytesRead++;
+
+        }
+        // Checksum byte
+        variableResponse[bytesRead] = (byte) aInputStream.read();
+        bytesRead++;
+        return bytesRead;
+    }
+    
     
     /**
      * This method sets the minimum and maximum main battery threshold
@@ -359,5 +394,5 @@ public class RoboClaw implements
     public IEncoder getEncoder() {
         return null;
     }
-    
+
 }
