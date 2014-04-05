@@ -28,8 +28,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ensor.robots.comm.ITTY;
-import org.ensor.robots.comm.TTYFactory;
+import org.ensor.io.tty.ITTY;
+import org.ensor.io.tty.TTYFactory;
 import org.ensor.robots.motors.ComponentManager;
 import org.ensor.robots.motors.IComponent;
 import org.ensor.robots.motors.IConfigurable;
@@ -127,8 +127,8 @@ public class RoboClaw implements
     private final void initialize() {
         handleCommand(new CommandReadFirmware(this));
         
-        handleCommand(new CommandReadPIDQPPS(m1));
-        handleCommand(new CommandReadPIDQPPS(m2));
+//        handleCommand(new CommandReadPIDQPPS(m1));
+//        handleCommand(new CommandReadPIDQPPS(m2));
         
         updateData();
         
@@ -137,16 +137,16 @@ public class RoboClaw implements
     }
     
     public final void updateData() {
-//        handleCommand(new CommandReadMainBatteryVoltage(this));
-//        handleCommand(new CommandReadLogicBatteryVoltage(this));
-//        handleCommand(new CommandReadMotorCurrents(m1, m2));
-//        handleCommand(new CommandReadTemperature(this));
-//        handleCommand(new CommandReadErrorStatus(this));
-//        handleCommand(new CommandReadEncoderMode(m1, m2));
-//        handleCommand(new CommandReadEncoderPosition(m1));
-//        handleCommand(new CommandReadEncoderPosition(m2));
-//        handleCommand(new CommandReadEncoderSpeed(m1));
-//        handleCommand(new CommandReadEncoderSpeed(m2));
+        handleCommand(new CommandReadMainBatteryVoltage(this));
+        handleCommand(new CommandReadLogicBatteryVoltage(this));
+        handleCommand(new CommandReadMotorCurrents(m1, m2));
+        handleCommand(new CommandReadTemperature(this));
+        handleCommand(new CommandReadErrorStatus(this));
+        handleCommand(new CommandReadEncoderMode(m1, m2));
+        handleCommand(new CommandReadEncoderPosition(m1));
+        handleCommand(new CommandReadEncoderPosition(m2));
+        handleCommand(new CommandReadEncoderSpeed(m1));
+        handleCommand(new CommandReadEncoderSpeed(m2));
     }
     
     public String getFirmwareVersion() {
@@ -200,7 +200,12 @@ public class RoboClaw implements
             }
             mOutputStream.write(commandBytes);
             mOutputStream.flush();
+            
+            Thread.sleep(25);
+            
         } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
 

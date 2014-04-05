@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.comm;
+package org.ensor.io.tty;
 
 import java.io.InputStream;
 import java.io.OutputStream;

@@ -35,4 +35,4 @@
  * differently.
  */
 
-package org.ensor.robots.comm;
+package org.ensor.io.tty;

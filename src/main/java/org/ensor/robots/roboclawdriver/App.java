@@ -81,34 +81,34 @@ public final class App {
         
         while (true) {
             poll(roboClaw, ce1, cc1, ce2, cc2);
-
-            IMotor m1 = c1.getMotorInterface();
-            IMotor m2 = c2.getMotorInterface();
-
-            m1.setDutyCycle(1.0);
-            m2.setDutyCycle(0.5);
-
-            Thread.sleep(500);
-            poll(roboClaw, ce1, cc1, ce2, cc2);
-            poll(roboClaw, ce1, cc1, ce2, cc2);
-            poll(roboClaw, ce1, cc1, ce2, cc2);
-            poll(roboClaw, ce1, cc1, ce2, cc2);
-            poll(roboClaw, ce1, cc1, ce2, cc2);
-
-            m1.setDutyCycle(0.0);
-            m2.setDutyCycle(0.0);
-
-            Thread.sleep(500);
-            poll(roboClaw, ce1, cc1, ce2, cc2);
-
-            m1.setDutyCycle(-0.5);
-            m2.setDutyCycle(-1);
-
-            Thread.sleep(500);
-            poll(roboClaw, ce1, cc1, ce2, cc2);
-
-            m1.setDutyCycle(0.0);
-            m2.setDutyCycle(0.0);
+//
+//            IMotor m1 = c1.getMotorInterface();
+//            IMotor m2 = c2.getMotorInterface();
+//
+//            m1.setDutyCycle(1.0);
+//            m2.setDutyCycle(0.5);
+//
+//            Thread.sleep(500);
+//            poll(roboClaw, ce1, cc1, ce2, cc2);
+//            poll(roboClaw, ce1, cc1, ce2, cc2);
+//            poll(roboClaw, ce1, cc1, ce2, cc2);
+//            poll(roboClaw, ce1, cc1, ce2, cc2);
+//            poll(roboClaw, ce1, cc1, ce2, cc2);
+//
+//            m1.setDutyCycle(0.0);
+//            m2.setDutyCycle(0.0);
+//
+//            Thread.sleep(500);
+//            poll(roboClaw, ce1, cc1, ce2, cc2);
+//
+//            m1.setDutyCycle(-0.5);
+//            m2.setDutyCycle(-1);
+//
+//            Thread.sleep(500);
+//            poll(roboClaw, ce1, cc1, ce2, cc2);
+//
+//            m1.setDutyCycle(0.0);
+//            m2.setDutyCycle(0.0);
             Thread.sleep(500);
         }
         

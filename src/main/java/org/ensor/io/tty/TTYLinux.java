@@ -22,15 +22,20 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.comm;
+package org.ensor.io.tty;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import jssc.SerialPort;
+import jssc.SerialPortException;
 
 /**
  * This class is a TTY device for the Linux platform
@@ -41,15 +46,57 @@ import java.util.List;
  */
 class TTYLinux implements ITTY {
 
-    private final FileOutputStream mOutputStream;
-    private final FileInputStream mInputStream;
+    private final OutputStream mOutputStream;
+    private final InputStream mInputStream;
 
+    private SerialPort mSerialPort;
+    
+    class SerialOutputStream extends OutputStream {
+
+        @Override
+        public void write(int i) throws IOException {
+            try {
+                mSerialPort.writeByte((byte) i);
+            } catch (SerialPortException ex) {
+                throw new IOException("Exception writing", ex);
+            }
+        }
+    }
+    class SerialInputStream extends InputStream {
+
+        @Override
+        public int read() throws IOException {
+            byte[] b;
+            try {
+                b = mSerialPort.readBytes(1);
+            } catch (SerialPortException ex) {
+                throw new IOException("Exception writing", ex);
+            }
+            if (b != null) {
+                return b[0];
+            }
+            return -1;
+        }
+        
+    }
+    
+    
     protected TTYLinux(final String aTTY) throws Exception {
 
         init(aTTY);
 
+//        mSerialPort = new SerialPort(aTTY);
+//        mSerialPort.openPort();
+//        mSerialPort.setParams(SerialPort.BAUDRATE_9600,
+//                SerialPort.DATABITS_8,
+//                SerialPort.STOPBITS_1,
+//                SerialPort.PARITY_NONE);
+//
+//        mOutputStream = new SerialOutputStream();
+//        mInputStream = new SerialInputStream();
         mOutputStream = new FileOutputStream(aTTY);
         mInputStream = new FileInputStream(aTTY);
+        
     }
 
     /**
@@ -87,11 +134,13 @@ class TTYLinux implements ITTY {
         commandList.add("");
         commandList.add("rprnt");
         commandList.add("");
-        
-//        commandList.add("time");
-//        commandList.add("10");
-//        commandList.add("min");
-//        commandList.add("0");
+        commandList.add("quit");
+        commandList.add("");
+        commandList.add("crtscts");
+        commandList.add("time");
+        commandList.add("10");
+        commandList.add("min");
+        commandList.add("1");
 
         int rc = runCommand(commandList);
 

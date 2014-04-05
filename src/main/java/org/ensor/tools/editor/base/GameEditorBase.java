@@ -497,17 +497,21 @@ public abstract class GameEditorBase extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jMenu2 = new javax.swing.JMenu();
         mTreePanel = new javax.swing.JScrollPane();
         mEditorTabControl = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         mReferenceList = new javax.swing.JList();
         mMenuBar = new javax.swing.JMenuBar();
         mFileMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         mMenuFileSave = new javax.swing.JMenuItem();
         mMenuFileExit = new javax.swing.JMenuItem();
         mEditMenu = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
         mMenuToolsCookAll = new javax.swing.JMenuItem();
+
+        jMenu2.setText("jMenu2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -528,6 +532,9 @@ public abstract class GameEditorBase extends javax.swing.JFrame {
         jScrollPane1.setViewportView(mReferenceList);
 
         mFileMenu.setText("File");
+
+        jMenuItem1.setText("Open");
+        mFileMenu.add(jMenuItem1);
 
         mMenuFileSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         mMenuFileSave.setText("Save");
@@ -813,6 +820,8 @@ public abstract class GameEditorBase extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu mEditMenu;
