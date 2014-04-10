@@ -1,9 +1,9 @@
-# SnackBot
+# Snackbot
 
 Welcome to SnackBot, the Significantly Nifty Autonomous Computer Kontrolled
 Bringer Of Treats.
 
-<img src="snackbot.jpg" alt="Snackbot Picture" style="width: 1024px;"/>
+<img src="snackbot.png" alt="Snackbot Picture" style="width: 1024px;"/>
 
 The project intends to create an autonomous robot navigation system with voice
 control and the capability to bring snacks.  The project is in the early stages,
