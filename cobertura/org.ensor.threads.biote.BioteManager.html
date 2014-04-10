@@ -703,8 +703,8 @@
   <td class="src"><pre class="src">&nbsp;                        0,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;422</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="string">"Starting event handling thread..."</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;423</td>  <td class="nbHitsCovered"><a title="Line 423: Conditional coverage 100% (2/2).">&nbsp;1304</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 423: Conditional coverage 100% (2/2).">                <span class="keyword">while</span> (mRunning.get()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;424</td>  <td class="nbHitsCovered">&nbsp;1300</td>  <td class="src"><pre class="src">&nbsp;                        checkBiotes();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;423</td>  <td class="nbHitsCovered"><a title="Line 423: Conditional coverage 100% (2/2).">&nbsp;1300</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 423: Conditional coverage 100% (2/2).">                <span class="keyword">while</span> (mRunning.get()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;424</td>  <td class="nbHitsCovered">&nbsp;1288</td>  <td class="src"><pre class="src">&nbsp;                        checkBiotes();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;425</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;426</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;                mBioteManager.logString(</pre></td></tr>
@@ -717,9 +717,9 @@
 <tr>  <td class="numLineCover">&nbsp;430</td>  <td class="nbHitsCovered">&nbsp;10</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;431</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">void</span> checkBiotes() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;432</td>  <td class="nbHitsCovered">&nbsp;1290</td>  <td class="src"><pre class="src">&nbsp;            Biote b = mReadyBiotes.poll();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;433</td>  <td class="nbHitsCovered">&nbsp;1298</td>  <td class="src"><pre class="src">&nbsp;            <span class="keyword">boolean</span> idle = <span class="keyword">true</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;434</td>  <td class="nbHitsCovered"><a title="Line 434: Conditional coverage 100% (2/2).">&nbsp;1298</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 434: Conditional coverage 100% (2/2).">            <span class="keyword">if</span> (b != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;432</td>  <td class="nbHitsCovered">&nbsp;1289</td>  <td class="src"><pre class="src">&nbsp;            Biote b = mReadyBiotes.poll();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;433</td>  <td class="nbHitsCovered">&nbsp;1290</td>  <td class="src"><pre class="src">&nbsp;            <span class="keyword">boolean</span> idle = <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;434</td>  <td class="nbHitsCovered"><a title="Line 434: Conditional coverage 100% (2/2).">&nbsp;1290</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 434: Conditional coverage 100% (2/2).">            <span class="keyword">if</span> (b != <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;435</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                idle = <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;436</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
@@ -758,18 +758,18 @@
   <td class="src"><pre class="src">&nbsp;            <span class="comment">// If we did not have any messages for any biotes to process</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;458</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;            <span class="comment">// then we will sleep.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;459</td>  <td class="nbHitsCovered"><a title="Line 459: Conditional coverage 100% (2/2).">&nbsp;1301</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 459: Conditional coverage 100% (2/2).">            <span class="keyword">if</span> (idle) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;459</td>  <td class="nbHitsCovered"><a title="Line 459: Conditional coverage 100% (2/2).">&nbsp;1290</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 459: Conditional coverage 100% (2/2).">            <span class="keyword">if</span> (idle) {</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;460</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;461</td>  <td class="nbHitsCovered">&nbsp;1284</td>  <td class="src"><pre class="src">&nbsp;                    Thread.sleep(10);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;461</td>  <td class="nbHitsCovered">&nbsp;1273</td>  <td class="src"><pre class="src">&nbsp;                    Thread.sleep(10);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;462</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;463</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">catch</span> (InterruptedException ex) {</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;464</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    Thread.currentThread().interrupt();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;465</td>  <td class="nbHitsCovered">&nbsp;1244</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;465</td>  <td class="nbHitsCovered">&nbsp;1260</td>  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;466</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;            }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;467</td>  <td class="nbHitsCovered">&nbsp;1289</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;467</td>  <td class="nbHitsCovered">&nbsp;1284</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;468</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;469</td>  <td class="nbHits">&nbsp;</td>
@@ -871,6 +871,6 @@
   <td class="src"><pre class="src">&nbsp;};</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 3/16/14 2:50 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 4/9/14 7:51 PM.</div>
 </body>
 </html>

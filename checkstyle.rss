@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2014</copyright>
     <item>
-      <title>File: 230,
-             Errors: 2110,
+      <title>File: 233,
+             Errors: 2231,
              Warnings: 0,
              Infos: 0
       </title>
@@ -1009,20 +1009,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.comm.package-info.java">org/ensor/robots/comm/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.tools.editor.base.CookerBase.java">org/ensor/tools/editor/base/CookerBase.java</a>
                 </td>
                 <td>
@@ -1219,34 +1205,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.comm.TTYFactory.java">org/ensor/robots/comm/TTYFactory.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.comm.TTYLinux.java">org/ensor/robots/comm/TTYLinux.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.algorithms.cubicspline.IInterpolator.java">org/ensor/algorithms/cubicspline/IInterpolator.java</a>
                 </td>
                 <td>
@@ -1276,6 +1234,20 @@
                           <tr>
                 <td>
                   <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.motors.package-info.java">org/ensor/robots/motors/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.io.tty.TTYFactory.java">org/ensor/io/tty/TTYFactory.java</a>
                 </td>
                 <td>
                   0
@@ -1369,6 +1341,20 @@
                 </td>
                 <td>
                   6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.io.tty.package-info.java">org/ensor/io/tty/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -1877,6 +1863,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.io.tty.ITTY.java">org/ensor/io/tty/ITTY.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.Pair.java">org/ensor/data/atom/Pair.java</a>
                 </td>
                 <td>
@@ -2097,6 +2097,20 @@
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.client.viewer.OneTriangle.java">org/ensor/robots/client/viewer/OneTriangle.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  39
                 </td>
               </tr>
                           <tr>
@@ -2381,6 +2395,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.client.viewer.OneTriangleSwingGLPanel.java">org/ensor/robots/client/viewer/OneTriangleSwingGLPanel.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  56
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.json.JSONStringSerializer.java">org/ensor/data/atom/json/JSONStringSerializer.java</a>
                 </td>
                 <td>
@@ -2433,6 +2461,20 @@
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.io.tty.TTYLinux.java">org/ensor/io/tty/TTYLinux.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
                 </td>
               </tr>
                           <tr>
@@ -2493,20 +2535,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.comm.ITTY.java">org/ensor/robots/comm/ITTY.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.roboclawdriver.RoboClaw.java">org/ensor/robots/roboclawdriver/RoboClaw.java</a>
                 </td>
                 <td>
@@ -2516,7 +2544,7 @@
                   0
                 </td>
                 <td>
-                  70
+                  85
                 </td>
               </tr>
                           <tr>
@@ -2927,7 +2955,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.EuclideanMetric.java">org/ensor/math/geometry/EuclideanMetric.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.BoolAtom.java">org/ensor/data/atom/BoolAtom.java</a>
                 </td>
                 <td>
                   0
@@ -2941,7 +2969,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.data.atom.BoolAtom.java">org/ensor/data/atom/BoolAtom.java</a>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.EuclideanMetric.java">org/ensor/math/geometry/EuclideanMetric.java</a>
                 </td>
                 <td>
                   0
@@ -2984,6 +3012,20 @@
                           <tr>
                 <td>
                   <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.robots.editor.objects.TagDef.java">org/ensor/robots/editor/objects/TagDef.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jarney.github.io/snackbot//checkstyle.html#org.ensor.math.geometry.Quaternion.java">org/ensor/math/geometry/Quaternion.java</a>
                 </td>
                 <td>
                   0
@@ -3076,7 +3118,7 @@
                   0
                 </td>
                 <td>
-                  47
+                  38
                 </td>
               </tr>
                           <tr>

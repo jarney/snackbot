@@ -8,10 +8,11 @@ org.ensor.data.atom.json
 org.ensor.data.atom.log
 org.ensor.data.atom.xml
 org.ensor.io.fileformats.xml
+org.ensor.io.tty
 org.ensor.java.utilities
 org.ensor.math.analysis
 org.ensor.math.geometry
-org.ensor.robots.comm
+org.ensor.robots.client.viewer
 org.ensor.robots.editor
 org.ensor.robots.editor.cookers
 org.ensor.robots.editor.editors
