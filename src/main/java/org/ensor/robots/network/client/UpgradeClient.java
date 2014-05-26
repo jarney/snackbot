@@ -120,17 +120,24 @@ public class UpgradeClient implements WebSocket.OnBinaryMessage {
     
     public static void main(String [] args) {
         try {
-            System.out.println("new client");
-            UpgradeClient uc = new UpgradeClient("localhost", 8080);
-            System.out.println("connect");
+            
+            if (args.length < 2) {
+                System.out.println("Usage: UpgradeClient hostname port");
+                System.exit(1);
+            }
+            
+            String hostname = args[0];
+            short port = 8080;
+            if (args.length >= 2) {
+                port = Short.parseShort(args[1]);
+            }
+            System.out.println("Upgrading server at " + hostname + ":" + port);
+            UpgradeClient uc = new UpgradeClient(hostname, port);
             uc.connect();
             if (uc.isConnected()) {
-                uc.uploadFile(new File("target/RoboClawDriver-1.0-SNAPSHOT-bin.zip"));
+                uc.uploadFile(new File("target/snackbot-1.0-SNAPSHOT-bin.zip"));
             }
             uc.disconnect();
-            // XXX : Hack, we shouldn't need to do this,
-            // but apparently we've left some thread or another
-            // running.
             System.exit(0);
         } catch (Exception ex) {
             Logger.getLogger(UpgradeClient.class.getName()).log(Level.SEVERE, null, ex);

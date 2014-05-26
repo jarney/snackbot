@@ -1,4 +1,4 @@
-/*
+/* 
  * The MIT License
  *
  * Copyright 2014 Jon Arney, Ensor Robotics.
@@ -22,26 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.network.server;
-
-import javax.servlet.http.HttpServletRequest;
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketServlet;
-import org.ensor.threads.biote.BioteManager;
-
-/**
- *
- * @author jona
- */
-public class BioteSocketServlet extends WebSocketServlet {
-    private final BioteManager mBioteManager;
-
-    BioteSocketServlet(BioteManager aBioteManager) {
-        mBioteManager = aBioteManager; 
+jQuery.fn.sbUIFixAspectRatio = function () {
+    var width = $(this).parent().width();
+    var height = $(this).parent().height();
+    if (height > width) {
+        $(this).height(width);
     }
-    
-    public WebSocket doWebSocketConnect(HttpServletRequest hsr, String string) {
-        return new BioteSocket(mBioteManager);
+    else {
+        $(this).width(height);
     }
-
-}
+};

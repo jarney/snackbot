@@ -110,6 +110,8 @@ class TTYLinux implements ITTY {
         commandList.add("stty");
         commandList.add("-F");
         commandList.add(aTTY);
+        commandList.add("speed");
+        commandList.add("38400");
         commandList.add("raw");
         commandList.add("-hupcl");
         commandList.add("eof");
@@ -136,9 +138,9 @@ class TTYLinux implements ITTY {
         commandList.add("");
         commandList.add("quit");
         commandList.add("");
-        commandList.add("crtscts");
+        commandList.add("-crtscts");
         commandList.add("time");
-        commandList.add("10");
+        commandList.add("1");
         commandList.add("min");
         commandList.add("1");
 

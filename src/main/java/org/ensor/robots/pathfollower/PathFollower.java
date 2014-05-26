@@ -108,7 +108,7 @@ public class PathFollower extends Biote {
     private Long mPathStartTime;
 
     // 0.5 m/s top speed.
-    private double mVMax = 0.5;
+    private double mVMax = 0.2;
 
     /// The goal location and velocity.
     private Vector3 mGoalLocation;
@@ -168,8 +168,11 @@ public class PathFollower extends Biote {
                 onPathTick(msg);
             }
         });
-        // Start running the path again...
-        onPathFinished(null);
+        subscribe("PathFollower-Example", new IEventHandler() {
+            public void process(Event msg) throws Exception {
+                onPathExample(null);
+            }
+        });
     }
 
     @Override
@@ -221,6 +224,9 @@ public class PathFollower extends Biote {
         // Calculate the cubic spline between the waypoints and from that, the
         // overall path length.
         mTotalPathLength = mSpline.getLength();
+        System.out.println("Total path length: " + mTotalPathLength);
+        System.out.println("At max velocity, this should take " + mTotalPathLength / mVMax + " seconds");
+        
 //        
 //        // Input parameters
 //        // of the system, these are properties
@@ -284,6 +290,9 @@ public class PathFollower extends Biote {
     }
     
     private void onPathFinished(final Event aEvent) {
+    }
+    
+    private void onPathExample(final Event aEvent) {
 
         DictionaryAtom pathDict = DictionaryAtom.newAtom();
         pathDict.setInt("complete-notify-biote", getBioteId());
@@ -298,14 +307,16 @@ public class PathFollower extends Biote {
         // Trace a square path beginning and ending at the
         // same point.
         ListAtom pointList = pathDict.newList("path");
-        Vector3 p0 = new Vector3(0, 1, 0);
+        Vector3 p0 = new Vector3(0, 0, 0);
         writePoint(pointList.newDictionary(), p0);
-        Vector3 p1 = new Vector3(1, 1, 0);
+        Vector3 p1 = new Vector3(-1f/4f, 0, 0);
         writePoint(pointList.newDictionary(), p1);
-        Vector3 p2 = new Vector3(1, 0, 0);
+        Vector3 p2 = new Vector3(-1f/4f, 1f/4f, 0);
         writePoint(pointList.newDictionary(), p2);
-        Vector3 p3 = new Vector3(0, 0, 0);
+        Vector3 p3 = new Vector3(0, 1f/4f, 0);
         writePoint(pointList.newDictionary(), p3);
+        Vector3 p4 = new Vector3(0, 0, 0);
+        writePoint(pointList.newDictionary(), p4);
 
         Event planNewPath = new Event("Navigation-PathPlanned", pathDict);
         sendStimulus(getBioteId(), planNewPath);
@@ -332,8 +343,24 @@ public class PathFollower extends Biote {
         double pathFraction = (dNext / mTotalPathLength);
         if (pathFraction > 1.0) {
             cancelTimer(mTimerId);
+            
+            System.out.println("Stopping");
+            
+            // Send the movement request to the mover.
+            // Velocity is absolute while
+            // direction is relative to our present direction.
+            DictionaryAtom move = DictionaryAtom.newAtom();
+            move.setReal("direction", 0);
+            move.setReal("velocity", 0);
+            move.setReal("delta_time", TICK_DURATION_SECONDS);
+            Event moveRequest = new Event("Mover-MoveRequest", move);
+            sendStimulus(mMoverBioteId, moveRequest);
+        
             Event evt = new Event("PathFollower-PathFinished");
             sendStimulus(getBioteId(), evt);
+            
+            
+            
             return;
         }
         
@@ -343,9 +370,19 @@ public class PathFollower extends Biote {
         // of where we expect to be for the next tick.
         Vector3 nextLocation = mSpline.getPosition(pathFraction);
 
+        System.out.println(
+                "x = " + mLastLocation.getX() + 
+                "y = " + mLastLocation.getY() + 
+                "z = " + nextLocation.getZ());
+        System.out.println(
+                "nx = " + nextLocation.getX() + 
+                "ny = " + nextLocation.getY() + 
+                "nz = " + nextLocation.getZ());
+        
         // This is the amount of distance
         // we need to cover for the next tick.
         Vector3 direction = nextLocation.subtract(mLastLocation);
+        mLastLocation = nextLocation;
         
         double dir = 0;
         double vel = 0;
@@ -358,6 +395,8 @@ public class PathFollower extends Biote {
             // we need to get.
             vel = directionLength / TICK_DURATION_SECONDS;
 
+            System.out.println("Direction length " + directionLength);
+            
             // Normalize the vector to 1.
             direction = direction.multiply(1 / directionLength);
 

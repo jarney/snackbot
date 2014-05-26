@@ -1,10 +1,17 @@
 # Pictures
 
-Snackbot in its native environment serving treats.
+Some videos of Snackbot.
 
-<img src="snackbot-tall.png" alt="Snackbot Picture" style="height: 1024px;"/>
+# First video
 
-Snackbot during an intense debugging session.
+This is a test run of the lower chassis during an early RC controlled test.
 
-<img src="snackbot-debugging.png" alt="Snackbot Picture" style="width: 1024px;"/>
+<iframe src="video-1.html" width="400" height="250" scrolling="no" seamless="seamless" frameborder="0">
+</iframe>
 
+# Test run with upper-chassis
+
+This is a test run with the upper chassis built and assembled.
+
+<iframe src="video-2.html" width="400" height="250" scrolling="no" seamless="seamless" frameborder="0">
+</iframe>

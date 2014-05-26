@@ -4,4 +4,5 @@ for file in $files ; do
 	classpath=$file:$classpath
 done
 
-java -cp $classpath org.ensor.robots.network.client.UpgradeClient
+#java -cp $classpath org.ensor.robots.network.client.UpgradeClient snackbot 8080
+java -cp $classpath org.ensor.robots.network.client.UpgradeClient snackbotwired 8080

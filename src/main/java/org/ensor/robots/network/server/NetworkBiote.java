@@ -26,6 +26,7 @@ package org.ensor.robots.network.server;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.threads.biote.Biote;
 import org.ensor.threads.biote.BioteManager;
 import org.ensor.threads.biote.Event;
@@ -59,14 +60,73 @@ public class NetworkBiote extends Biote {
                 onNetOut(msg);
             }
         });
+        this.subscribe("Timer-Expire", new IEventHandler() {
+            public void process(Event msg) throws Exception {
+                onTimerExpire(msg);
+            }
+        });
+        
     }
 
     @Override
     protected void onFinalize(Event message) throws Exception {
     }
 
+    private static final int DIFFERENTIAL_DRIVE_BIOTE = 3;
+    
     // Handle a specific network event.
     private void onNetIn(Event msg) {
+        String name = msg.getData().getString("eventName");
+        
+        if (name.equals("all-stop")) {
+            Event allStop = new  Event("Mover-AllStop");
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, allStop);
+        }
+        else if (name.equals("differentialDrive")) {
+            Event forward = new Event("Mover-MoveRequestLeftRight", msg.getData());
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
+        }
+        else if (name.equals("forward")) {
+            DictionaryAtom dict = DictionaryAtom.newAtom();
+            dict.setReal("direction", 0);
+            dict.setReal("velocity", 0.3f);
+            dict.setReal("delta_time", 1);
+            Event forward = new Event("Mover-MoveRequest", dict);
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
+            startTimer(1000, new Event("Timer-Expire"), false);
+        }
+        else if (name.equals("reverse")) {
+            DictionaryAtom dict = DictionaryAtom.newAtom();
+            dict.setReal("direction", 0);
+            dict.setReal("velocity", -0.3f);
+            dict.setReal("delta_time", 1);
+            Event forward = new Event("Mover-MoveRequest", dict);
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
+            startTimer(1000, new Event("Timer-Expire"), false);
+        }
+        else if (name.equals("left")) {
+            DictionaryAtom dict = DictionaryAtom.newAtom();
+            dict.setReal("direction", -Math.PI/2);
+            dict.setReal("velocity", 0);
+            dict.setReal("delta_time", 1);
+            Event forward = new Event("Mover-MoveRequest", dict);
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
+            startTimer(1000, new Event("Timer-Expire"), false);
+        }
+        else if (name.equals("right")) {
+            DictionaryAtom dict = DictionaryAtom.newAtom();
+            dict.setReal("direction", Math.PI/2.0);
+            dict.setReal("velocity", 0);
+            dict.setReal("delta_time", 1);
+            Event forward = new Event("Mover-MoveRequest", dict);
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
+            startTimer(1000, new Event("Timer-Expire"), false);
+        }
+    }
+    
+    private void onTimerExpire(Event msg) throws Exception {
+        Event allStop = new Event("Mover-AllStop");
+        sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, allStop);
     }
     
     // Handle events from other biotes

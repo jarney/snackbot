@@ -40,7 +40,7 @@ public class Module implements IModule {
     }
 
     public void start(IModuleManager aManager) throws Exception {
-        roboClaw = new RoboClaw("/dev/ttyACM0");
+        roboClaw = new RoboClaw("/dev/ttyUSB0");
     }
 
     public void shutdown(IModuleManager aManager) throws Exception {

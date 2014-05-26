@@ -48,6 +48,8 @@ public class RoboClaw implements
         IConfigurable,
         ITemperatureSensor {
     
+    private static final Logger LOGGER = Logger.getLogger(RoboClaw.class.getCanonicalName());
+    
     /**
      * This is the default address of the RoboClaw
      * on a packet-serial device.
@@ -130,6 +132,16 @@ public class RoboClaw implements
 //        handleCommand(new CommandReadPIDQPPS(m1));
 //        handleCommand(new CommandReadPIDQPPS(m2));
         
+        handleCommand(new CommandReadMainBatteryVoltage(this));
+        handleCommand(new CommandReadLogicBatteryVoltage(this));
+        handleCommand(new CommandReadMotorCurrents(m1, m2));
+        handleCommand(new CommandReadTemperature(this));
+        handleCommand(new CommandReadEncoderMode(m1, m2));
+        handleCommand(new CommandReadEncoderPosition(m1));
+        handleCommand(new CommandReadEncoderPosition(m2));
+        handleCommand(new CommandReadEncoderSpeed(m1));
+        handleCommand(new CommandReadEncoderSpeed(m2));
+        
         updateData();
         
         handleCommand(new CommandSetEncoderMode(m1, false, true));
@@ -137,16 +149,7 @@ public class RoboClaw implements
     }
     
     public final void updateData() {
-        handleCommand(new CommandReadMainBatteryVoltage(this));
-        handleCommand(new CommandReadLogicBatteryVoltage(this));
-        handleCommand(new CommandReadMotorCurrents(m1, m2));
-        handleCommand(new CommandReadTemperature(this));
         handleCommand(new CommandReadErrorStatus(this));
-        handleCommand(new CommandReadEncoderMode(m1, m2));
-        handleCommand(new CommandReadEncoderPosition(m1));
-        handleCommand(new CommandReadEncoderPosition(m2));
-        handleCommand(new CommandReadEncoderSpeed(m1));
-        handleCommand(new CommandReadEncoderSpeed(m2));
     }
     
     public String getFirmwareVersion() {
@@ -192,13 +195,15 @@ public class RoboClaw implements
         // First, get sequence of bytes to send.
         byte[] commandBytes = aCommand.getCommand((byte) mAddress);
         
-        System.out.println("Command : " + aCommand);
+        LOGGER.log(Level.INFO, "Command : " + aCommand);
         // Next, we send them to the device.
         try {
             for (int i = 0; i < commandBytes.length; i++) {
-                System.out.println("" + i + ">>> " + (int)commandBytes[i]);
+                LOGGER.log(Level.INFO, "" + i + ">>> " + (int)commandBytes[i]);
             }
+            Thread.sleep(25);
             mOutputStream.write(commandBytes);
+            Thread.sleep(25);
             mOutputStream.flush();
             
             Thread.sleep(25);
@@ -220,19 +225,22 @@ public class RoboClaw implements
                                 fixedResponse,
                                 fixedResponse.length);
                     if (bytesRead != length) {
-                        System.out.println("Command returned " + bytesRead +
+                        LOGGER.log(Level.INFO,
+                                "Command returned " + bytesRead +
                                 " but was expected to return " + length);
                     }
                     else {
                         System.out.println("Received " + bytesRead);
                         for (int i = 0; i < bytesRead; i++) {
-                            System.out.println("" + i + "<<< " + (int)fixedResponse[i]);
+                            LOGGER.log(Level.INFO,
+                                    "" + i + "<<< {0}" + (int)fixedResponse[i]);
                         }
                         byte checksum = aCommand.calculateChecksum(
                                 commandBytes, commandBytes.length,
                                 fixedResponse, bytesRead - 1);
                         if (checksum != fixedResponse[bytesRead - 1]) {
-                            System.out.println("Checksum was " +
+                            LOGGER.log(Level.INFO,
+                                    "Checksum was " +
                                     fixedResponse[bytesRead - 1] + 
                                     " but was expected to be " + checksum);
                         }
@@ -247,7 +255,8 @@ public class RoboClaw implements
                 case Command.READ_MODE_NULL_TERMINATED:
                     byte[] variableResponse = new byte[32];
                     int bytesRead2 = readUntilNull(mInputStream, variableResponse);
-                    System.out.println("Read " + bytesRead2);
+                    LOGGER.log(Level.INFO,
+                        "Read " + bytesRead2);
                     aCommand.onResponse(variableResponse, bytesRead2);
                     break;
             }

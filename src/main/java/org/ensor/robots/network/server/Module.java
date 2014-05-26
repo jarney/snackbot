@@ -104,7 +104,8 @@ public class Module implements IModule {
             servletHandler.addServlet(new ServletHolder(uss), "/v1/upgrade/*");
 
             ResourceHandler resourceHandler = new ResourceHandler();
-            resourceHandler.setResourceBase("target/site");
+            resourceHandler.setDirectoriesListed(true);
+            resourceHandler.setResourceBase("server-current/html");
             resourceHandler.setWelcomeFiles(new String[] {"index.html"});
             ContextHandler siteHandler = new ContextHandler("/site");
             siteHandler.setHandler(resourceHandler);
@@ -133,9 +134,6 @@ public class Module implements IModule {
                 throw new RuntimeException("Shutting down server", ex);
             }
         }
-        
     }
-
-    
     
 }

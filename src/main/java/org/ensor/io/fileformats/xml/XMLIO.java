@@ -86,6 +86,7 @@ public final class XMLIO {
 
         // Prepare the output file
         File file = new File(filename);
+        file.getParentFile().mkdirs();
         Result result = new StreamResult(file);
         DOMSource source = new DOMSource(doc);
 

@@ -18,17 +18,25 @@
     </fileSet>
     <fileSet>
       <directory>target</directory>
-      <outputDirectory>server-update</outputDirectory>
+      <outputDirectory>server-update/lib</outputDirectory>
       <includes>
         <include>*.jar</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>target/lib</directory>
-      <outputDirectory>server-update</outputDirectory>
+      <outputDirectory>server-update/lib</outputDirectory>
       <includes>
         <include>*.jar</include>
       </includes>
     </fileSet>
+    <fileSet>
+      <directory>src/main/html</directory>
+      <outputDirectory>server-update/html</outputDirectory>
+      <includes>
+        <include>*</include>
+      </includes>
+    </fileSet>
+    
   </fileSets>
 </assembly>

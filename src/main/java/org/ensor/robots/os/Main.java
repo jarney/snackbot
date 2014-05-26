@@ -33,7 +33,7 @@ public class Main {
     public static void main(String []args) throws Exception {
         ModuleManager moduleManager = new ModuleManager();
         
-        org.ensor.robots.roboclawdriver.Module roboClawModule = 
+        org.ensor.robots.roboclawdriver.Module roboClawModule =
                 new org.ensor.robots.roboclawdriver.Module();
         moduleManager.register(roboClawModule);
         
@@ -45,9 +45,9 @@ public class Main {
                 new org.ensor.robots.pathfollower.Module(bioteModule);
         moduleManager.register(pathModule);
         
-//        org.ensor.robots.network.server.Module networkModule =
-//            new org.ensor.robots.network.server.Module(bioteModule);
-//        moduleManager.register(networkModule);
+        org.ensor.robots.network.server.Module networkModule =
+            new org.ensor.robots.network.server.Module(bioteModule);
+        moduleManager.register(networkModule);
         
         moduleManager.startAll();
     }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Snackbot UI</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+        
+        <script src="sb-ui-tabs.js"></script>
+        <script src="sb-ui-aspect-ratio.js"></script>
+        <script src="sb-ui-center.js"></script>
+        <script src="sb-ui-canvas-dial.js"></script>
+        <script src="sb-net.js"></script>
+        <script src="snackbot-main.js"></script>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="sb-ui-tabs.css">
+        
+    </head>
+    <body>
+        <div class="body">
+            
+        
+            <div class="header">
+                Odometry calibration lab
+            </div>
+
+            <div class="content">
+                
+                <div id="maintabs" class="tabContainer" style="height:100%; width:100%">
+
+                    <div id="tabhdr" class="tabHeader" style="background-color: brown;">
+                        <a href="#control">Control</a>
+                        <a href="#telemetry">Robot Telemetry</a>
+                        <a href="#communications-log">Communications-log</a>
+                        <a href="#configuration">Configuration</a>
+                    </div>
+                    <div id="tabitems" class="tabItems" style="background-color: red;">
+                        <div id="control">
+                            <canvas id="control_canvas" style="position: absolute; width: 100%; height:100%;">
+                            </canvas>
+                        </div>
+
+                        <div id="telemetry">
+                            <button id="forward">Fwd</button>
+                            <button id="reverse">Back</button>
+                            <button id="left">Left</button>
+                            <button id="right">Right</button>
+                        </div>
+                        <div id="communications-log">
+                            <div id="log">
+                                
+                            </div>
+                        </div>
+                        <div id="configuration">
+                            conf
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                Footer here.
+            </div>
+        </div>
+        
+    </body>
+</html>

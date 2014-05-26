@@ -584,7 +584,7 @@ def readerrorstate():
 print "Roboclaw Example 1\r\n"
 
 #Rasberry Pi/Linux Serial instance example
-port = serial.Serial("/dev/ttyACM0", baudrate=115200, timeout=0.1)
+port = serial.Serial("/dev/ttyUSB0", baudrate=38400, timeout=1)
 
 #Windows Serial instance example
 #port = serial.Serial("COM253", baudrate=38400, timeout=1)
@@ -628,9 +628,15 @@ while True:
     print "M2 D=%.2f" % (d/65536.0)
     print "M2 QPPS=",qpps
 
+    e1 = readM1encoder()
+    e2 = readM2encoder()
+    print "e1 ", e1, " e2 ", e2
     SetM1DutyAccel(1500,1500)
     SetM2DutyAccel(1500,-1500)
     time.sleep(2)
+    e1 = readM1encoder()
+    e2 = readM2encoder()
+    print "e1 ", e1, " e2 ", e2
     SetM1DutyAccel(1500,-1500)
     SetM2DutyAccel(1500,1500)
     time.sleep(2)

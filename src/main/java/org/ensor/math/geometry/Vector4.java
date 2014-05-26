@@ -39,6 +39,8 @@ public class Vector4
         IHasW,
         IVectorWithNorm<Vector4> {
 
+    public static final Vector4 ZERO = new Vector4(0, 0, 0, 0);
+    
     protected final double mX;
     protected final double mY;
     protected final double mZ;
@@ -137,6 +139,6 @@ public class Vector4
      * @return Euclidean length.
      */
     public double length() {
-        return EuclideanMetric.VECTOR4.distance(this, this);
+        return EuclideanMetric.VECTOR4.distance(ZERO, this);
     }
 }

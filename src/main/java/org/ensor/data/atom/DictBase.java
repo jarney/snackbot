@@ -112,7 +112,11 @@ abstract class DictBase extends Atom
      * @return The floating point number associated with the given key.
      */
     public double getReal(final String key) {
-        return ((RealAtom) getValue(key)).getValue();
+        Atom a = getValue(key);
+        if (a.getType() == Atom.ATOM_TYPE_INT) {
+            return ((IntAtom)a).getValue();
+        }
+        return ((RealAtom)a).getValue();
     }
     /**
      * This method retrieves the string associated with the given key.

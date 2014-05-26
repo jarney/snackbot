@@ -36,6 +36,8 @@ public class Vector2
         IHasX,
         IHasY,
         IVectorWithNorm<Vector2> {
+    
+    public static final Vector2 ZERO = new Vector2(0, 0);
 
     protected final double mX;
     protected final double mY;
@@ -103,6 +105,6 @@ public class Vector2
      * @return Euclidean length.
      */
     public double length() {
-        return EuclideanMetric.VECTOR2.distance(this, this);
+        return EuclideanMetric.VECTOR2.distance(ZERO, this);
     }
 }

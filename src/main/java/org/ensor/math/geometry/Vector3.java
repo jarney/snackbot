@@ -38,6 +38,8 @@ public final class Vector3
         IHasZ,
         IVectorWithNorm<Vector3> {
 
+    public static final Vector3 ZERO = new Vector3(0, 0, 0);
+    
     protected final double mX;
     protected final double mY;
     protected final double mZ;
@@ -114,6 +116,6 @@ public final class Vector3
      * @return Euclidean length.
      */
     public double length() {
-        return EuclideanMetric.VECTOR3.distance(this, this);
+        return EuclideanMetric.VECTOR3.distance(ZERO, this);
     }
 }

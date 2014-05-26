@@ -23,26 +23,41 @@
  */
 
 package org.ensor.robots.motors.differentialdrive;
-
-import org.ensor.math.geometry.Vector2;
-
 /**
  * This class implements an elementary model for
  * differential steering based on
  * <a href="http://rossum.sourceforge.net/papers/DiffSteer/">this paper</a>.
  *
+ * All units of length are presumed to be in terms of meters
+ * and angle measures are in terms of radians.
+ *
  * @author jona
  */
 public class SimpleModel {
-    
-    private double mWheelDistance;
-    private double mHalfWheelDistance;
-    
+
+    private final double mWheelDistance;
+    private final double mHalfWheelDistance;
+    /**
+     * This instantiates the simple differential drive model
+     * with the distance between the two wheels
+     * given in meters.
+     *
+     * @param aWheelDistance The distance between the center-point
+     * of the wheels.  The model assumes that the wheels rotate along the
+     * same axis independently of each other.
+     */
     public SimpleModel(final double aWheelDistance) {
         mWheelDistance = aWheelDistance;
         mHalfWheelDistance = mWheelDistance / 2;
     }
-    
+    /**
+     * This method calculates the speed and turn rate
+     * from the given wheel velocities.
+     *
+     * @param aWheelVelocities The velocities of the two
+     *        wheels of the differential drive.
+     * @return The speed and rate of turn for the assembly.
+     */
     public SpeedAndTurnRate calculateBearing(
             final WheelVelocities aWheelVelocities) {
         double vr = aWheelVelocities.getRightVelocity();
@@ -52,10 +67,33 @@ public class SimpleModel {
         return new SpeedAndTurnRate(v, dthetadt);
     }
 
+    /**
+     * This method calculates the speed of each of the
+     * wheels given the total velocity and rate of turn
+     * desired.
+     * @param aVelocity The desired total velocity.
+     * @param aRadiansPerSecond The desired rate of turn.
+     * @return The left and right wheel velocities to achieve this state.
+     */
+    public WheelVelocities calculateWheelVelocities(
+            final double aVelocity,
+            final double aRadiansPerSecond) {
+        
+        double rotationVelocity = mHalfWheelDistance * aRadiansPerSecond;
+        double vr = aVelocity + rotationVelocity;
+        double vl = aVelocity - rotationVelocity;
+        return new WheelVelocities(vr, vl);
+    }
+    /**
+     * This class represents the speed of a differential
+     * drive assembly and the rate of turn.  Units of velocity
+     * are assumed to be in meters per second and angle changes
+     * are measured in terms of radians per second.
+     */
     public static class SpeedAndTurnRate {
         private final double mV;
         private final double mDThetaDT;
-        
+
         /**
          * This constructs an object which represents a rate of turn
          * and a velocity.  The velocity is measured in terms of meters
@@ -88,46 +126,47 @@ public class SimpleModel {
         public double getTurnRate() {
             return mDThetaDT;
         }
-        
+
     }
-    
+    /**
+     * This class represents the state of movement of a differential
+     * drive assembly by representing the velocities of each of the
+     * two wheels.  Velocities are measured in terms of meters per second.
+     */
     public static class WheelVelocities {
         private final double mVr;
         private final double mVl;
-        
+
+        /**
+         * The constructor creates a new object representing
+         * the state of movement of the differential drive assembly
+         * from the given two wheel velocities.
+         * @param aRight The speed of the right wheel in meters per second.
+         * @param aLeft The speed of the left wheel in meters per second.
+         */
         public WheelVelocities(
                 final double aRight,
                 final double aLeft) {
             mVr = aRight;
             mVl = aLeft;
         }
-        
+        /**
+         * This method returns the speed of the right wheel in
+         * meters per second.
+         * @return Speed in meters per second.
+         */
         public double getRightVelocity() {
             return mVr;
         }
+        /**
+         * This method returns the speed of the left wheel in
+         * meters per second.
+         * @return Speed in meters per second.
+         */
         public double getLeftVelocity() {
             return mVl;
         }
-        
+
     }
-    
-    /**
-     * This method calculates the speed of each of the
-     * wheels given the total velocity and rate of turn
-     * desired.
-     * @param aVelocity The desired total velocity.
-     * @param aRadiansPerSecond The desired rate of turn.
-     * @return The left and right wheel velocities to achieve this state.
-     */
-    public WheelVelocities calculateWheelVelocities(
-            final double aVelocity,
-            final double aRadiansPerSecond) {
-        
-        double rotationVelocity = mHalfWheelDistance * aRadiansPerSecond;
-        double vr = aVelocity + rotationVelocity;
-        double vl = aRadiansPerSecond - rotationVelocity;
-        
-        return new WheelVelocities(vr, vl);
-        
-    }
+
 }

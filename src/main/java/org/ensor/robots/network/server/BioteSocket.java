@@ -54,15 +54,17 @@ public class BioteSocket implements
         }
     }
 
-    public void sendMessage(Event aEvent) throws Exception {
+    public void sendMessage(final Event aEvent) throws Exception {
         String jsonData = JSONStringSerializer.instance().serializeTo(
                 aEvent.getData());
         mConnection.sendMessage(jsonData);
     }
 
     @Override
-    public void onMessage(String data) {
+    public void onMessage(final String data) {
         try {
+            Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, "Got some data");
+            Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, data);
             Event e = new Event("Net-In",
                     JSONStringSerializer.instance().serializeFrom(data));
             mBiote.stimulate(e);

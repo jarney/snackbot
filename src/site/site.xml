@@ -17,7 +17,8 @@
     <menu name="RoboClawDriver">
       <item name="Introduction" href="index.html"/>
       <item name="Pictures" href="pictures.html"/>
-      <item name="Component List" href="component-list.html"/>
+      <item name="Videos" href="videos.html"/>
+      <item name="Construction" href="construction.html"/>
       <item name="Project List" href="project-list.html"/>
           <item name="Project: Find A Path" href="project-find-a-path.html"/>
           <item name="Project: (done) Smooth Running" href="project-smooth-running.html"/>

@@ -1,14 +1,31 @@
 #!/bin/bash
 
+rm -rf server-current
+
+export PATH=/usr/bin:/bin:/sbin:$PATH
+
 if [ ! -d server-current ] ; then
-	unzip target/RoboClawDriver-1.0-SNAPSHOT-bin.zip
-	mv server-update server-current
+	if [ -f server-update.zip ] ; then
+		unzip server-update.zip
+		if [ -d server-update ] ; then
+			mv server-update server-current
+		fi
+	fi
+fi
+if [ ! -d server-current ] ; then
+	if [ -f target/snackbot-1.0-SNAPSHOT-bin.zip ] ; then
+		unzip server-update.zip
+		unzip target/snackbot-1.0-SNAPSHOT-bin.zip
+		if [ -d server-update ] ; then
+			mv server-update server-current
+		fi
+	fi
 fi
 
 getClasspath() {
 	serverInstance=$1
 
-	for file in $(ls ${serverInstance}/*) ; do
+	for file in $(find ${serverInstance}/lib/ -type f -name '*.jar') ; do
 		classpath=$file:$classpath
 	done
 	echo $classpath
@@ -17,7 +34,11 @@ getClasspath() {
 while [ 1 -eq 1 ] ; do
 	classpath=$(getClasspath server-current)
 	echo "-------------------------------------------------"
-	java -cp ${classpath} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=10080 org.ensor.robots.os.Main
+	java \
+	  -cp ${classpath} \
+	  -Xdebug \
+	  -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=10080 \
+	  org.ensor.robots.os.Main
 	let rc=$?
 	if [ $rc -eq 0 ] ; then
 		if [ -f server-update.zip ] ; then

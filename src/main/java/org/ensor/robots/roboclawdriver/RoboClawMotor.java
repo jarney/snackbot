@@ -202,23 +202,6 @@ class RoboClawMotor implements
         );
     }
     
-//    public void setDutyCycle(double aDutyCycle) {
-//        byte speed;
-//        double dutyCycle;
-//        boolean forward;
-//        forward = aDutyCycle > 0;
-//
-//        dutyCycle = Math.abs(aDutyCycle);
-//        if (dutyCycle > 1.0) {
-//            dutyCycle = 1.0;
-//        }
-//        speed = (byte)((double)(dutyCycle * 127.0));
-//        Command cmd;
-//        cmd = new CommandDriveMotor(speed, forward, mMotorId);
-//
-//        mMotorController.handleCommand(cmd);
-//    }
-
     protected void setCurrentDraw(final double aCurrentDraw) {
         mCurrentDraw = aCurrentDraw;
     }

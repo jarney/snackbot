@@ -22,26 +22,21 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.network.server;
+package org.ensor.robots.logging;
 
-import javax.servlet.http.HttpServletRequest;
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketServlet;
-import org.ensor.threads.biote.BioteManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.ensor.robots.network.server.BioteSocket;
 
 /**
  *
  * @author jona
  */
-public class BioteSocketServlet extends WebSocketServlet {
-    private final BioteManager mBioteManager;
-
-    BioteSocketServlet(BioteManager aBioteManager) {
-        mBioteManager = aBioteManager; 
+public class SBLogger {
+    public static void info(String msg) {
+        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, msg);
     }
-    
-    public WebSocket doWebSocketConnect(HttpServletRequest hsr, String string) {
-        return new BioteSocket(mBioteManager);
+    public static void debug(String msg) {
+        Logger.getLogger(BioteSocket.class.getName()).log(Level.FINE, msg);
     }
-
 }

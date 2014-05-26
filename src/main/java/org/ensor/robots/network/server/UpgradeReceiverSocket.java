@@ -50,7 +50,6 @@ public class UpgradeReceiverSocket implements WebSocket.OnBinaryMessage {
     
     public void onMessage(byte[] readBuffer, int offset, int length) {
         try {
-            System.out.println("UpgradeServerSocket.onMessage");
             mOutputStream.write(readBuffer, offset, length);
         } catch (IOException ex) {
             Logger.getLogger(UpgradeReceiverSocket.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,7 +58,6 @@ public class UpgradeReceiverSocket implements WebSocket.OnBinaryMessage {
     }
 
     public void onOpen(Connection cnctn) {
-        System.out.println("UpgradeServerSocket.onOpen");
         mConnection = cnctn;
         try {
             mOutputStream = new FileOutputStream(new File("server-update.zip"));
@@ -84,7 +82,6 @@ public class UpgradeReceiverSocket implements WebSocket.OnBinaryMessage {
     
     public void onClose(int i, String string) {
         try {
-            System.out.println("closing");
             mOutputStream.close();
             
             Thread shutdownThread = new Thread(new ShutdownRunnable());
