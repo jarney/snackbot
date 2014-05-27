@@ -33,6 +33,10 @@ public class Main {
     public static void main(String []args) throws Exception {
         ModuleManager moduleManager = new ModuleManager();
         
+        moduleManager.register(
+                new org.ensor.robots.logging.Module()
+        );
+        
         org.ensor.robots.roboclawdriver.Module roboClawModule =
                 new org.ensor.robots.roboclawdriver.Module();
         moduleManager.register(roboClawModule);

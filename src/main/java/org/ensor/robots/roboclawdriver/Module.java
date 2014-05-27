@@ -36,7 +36,10 @@ public class Module implements IModule {
     private RoboClaw roboClaw;
 
     public Class[] getDependencies() {
-        return null;
+        Class [] deps = {
+            org.ensor.robots.logging.Module.class
+        };
+        return deps;
     }
 
     public void start(IModuleManager aManager) throws Exception {

@@ -43,7 +43,6 @@ class UpgradeReceiverSocketServlet extends WebSocketServlet {
     }
     
     public WebSocket doWebSocketConnect(HttpServletRequest hsr, String string) {
-        System.out.println("Received connection");
         return new UpgradeReceiverSocket(mManager);
     }
 

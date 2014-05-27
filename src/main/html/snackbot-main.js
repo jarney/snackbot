@@ -88,8 +88,8 @@ $(
         connection.send({evt: "something-wierd"});
 
         function sendValueChange(r, theta) {
-            var x = r * Math.cos(theta);
-            var y = r * Math.sin(theta);
+            var x = r * Math.sin(theta);
+            var y = r * Math.cos(theta);
             
             connection.send({
                 eventName: "differentialDrive",
@@ -105,7 +105,10 @@ $(
                 width: 800,
                 height: 800,
                 dragInput: true,
-                onValueChange: sendValueChange
+                onValueChange: sendValueChange,
+                logger: function (msg) {
+                    $("#log").sbLog("msg: " + msg);
+                }
             });
 
     }

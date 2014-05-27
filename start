@@ -1,0 +1,4 @@
+
+export SNACKBOT_ROOT=/home/pi/snackbot
+cd $SNACKBOT_ROOT
+sudo -u root bash -c "(${SNACKBOT_ROOT}/server >${SNACKBOT_ROOT}/server.log 2>&1 &)&"

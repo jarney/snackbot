@@ -22,9 +22,11 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.threads.biote;
+package org.ensor.robots.logging;
 
-import java.util.Properties;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 import org.ensor.robots.os.IModule;
 import org.ensor.robots.os.IModuleManager;
 
@@ -33,30 +35,22 @@ import org.ensor.robots.os.IModuleManager;
  * @author jona
  */
 public class Module implements IModule {
-
-    private BioteManager mBioteManager;
-    
-    public Module() {
-        mBioteManager = null;
-    }
     
     public Class[] getDependencies() {
         Class [] deps = {
-            org.ensor.robots.logging.Module.class
         };
         return deps;
     }
 
     public void start(IModuleManager aManager) {
-        mBioteManager = new BioteManager("rootInstance");
+        Logger logger = Logger.getLogger("");
+        for (Handler h : logger.getHandlers()) {
+            h.setFormatter(new LogFormatter());
+        }
     }
 
     public void shutdown(IModuleManager aManager) {
-        mBioteManager.shutdown();
     }
     
-    public BioteManager getBioteManager() {
-        return mBioteManager;
-    }
-
+    
 }

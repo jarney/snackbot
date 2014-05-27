@@ -54,7 +54,8 @@ public class Module implements IModule {
     
     public Class[] getDependencies() {
         Class [] deps = {
-            org.ensor.threads.biote.Module.class
+            org.ensor.threads.biote.Module.class,
+            org.ensor.robots.logging.Module.class
         };
         return deps;
     }

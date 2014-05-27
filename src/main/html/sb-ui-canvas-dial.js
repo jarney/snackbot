@@ -34,6 +34,7 @@ $.fn.sbUICanvasDial = function(options) {
     var height = opts.height;
     var halfHeight = height/2;
     var onValueChange = opts.onValueChange;
+    var logger = opts.logger;
     
     var dragState = {
         startx: undefined,
@@ -101,31 +102,61 @@ $.fn.sbUICanvasDial = function(options) {
     }
     
     function dragStart(evt) {
+        logger("dragStart");
         dragState.startx = evt.clientX;
         dragState.starty = evt.clientY;
         dragState.x = dragState.startx;
         dragState.y = dragState.starty;
+        logger("dragStart start timer");
         dragState.timer = window.setInterval(dragRepaint, 100);
+        return false;
     }
     function dragMove(evt) {
         dragState.x = evt.clientX;
         dragState.y = evt.clientY;
+        return false;
     }
-    function dragStop() {
+    function dragStop(evt) {
         dragState.startx = undefined;
         dragState.starty = undefined;
         dragState.x = undefined;
         dragState.y = undefined;
         window.clearInterval(dragState.timer);
         paint(0, 0);
+        return false;
+    }
+
+    function touchStart(evt) {
+        evt.preventDefault();
+        logger("touch before start");
+        var targetEvent = evt.originalEvent.touches[0] || evt.originalEvent.changedTouches[0];
+        logger("touch start");
+        dragStart(targetEvent);
+        return false;
+    }
+    function touchEnd(evt) {
+        evt.preventDefault();
+        dragStop(evt);
+        return false;
+    }
+    function touchMove(evt) {
+        evt.preventDefault();
+        logger("touch before move");
+        var targetEvent = evt.originalEvent.touches[0] || evt.originalEvent.changedTouches[0];
+        logger("touch move");
+        dragMove(targetEvent);
+        return false;
     }
     
     if (dragInput) {
         $("#control_canvas")
                 .mousedown(dragStart)
                 .mousemove(dragMove)
-                .mouseup(dragStop);
-
+                .mouseup(dragStop)
+                .bind("touchstart", touchStart)
+                .bind("touchend", touchEnd)
+                .bind("touchmove", touchMove);
+ 
 
 
     }
@@ -142,6 +173,7 @@ $.fn.sbUICanvasDial.defaults = {
     dragInput: false,
     width: 800,
     height: 800,
-    onValueChange: function(r,theta) {}
+    onValueChange: function(r,theta) {},
+    logger: function(msg) {}
 };
 

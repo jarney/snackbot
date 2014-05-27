@@ -195,22 +195,20 @@ public class RoboClaw implements
         // First, get sequence of bytes to send.
         byte[] commandBytes = aCommand.getCommand((byte) mAddress);
         
-        LOGGER.log(Level.INFO, "Command : " + aCommand);
         // Next, we send them to the device.
         try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Command : ");
             for (int i = 0; i < commandBytes.length; i++) {
-                LOGGER.log(Level.INFO, "" + i + ">>> " + (int)commandBytes[i]);
+                sb.append((int) commandBytes[i]);
+                sb.append(" ");
             }
-            Thread.sleep(25);
+            LOGGER.log(Level.INFO, sb.toString());
+            
             mOutputStream.write(commandBytes);
-            Thread.sleep(25);
             mOutputStream.flush();
             
-            Thread.sleep(25);
-            
         } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
 
@@ -227,14 +225,17 @@ public class RoboClaw implements
                     if (bytesRead != length) {
                         LOGGER.log(Level.INFO,
                                 "Command returned " + bytesRead +
-                                " but was expected to return " + length);
+                                " bytes but was expected to return " + length + " bytes");
                     }
                     else {
-                        System.out.println("Received " + bytesRead);
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("Received : ");
                         for (int i = 0; i < bytesRead; i++) {
-                            LOGGER.log(Level.INFO,
-                                    "" + i + "<<< {0}" + (int)fixedResponse[i]);
+                            sb.append((int) fixedResponse[i]);
+                            sb.append(" ");
                         }
+                        LOGGER.log(Level.INFO, sb.toString());
+                        
                         byte checksum = aCommand.calculateChecksum(
                                 commandBytes, commandBytes.length,
                                 fixedResponse, bytesRead - 1);
@@ -255,8 +256,14 @@ public class RoboClaw implements
                 case Command.READ_MODE_NULL_TERMINATED:
                     byte[] variableResponse = new byte[32];
                     int bytesRead2 = readUntilNull(mInputStream, variableResponse);
-                    LOGGER.log(Level.INFO,
-                        "Read " + bytesRead2);
+                    
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Received : ");
+                    for (int i = 0; i < bytesRead2; i++) {
+                        sb.append((int) variableResponse[i]);
+                        sb.append(" ");
+                    }
+                    LOGGER.log(Level.INFO, sb.toString());
                     aCommand.onResponse(variableResponse, bytesRead2);
                     break;
             }

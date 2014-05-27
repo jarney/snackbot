@@ -37,7 +37,10 @@ import org.ensor.threads.biote.Event;
  */
 public class BioteSocket implements
         WebSocket.OnTextMessage {
-
+    
+    private static final Logger LOGGER =
+            Logger.getLogger(BioteSocket.class.getName());
+    
     private Connection mConnection;
     private BioteManager mBioteManager;
     private Biote mBiote;
@@ -63,8 +66,8 @@ public class BioteSocket implements
     @Override
     public void onMessage(final String data) {
         try {
-            Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, "Got some data");
-            Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, data);
+            LOGGER.log(Level.INFO, "Got some data");
+            LOGGER.log(Level.INFO, data);
             Event e = new Event("Net-In",
                     JSONStringSerializer.instance().serializeFrom(data));
             mBiote.stimulate(e);
@@ -85,7 +88,7 @@ public class BioteSocket implements
             mBioteManager.createBiote(mBiote);
             connection.sendMessage("Server received Web Socket upgrade and added it to Receiver List.");
         } catch (Exception ex) {
-            Logger.getLogger(BioteSocket.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, null, ex);
         }
     }
 
