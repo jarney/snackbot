@@ -18,7 +18,13 @@
       <item name="Introduction" href="index.html"/>
       <item name="Pictures" href="pictures.html"/>
       <item name="Videos" href="videos.html"/>
+      
       <item name="Construction" href="construction.html"/>
+        <item name="Construction: Full" href="construction-full-assembly.html"/>
+        <item name="Construction: Base" href="construction-base-assembly.html"/>
+        <item name="Construction: Waist" href="construction-waist-assembly.html"/>
+        <item name="Construction: Head" href="construction-head-assembly.html"/>
+      
       <item name="Project List" href="project-list.html"/>
           <item name="Project: Find A Path" href="project-find-a-path.html"/>
           <item name="Project: (done) Smooth Running" href="project-smooth-running.html"/>

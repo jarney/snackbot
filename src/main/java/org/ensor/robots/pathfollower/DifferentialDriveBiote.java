@@ -27,6 +27,7 @@ package org.ensor.robots.pathfollower;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.robots.motors.ComponentManager;
+import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
 import org.ensor.robots.motors.IServo;
 import org.ensor.robots.motors.differentialdrive.SimpleModel;
@@ -57,6 +58,8 @@ public class DifferentialDriveBiote extends Biote {
     private final IMotor mRightMotor;
     private final IMotor mLeftMotor;
     private final RoboClaw mRoboClaw;
+    private final IEncoder mRightEncoder;
+    private final IEncoder mLeftEncoder;
 
     private final double mLeftEncoderUnitsPerMeter;
     private final double mRightEncoderUnitsPerMeter;
@@ -79,10 +82,16 @@ public class DifferentialDriveBiote extends Biote {
                 getComponent("roboclaw-0-motor0").getSpeedServo();
         mLeftSpeedControl = ComponentManager.
                 getComponent("roboclaw-0-motor1").getSpeedServo();
+        
         mRightMotor = ComponentManager.
                 getComponent("roboclaw-0-motor0").getMotorInterface();
         mLeftMotor = ComponentManager.
                 getComponent("roboclaw-0-motor1").getMotorInterface();
+        
+        mRightEncoder = ComponentManager.
+                getComponent("roboclaw-0-motor0").getEncoder();
+        mLeftEncoder = ComponentManager.
+                getComponent("roboclaw-0-motor1").getEncoder();
         
         mRoboClaw = (RoboClaw)ComponentManager.getComponent("roboclaw-0");
         
@@ -130,6 +139,12 @@ public class DifferentialDriveBiote extends Biote {
 //        mRightMotor.setDutyCycle(aEvent.getData().getReal("right"));
 //        mLeftMotor.setDutyCycle(aEvent.getData().getReal("left"));
         mRoboClaw.updateData();
+        
+        mRightEncoder.getEncoderPosition();
+        mLeftEncoder.getEncoderPosition();
+        
+        
+        
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, 
                 "Error status is " + mRoboClaw.getErrorStatus());
     }

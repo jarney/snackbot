@@ -137,10 +137,6 @@ public class RoboClaw implements
         handleCommand(new CommandReadMotorCurrents(m1, m2));
         handleCommand(new CommandReadTemperature(this));
         handleCommand(new CommandReadEncoderMode(m1, m2));
-        handleCommand(new CommandReadEncoderPosition(m1));
-        handleCommand(new CommandReadEncoderPosition(m2));
-        handleCommand(new CommandReadEncoderSpeed(m1));
-        handleCommand(new CommandReadEncoderSpeed(m2));
         
         updateData();
         
@@ -149,7 +145,11 @@ public class RoboClaw implements
     }
     
     public final void updateData() {
-        handleCommand(new CommandReadErrorStatus(this));
+//        handleCommand(new CommandReadErrorStatus(this));
+//        handleCommand(new CommandReadEncoderPosition(m1));
+//        handleCommand(new CommandReadEncoderPosition(m2));
+//        handleCommand(new CommandReadEncoderSpeed(m1));
+//        handleCommand(new CommandReadEncoderSpeed(m2));
     }
     
     public String getFirmwareVersion() {
