@@ -13,10 +13,7 @@ org.ensor.java.utilities
 org.ensor.math.analysis
 org.ensor.math.geometry
 org.ensor.robots.client.viewer
-org.ensor.robots.editor
-org.ensor.robots.editor.cookers
-org.ensor.robots.editor.editors
-org.ensor.robots.editor.objects
+org.ensor.robots.logging
 org.ensor.robots.motors
 org.ensor.robots.motors.differentialdrive
 org.ensor.robots.network.client
@@ -26,6 +23,3 @@ org.ensor.robots.pathfollower
 org.ensor.robots.roboclawdriver
 org.ensor.robots.simulator
 org.ensor.threads.biote
-org.ensor.tools.editor.base
-org.ensor.tools.editor.base.components
-org.ensor.tools.editor.base.resource
