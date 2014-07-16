@@ -24,15 +24,18 @@
 
 package org.ensor.robots.pathfollower;
 
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ensor.data.atom.DictionaryAtom;
+import org.ensor.math.geometry.Vector2;
 import org.ensor.robots.motors.ComponentManager;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
 import org.ensor.robots.motors.IServo;
-import org.ensor.robots.motors.differentialdrive.SimpleModel;
 import org.ensor.robots.network.server.BioteSocket;
-import org.ensor.robots.roboclawdriver.RoboClaw;
+import org.ensor.robots.os.configuration.Configuration;
 import org.ensor.threads.biote.Biote;
 import org.ensor.threads.biote.BioteManager;
 import org.ensor.threads.biote.Event;
@@ -46,54 +49,124 @@ import org.ensor.threads.biote.IEventHandler;
  * to estimate the desired velocity of each of the wheels.
  * @author jona
  */
-public class DifferentialDriveBiote extends Biote {
+public class DifferentialDriveBiote extends Biote implements IGoalReachedListener {
 
-    // Differential drive model.
-    private final SimpleModel mDifferentialDriveModel;
+    public static final String CONFIG_LEFT_MOTOR_ID = "leftMotorId";
+    public static final String CONFIG_RIGHT_MOTOR_ID = "rightMotorId";
+    public static final String CONFIG_LEFT_ENCODER_TICKS_PER_REVOLUTION = "leftEncoderTicksPerRevolution";
+    public static final String CONFIG_RIGHT_ENCODER_TICKS_PER_REVOLUTION = "rightEncoderTicksPerRevolution";
+    public static final String CONFIG_LEFT_WHEEL_DIAMETER = "leftWheelDiameter";
+    public static final String CONFIG_RIGHT_WHEEL_DIAMETER = "rightWheelDiameter";
+    public static final String CONFIG_LEFT_ENCODER_CALIBRATION_TICKS_PER_METER = "leftEncoderCalibrationTicks";
+    public static final String CONFIG_RIGHT_ENCODER_CALIBRATION_TICKS_PER_METER = "rightEncoderCalibrationTicks";
+    public static final String CONFIG_WHEEL_DISTANCE = "wheelDistance";
+    public static final String CONFIG_LEFT_WHEEL_MAX_ROTATION_SPEED = "leftWheelMaxRotationSpeed";
+    public static final String CONFIG_RIGHT_WHEEL_MAX_ROTATION_SPEED = "rightWheelMaxRotationSpeed";
+    public static final String CONFIG_DISTANCE_TOLERANCE = "distanceTolerance";
+    public static final String CONFIG_ANGLE_TOLERANCE = "angleTolerance";
+    public static final String CONFIG_DECELERATION_DISTANCE = "decelerationDistance";
+    public static final String CONFIG_LEFT_WHEEL_DIRECTION = "leftWheelDirection";
+    public static final String CONFIG_RIGHT_WHEEL_DIRECTION = "rightWheelDirection";
+
+    private final Configuration mConfiguration;
+    private DictionaryAtom mConfigDict;
 
     // Speed controllers for left and right motors,
     // respectively.
-    private final IServo mLeftSpeedControl;
-    private final IServo mRightSpeedControl;
-    private final IMotor mRightMotor;
-    private final IMotor mLeftMotor;
-    private final RoboClaw mRoboClaw;
-    private final IEncoder mRightEncoder;
-    private final IEncoder mLeftEncoder;
-
-    private final double mLeftEncoderUnitsPerMeter;
-    private final double mRightEncoderUnitsPerMeter;
+    private IMotor mLeftMotor;
+    private IMotor mRightMotor;
+    private IEncoder mLeftEncoder;
+    private IEncoder mRightEncoder;
+    private PrintStream mJourneyLog;
+    private int mTimerId;
     
-    public DifferentialDriveBiote(final BioteManager aBioteManager) {
+    private long mLeftPosition;
+    private long mRightPosition;
+    private long mLastUpdateTime;
+    private Vector2 mPosition;
+    private double mDirection;
+
+    private int mBioteId;
+    
+    private double mLeftEncoderUnitsPerMeter;
+    private double mRightEncoderUnitsPerMeter;
+    private double mLeftWheelDirection;
+    private double mRightWheelDirection;
+    private static final Event TICK_EVENT = new Event("Mover-Tick");
+    private static final int TICK_DURATION_MILLISECONDS = 100;
+    
+    private SimpleModel mSimpleModel;
+    private PathServo mPathServo;
+    private DifferentialDriveServo mDifferentialDrive;
+    private WheelSpeedControl mLeftSpeedControl;
+    private WheelSpeedControl mRightSpeedControl;
+    private String leftMotorId;
+    private String rightMotorId;
+
+    class WheelSpeedControl implements IServo {
+        private final double mPulsesPerMeter;
+        private final IServo mSpeedControl;
+        private final String mLogPrefix;
+        
+        public WheelSpeedControl(
+                final double aPulsesPerMeter,
+                final IServo aSpeedControl,
+                final String aLogPrefix) {
+            mSpeedControl = aSpeedControl;
+            mPulsesPerMeter = aPulsesPerMeter;
+            mLogPrefix = aLogPrefix;
+        }
+        
+        public void setPosition(double aPosition) {
+            mSpeedControl.setPosition(aPosition * mPulsesPerMeter);
+            long spd = (long) (aPosition * mPulsesPerMeter);
+            Logger.getLogger(BioteSocket.class.getName()).log(
+                    Level.INFO,
+                    mLogPrefix + " = " + aPosition + ":" + spd);
+        }
+    
+    }
+    
+    
+    public DifferentialDriveBiote(
+            final BioteManager aBioteManager,
+            final Configuration aConfiguration) {
         super(aBioteManager, false);
+        mConfiguration = aConfiguration;
         
-        // All of this comes from configuration manager.
-        mDifferentialDriveModel = new SimpleModel(0.36195);
+        DictionaryAtom config = 
+            mConfiguration.getConfigurationNode(
+                "org.ensor.robots.pathfollower.DifferentialDriveBiote");
+        if (config == null) {
+            config = DictionaryAtom.newAtom();
+
+            
+            config.setString(CONFIG_LEFT_MOTOR_ID, "roboclaw-0-motor1");
+            config.setString(CONFIG_RIGHT_MOTOR_ID, "roboclaw-0-motor0");
+            
+            config.setReal(CONFIG_LEFT_ENCODER_TICKS_PER_REVOLUTION, 1200.0);
+            config.setReal(CONFIG_RIGHT_ENCODER_TICKS_PER_REVOLUTION, 1200.0);
+            config.setReal(CONFIG_LEFT_WHEEL_DIAMETER, 0.09);
+            config.setReal(CONFIG_RIGHT_WHEEL_DIAMETER, 0.09);
+            config.setReal(CONFIG_LEFT_ENCODER_CALIBRATION_TICKS_PER_METER, 0);
+            config.setReal(CONFIG_RIGHT_ENCODER_CALIBRATION_TICKS_PER_METER, 0);
+            
+            config.setReal(CONFIG_WHEEL_DISTANCE, 0.36195);
+            config.setReal(CONFIG_LEFT_WHEEL_MAX_ROTATION_SPEED, 500);
+            config.setReal(CONFIG_RIGHT_WHEEL_MAX_ROTATION_SPEED, 500);
+            config.setReal(CONFIG_DISTANCE_TOLERANCE, 0.05);
+            config.setReal(CONFIG_ANGLE_TOLERANCE, 10);
+            config.setReal(CONFIG_DECELERATION_DISTANCE, 0.5);
+            config.setReal(CONFIG_LEFT_WHEEL_DIRECTION, 1);
+            config.setReal(CONFIG_RIGHT_WHEEL_DIRECTION, 1);
+            
+            mConfiguration.setConfigurationNode(
+                    "org.ensor.robots.pathfollower.DifferentialDriveBiote",
+                    config);
+        }
         
-        // To determine units per meter:
-        // Meters per revolution:
-        // 90/1000 * 3.14159265 = 
-        // Encoder counts per revolution: 29 * 64 = 1856 counts/rev
-        // counts/rev * rev/m
-        
-        mLeftEncoderUnitsPerMeter = 6564.4508108288;
-        mRightEncoderUnitsPerMeter = 6564.4508108288;
-        mRightSpeedControl = ComponentManager.
-                getComponent("roboclaw-0-motor0").getSpeedServo();
-        mLeftSpeedControl = ComponentManager.
-                getComponent("roboclaw-0-motor1").getSpeedServo();
-        
-        mRightMotor = ComponentManager.
-                getComponent("roboclaw-0-motor0").getMotorInterface();
-        mLeftMotor = ComponentManager.
-                getComponent("roboclaw-0-motor1").getMotorInterface();
-        
-        mRightEncoder = ComponentManager.
-                getComponent("roboclaw-0-motor0").getEncoder();
-        mLeftEncoder = ComponentManager.
-                getComponent("roboclaw-0-motor1").getEncoder();
-        
-        mRoboClaw = (RoboClaw)ComponentManager.getComponent("roboclaw-0");
+        mConfigDict = config;
+
         
     }
 
@@ -106,93 +179,325 @@ public class DifferentialDriveBiote extends Biote {
                 onMoveRequest(msg);
             }
         });
-        subscribe("Mover-MoveRequestLeftRight", new IEventHandler() {
+        subscribe("Mover-SetDestinationPoint", new IEventHandler() {
             public void process(final Event msg) throws Exception {
-                onMoveRequestLeftRight(msg);
+                onSetDestinationPoint(msg);
+            }
+        });
+        subscribe("Mover-Reset", new IEventHandler() {
+            public void process (final Event msg) throws Exception {
+                onReset(msg);
             }
         });
         subscribe("Mover-AllStop", new IEventHandler() {
             public void process(final Event msg) throws Exception {
                 onAllStop(msg);
             }
-            
         });
+        subscribe("Mover-Tick", new IEventHandler() {
+            public void process(Event msg) throws Exception {
+                onTick(msg);
+            }
+        });
+        subscribe("Mover-Subscribe", new IEventHandler() {
+            public void process(Event msg) throws Exception {
+                onSubscribe(msg);
+            }
+        });
+        subscribe("Mover-DriveMotor", new IEventHandler() {
+            public void process(Event msg) throws Exception {
+                onDriveMotor(msg);
+            }
+        });
+        subscribe("Mover-UpdateConfig", new IEventHandler() {
+            public void process(Event msg) throws Exception {
+                onConfigure(msg);
+            }
+        });
+        
+        
+        mJourneyLog = new PrintStream(new FileOutputStream("server-current/html/journey-log.txt"));
+
+        mTimerId = startTimer(TICK_DURATION_MILLISECONDS, TICK_EVENT, true);
+        
+        readConfiguration(mConfigDict);
+
+        mPosition = new Vector2(0, 0);
+        mDirection = 0;
+        mBioteId = 0;
+        
     }
 
-    private void onMoveRequestLeftRight(final Event aEvent) {
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, 
-                "Processing move request " +
-                aEvent.getData().getReal("left") + 
-                " " + 
-                aEvent.getData().getReal("right"));
+    private void readConfiguration(DictionaryAtom aConfigDict) {
+        // Wheel distance (in meters)
         
-        // Finally, we ask the motors to execute on that speed.
+        mLeftEncoderUnitsPerMeter =
+                aConfigDict.getReal(CONFIG_LEFT_ENCODER_TICKS_PER_REVOLUTION) /
+                (aConfigDict.getReal(CONFIG_LEFT_WHEEL_DIAMETER) * Math.PI) + 
+                aConfigDict.getReal(CONFIG_LEFT_ENCODER_CALIBRATION_TICKS_PER_METER);
         
-        double encoderVr = aEvent.getData().getReal("right") * 
-                mRightEncoderUnitsPerMeter;
-        double encoderVl = aEvent.getData().getReal("left") * 
-                mLeftEncoderUnitsPerMeter;
-        
-        mRightSpeedControl.setPosition((long) encoderVr);
-        mLeftSpeedControl.setPosition((long) encoderVl);
+        mRightEncoderUnitsPerMeter =
+                aConfigDict.getReal(CONFIG_RIGHT_ENCODER_TICKS_PER_REVOLUTION) /
+                (aConfigDict.getReal(CONFIG_RIGHT_WHEEL_DIAMETER) * Math.PI) + 
+                aConfigDict.getReal(CONFIG_RIGHT_ENCODER_CALIBRATION_TICKS_PER_METER);
 
-//        mRightMotor.setDutyCycle(aEvent.getData().getReal("right"));
-//        mLeftMotor.setDutyCycle(aEvent.getData().getReal("left"));
-        mRoboClaw.updateData();
+        double leftMaxRPM = aConfigDict.getReal(CONFIG_LEFT_WHEEL_MAX_ROTATION_SPEED);
+        double rightMaxRPM = aConfigDict.getReal(CONFIG_RIGHT_WHEEL_MAX_ROTATION_SPEED);
+
+        // rev/min * (1/60 min/sec) * PI*Diameter meters/rev = meters/sec
+        double leftMaxSpeed = leftMaxRPM / 60.0 *
+                aConfigDict.getReal(CONFIG_LEFT_WHEEL_DIAMETER) * Math.PI;
+        double rightMaxSpeed = rightMaxRPM / 60.0 *
+                aConfigDict.getReal(CONFIG_RIGHT_WHEEL_DIAMETER) * Math.PI;
         
-        mRightEncoder.getEncoderPosition();
-        mLeftEncoder.getEncoderPosition();
+        double maxMovementSpeed = (leftMaxSpeed + rightMaxSpeed)/2;
+        
+        double wheelDistance = aConfigDict.getReal(CONFIG_WHEEL_DISTANCE);
+        double distanceTolerance = aConfigDict.getReal(CONFIG_DISTANCE_TOLERANCE);
+        double angleTolerance = aConfigDict.getReal(CONFIG_ANGLE_TOLERANCE)
+                * Math.PI * 2 / 360.0;
+        double decelerationDistance = aConfigDict.getReal(CONFIG_DECELERATION_DISTANCE);
+
+        mLeftWheelDirection = aConfigDict.getReal(CONFIG_LEFT_WHEEL_DIRECTION);
+        mRightWheelDirection = aConfigDict.getReal(CONFIG_RIGHT_WHEEL_DIRECTION);
+        mLeftEncoderUnitsPerMeter *= mLeftWheelDirection;
+        mRightEncoderUnitsPerMeter *= mRightWheelDirection;
+        
+        String leftMotorId = aConfigDict.getString(CONFIG_LEFT_MOTOR_ID);
+        String rightMotorId = aConfigDict.getString(CONFIG_RIGHT_MOTOR_ID);
+        
+        IServo leftSpeedControl = ComponentManager.
+                getComponent(leftMotorId).getSpeedServo();
+        IServo rightSpeedControl = ComponentManager.
+                getComponent(rightMotorId).getSpeedServo();
+        
+        mLeftMotor = ComponentManager.
+                getComponent(leftMotorId).getMotorInterface();
+        mRightMotor = ComponentManager.
+                getComponent(rightMotorId).getMotorInterface();
+
+        mLeftEncoder = ComponentManager.
+                getComponent(leftMotorId).getEncoder();
+        mRightEncoder = ComponentManager.
+                getComponent(rightMotorId).getEncoder();
+        
+        mLeftSpeedControl = new WheelSpeedControl(mLeftEncoderUnitsPerMeter,
+                leftSpeedControl, "left");
+        mRightSpeedControl = new WheelSpeedControl(mRightEncoderUnitsPerMeter,
+                rightSpeedControl, "right");
+
+        if (mSimpleModel == null) {
+            mSimpleModel = new SimpleModel(wheelDistance);
+        }
+        else {
+            mSimpleModel.setWheelDistance(wheelDistance);
+        }
+
+        if (mDifferentialDrive == null) {
+            mDifferentialDrive = new DifferentialDriveServo(
+                    mSimpleModel,
+                    maxMovementSpeed,
+                    mLeftSpeedControl,
+                    mRightSpeedControl);
+        }
+        else {
+            mDifferentialDrive.setMaxMovementSpeed(maxMovementSpeed);
+        }
+
+        if (mPathServo == null) {
+            mPathServo = new PathServo(
+                maxMovementSpeed,
+                distanceTolerance,
+                angleTolerance,
+                decelerationDistance,
+                mDifferentialDrive.getSpeedControl(),
+                mDifferentialDrive.getAngleControl(),
+                this);
+        }
+        else {
+            mPathServo.setMaxMovementSpeed(maxMovementSpeed);
+            mPathServo.setDistanceTolerance(distanceTolerance);
+            mPathServo.setAngleTolerance(angleTolerance);
+        }
+        mConfigDict = aConfigDict;
+        mConfiguration.setConfigurationNode(
+                "org.ensor.robots.pathfollower.DifferentialDriveBiote",
+                mConfigDict);
+    }
+    
+    private void onConfigure(Event msg) throws Exception {
+        String saveResult = "Saved OK";
+        try {
+            DictionaryAtom configDict =
+                    msg.getData().getMutable();
+            readConfiguration(configDict);
+            mConfiguration.save();
+        }
+        catch (Exception ex) {
+            saveResult = "Exception saving results";
+            Logger.getLogger(BioteSocket.class.getName()).log(Level.WARNING,
+                    "Exception saving configuration", ex);
+        }
+        DictionaryAtom dict = DictionaryAtom.newAtom();
+        dict.setString("eventName", "updateConfigurationDone");
+        dict.setString("saveResult", saveResult);
+        Event positionUpdate = new Event("Net-Out", dict);
+        sendStimulus(mBioteId, positionUpdate);
+    }
+    
+    private void onSubscribe(Event msg) {
+        mBioteId = msg.getData().getInt("bioteId");
+        DictionaryAtom dict = DictionaryAtom.newAtom();
+        dict.setString("eventName", "differential-drive-configuration");
+        dict.setDictionary("configuration", mConfigDict.getImmutable());
+        Event positionUpdate = new Event("Net-Out", dict);
+        sendStimulus(mBioteId, positionUpdate);
+    }
+    
+    private void onReset(Event msg) {
+        mPosition = new Vector2(msg.getData().getReal("x"),
+                msg.getData().getReal("y"));
+        mDirection = msg.getData().getReal("theta");
+        mPathServo.abort();
+        mRightSpeedControl.setPosition((long) 0);
+        mLeftSpeedControl.setPosition((long) 0);
+        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
+                "Path Abort");
+    }
+    
+    private void onTick(Event msg) {
+        long newRightPosition = mRightEncoder.getEncoderPosition();
+        long newLeftPosition = mLeftEncoder.getEncoderPosition();
+        long now = System.currentTimeMillis();
+        long dt = (now - mLastUpdateTime);
+
+        // Left/right speed in ticks/sec.
+        double leftSpeedCounts = (newLeftPosition - mLeftPosition) * 1000.0 / (double)dt;
+        double rightSpeedCounts = (newRightPosition - mRightPosition) * 1000.0 / (double)dt;
+        
+        double leftSpeed = leftSpeedCounts / mLeftEncoderUnitsPerMeter;
+        double rightSpeed = rightSpeedCounts / mRightEncoderUnitsPerMeter;
+        
+        SimpleModel.WheelVelocities wv = new SimpleModel.WheelVelocities(leftSpeed, rightSpeed);
+        SimpleModel.SpeedAndTurnRate bearing = mSimpleModel.calculateBearing(wv);
+        
+        Vector2 distanceTraveled = new Vector2(
+                bearing.getVelocity() * dt / 1000.0 * Math.cos(mDirection),
+                bearing.getVelocity() * dt / 1000.0 * Math.sin(mDirection)
+        );
+        mPosition = mPosition.add(distanceTraveled);
+        double oldDirection = mDirection;
+        mDirection = mDirection + bearing.getTurnRate() * dt / 1000.0;
+
+        mPathServo.setCurrentPosition(mPosition, mDirection);
+        mPathServo.tick();
+        if (mPathServo.isMoving()) {
+            mDifferentialDrive.setAngle(mDirection);
+            mDifferentialDrive.tick();
+        }
+
+        if (mRightPosition != newRightPosition ||
+                mLeftPosition != newLeftPosition) {
+            
+            Logger.getLogger(BioteSocket.class.getName()).log(
+                    Level.INFO,
+                    "bearing: v = " + bearing.getVelocity() + " d = " + mDirection);
+        
+            Logger.getLogger(BioteSocket.class.getName()).log(
+                    Level.INFO,
+                    "leftSpeed = " + leftSpeedCounts + " rightSpeed = " + rightSpeedCounts + 
+                    " leftSpeed = " + leftSpeed + " rightSpeed = " + rightSpeed);
         
         
+            Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
+                    "Distance traveled " +
+                            distanceTraveled.getX() + "," + distanceTraveled.getY());
         
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, 
-                "Error status is " + mRoboClaw.getErrorStatus());
+            Logger.getLogger(BioteSocket.class.getName()).log(
+                    Level.INFO,
+                    "dt = " + dt +
+                    " r = " + newRightPosition +
+                    " l = " + newLeftPosition +
+                    " x = " + mPosition.getX() +
+                    " y = " + mPosition.getY() +
+                    " theta = " + mDirection);
+            if (mBioteId != 0) {
+                
+                DictionaryAtom dict = DictionaryAtom.newAtom();
+                dict.setString("eventName", "position-update");
+                dict.setReal("x", mPosition.getX());
+                dict.setReal("y", mPosition.getY());
+                dict.setReal("leftSpeed", leftSpeed);
+                dict.setReal("rightSpeed", rightSpeed);
+                Event positionUpdate = new Event("Net-Out", dict);
+                sendStimulus(mBioteId, positionUpdate);
+                
+            }
+
+            
+        }
+        else {
+            mJourneyLog.flush();
+        }
+        
+        mLastUpdateTime = now;
+        mRightPosition = newRightPosition;
+        mLeftPosition = newLeftPosition;
     }
     
     private void onMoveRequest(final Event aEvent) {
-        double theta = aEvent.getData().getReal("direction");
-        double velocity = aEvent.getData().getReal("velocity");
-        double dt = aEvent.getData().getReal("delta_time");
-
-        // We're going to move the
-        // angle by this much
-        double dthetadt = theta / dt;
-        if (dthetadt > 10) {
-            dthetadt = 10;
-        }
-        if (dthetadt < -10) {
-            dthetadt = -10;
-        }
-        
-        SimpleModel.WheelVelocities wheelVelocities =
-                mDifferentialDriveModel.
-                        calculateWheelVelocities(velocity, dthetadt);
-
-        // Now, we have the desired wheel velocities in terms of meters
-        // per second.  We need to convert them into units of
-        // encoder pulses per second, so we multiply the number of
-        // encoder pulses per meter.
-        double encoderVr = wheelVelocities.getRightVelocity() *
-                mRightEncoderUnitsPerMeter;
-        double encoderVl = wheelVelocities.getLeftVelocity() *
-                mLeftEncoderUnitsPerMeter;
-
-        System.out.println("vr = " + wheelVelocities.getRightVelocity() + ": " + encoderVr);
-        System.out.println("vl = " + wheelVelocities.getLeftVelocity() + ": " + encoderVl);
+        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
+                "Processing move request " +
+                aEvent.getData().getReal("leftMotor") +
+                " " +
+                aEvent.getData().getReal("rightMotor"));
         
         // Finally, we ask the motors to execute on that speed.
-        mRightSpeedControl.setPosition((long) encoderVr);
-        mLeftSpeedControl.setPosition((long) encoderVl);
+        
+        double left = aEvent.getData().getReal("leftMotor");
+        double right = aEvent.getData().getReal("rightMotor");
+
+        mLeftSpeedControl.setPosition(left * mDifferentialDrive.getMaxMovementSpeed());
+        mRightSpeedControl.setPosition(right * mDifferentialDrive.getMaxMovementSpeed());
+    }
+    
+    private void onSetDestinationPoint(final Event aEvent) {
+        double x = aEvent.getData().getReal("x");
+        double y = aEvent.getData().getReal("y");
+        double theta = aEvent.getData().getReal("theta");
+
+        Vector2 dest = new Vector2(x, y);
+        mPathServo.setDestination(dest, theta);
+        
+        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
+                "Setting destination point " + x + "," + y + " theta " + theta);
+        
     }
 
     private void onAllStop(Event aEvent) throws Exception {
         // Finally, we ask the motors to execute on that speed.
         mRightSpeedControl.setPosition((long) 0);
         mLeftSpeedControl.setPosition((long) 0);
+        mLeftMotor.setDutyCycle(0);
+        mRightMotor.setDutyCycle(0);
+    }
+    
+    private void onDriveMotor(Event aEvent) throws Exception {
+        mLeftMotor.setDutyCycle(aEvent.getData().getReal("leftMotor") * mLeftWheelDirection);
+        mRightMotor.setDutyCycle(aEvent.getData().getReal("rightMotor") * mRightWheelDirection);
     }
     
     @Override
     protected void onFinalize(Event message) throws Exception {
+        cancelTimer(mTimerId);
+    }
+
+    public void reached() {
+        mRightSpeedControl.setPosition((long) 0);
+        mLeftSpeedControl.setPosition((long) 0);
+        Logger.getLogger(BioteSocket.class.getName()).log(
+                Level.INFO, 
+                "Destination Reached");
     }
 
 }

@@ -43,7 +43,6 @@ public final class App {
             IEncoder m2,
             ICurrentMeasurable c2) {
         
-        roboClaw.updateData();
         System.out.println("Firmware revision: " + 
                 roboClaw.getFirmwareVersion());
         System.out.println("Main battery voltage: " +

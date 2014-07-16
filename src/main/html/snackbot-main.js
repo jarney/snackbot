@@ -30,86 +30,61 @@ $.fn.sbLog = function(message) {
     this.prepend(pre);
 };
 
+var snackbot = {
+    subscribers: {},
+    subscribe: function(eventName, callback) {
+        if (this.subscribers[eventName] === undefined) {
+            this.subscribers[eventName] = [];
+        }
+        this.subscribers[eventName].push(callback);
+    },
+    publish: function(eventName, msg) {
+        eventList = this.subscribers[eventName];
+        if (eventList === undefined) {
+            return;
+        }
+        for (var i = 0; i < eventList.length; i++) {
+            eventList[i](msg);
+        }
+    },
+    connection: undefined,
+    send: function(msg) {
+        if (this.connection === undefined) {
+            return;
+        }
+        this.connection.send(msg);
+    }
+};
+
+
 $(
     function() {
-        $( "#forward" ).button().click(function( event ) {
-                var obj = {
-                    eventName: "forward"
-                };
-                var jsonAsString = JSON.stringify(obj);
-                doSend(jsonAsString);
-            });
-        $( "#reverse" ).button().click(function( event ) {
-                var obj = {
-                    eventName: "reverse"
-                };
-                var jsonAsString = JSON.stringify(obj);
-                doSend(jsonAsString);
-            });
-        $( "#left" ).button().click(function( event ) {
-                var obj = {
-                    eventName: "left"
-                };
-                var jsonAsString = JSON.stringify(obj);
-                doSend(jsonAsString);
-            });
-        $( "#right" ).button().click(function( event ) {
-                var obj = {
-                    eventName: "right"
-                };
-                var jsonAsString = JSON.stringify(obj);
-                doSend(jsonAsString);
-            });
         $("#tabcontrol").button();
         $("#tabtelemetry").button();
         $("#tabcommunications-log").button();
         $("#tabconfiguration").button();
         $("#maintabs").sbUITabs();
-
-        $(window).resize(function(){
-            $("#control_canvas").sbUIFixAspectRatio();
-            $("#control_canvas").sbUICenter();
-        });
         
-        $("#control_canvas").sbUIFixAspectRatio();
-        $("#control_canvas").sbUICenter();
+        sbControl(snackbot);
+        sbTelemetry(snackbot);
+        sbConfigure(snackbot);
         
-        
-        var connection = new SnackbotConnection("localhost", 
+        snackbot.connection = new SnackbotConnection(
             function (msg) {
-                $("#log").sbLog("msg: " + msg);
+                snackbot.publish(msg.eventName, msg);
             },
             function (type, evt) {
                 $("#log").sbLog(type + "Event: " + evt);
+                snackbot.publish(type, evt);
             }
         );
-            
-        connection.connect();
-        connection.send({evt: "something-wierd"});
-
-        function sendValueChange(r, theta) {
-            var x = r * Math.sin(theta);
-            var y = r * Math.cos(theta);
-            
-            connection.send({
-                eventName: "differentialDrive",
-                left: y+x,
-                right: y-x
+        snackbot.subscribe("open", function(msg) {
+            snackbot.send({
+                eventName: "subscribe"
             });
-        }
+        });
+    
+        snackbot.connection.connect();
         
-        
-        $("#control_canvas").sbUICanvasDial({
-                r: 0,
-                theta: 0,
-                width: 800,
-                height: 800,
-                dragInput: true,
-                onValueChange: sendValueChange,
-                logger: function (msg) {
-                    $("#log").sbLog("msg: " + msg);
-                }
-            });
-
     }
 );

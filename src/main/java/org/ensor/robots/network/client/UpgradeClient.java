@@ -125,6 +125,13 @@ public class UpgradeClient implements WebSocket.OnBinaryMessage {
                 System.out.println("Usage: UpgradeClient hostname port");
                 System.exit(1);
             }
+
+            File fileToUpload = new File("target/snackbot-1.0-SNAPSHOT-bin.zip");
+            
+            if (!fileToUpload.exists()) {
+                System.out.println("File " + fileToUpload.getAbsolutePath() + " does not exist");
+                System.exit(1);
+            }
             
             String hostname = args[0];
             short port = 8080;
@@ -135,7 +142,7 @@ public class UpgradeClient implements WebSocket.OnBinaryMessage {
             UpgradeClient uc = new UpgradeClient(hostname, port);
             uc.connect();
             if (uc.isConnected()) {
-                uc.uploadFile(new File("target/snackbot-1.0-SNAPSHOT-bin.zip"));
+                uc.uploadFile(fileToUpload);
             }
             uc.disconnect();
             System.exit(0);

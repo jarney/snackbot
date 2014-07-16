@@ -35,16 +35,20 @@ import org.ensor.threads.biote.BioteManager;
 public class Module implements IModule {
     
     private final org.ensor.threads.biote.Module mBioteModule;
+    private final org.ensor.robots.os.configuration.Module mConfigModule;
 
     
     public Module(
-            final org.ensor.threads.biote.Module aBioteModule
+            final org.ensor.threads.biote.Module aBioteModule,
+            final org.ensor.robots.os.configuration.Module aConfigModule
     ) {
         mBioteModule = aBioteModule;
-    }
+        mConfigModule = aConfigModule;
+    }                                                                
 
     public Class[] getDependencies() {
         Class [] deps = {
+            org.ensor.robots.os.configuration.Module.class,
             org.ensor.threads.biote.Module.class,
             org.ensor.robots.roboclawdriver.Module.class
         };
@@ -54,9 +58,17 @@ public class Module implements IModule {
     public void start(IModuleManager aManager) throws Exception {
         
         BioteManager mgr = mBioteModule.getBioteManager();
-        DifferentialDriveBiote ddBiote = new DifferentialDriveBiote(mgr);
+        DifferentialDriveBiote ddBiote = new DifferentialDriveBiote(
+                mgr, 
+                mConfigModule.getConfiguration()
+        );
         mgr.createBiote(ddBiote);
-        PathFollower pathFollower = new PathFollower(mgr, ddBiote.getBioteId());
+        
+        PathFollower pathFollower = new PathFollower(
+                mgr,
+                ddBiote.getBioteId(),
+                mConfigModule.getConfiguration()
+        );
         mgr.createBiote(pathFollower);
     }
 

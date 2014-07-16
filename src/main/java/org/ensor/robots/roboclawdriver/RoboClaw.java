@@ -65,7 +65,9 @@ public class RoboClaw implements
     private final RoboClawMotor m1;
     private final RoboClawMotor m2;
     private double mTemperature;
-    private byte mErrorStatus;
+    private int mErrorStatus;
+    private Thread mRoboClawThread;
+    private boolean mRunning;
     
     /**
      * The constructor creates a RoboClaw object based on the TTY
@@ -103,13 +105,14 @@ public class RoboClaw implements
         
         mAddress = aAddress;
         
-        m1 = new RoboClawMotor(this, 0);
-        m2 = new RoboClawMotor(this, 1);
-        
         mTemperature = 70.0;
         mErrorStatus = 0;
         
+        m1 = new RoboClawMotor(this, 0);
+        m2 = new RoboClawMotor(this, 1);
+        
         initialize();
+        
         
         ComponentManager mgr = ComponentManager.getInstance();
         mgr.registerComponent("roboclaw-0-motor0", m1);
@@ -119,6 +122,7 @@ public class RoboClaw implements
     }
 
     public double getTemperature() {
+        handleCommand(new CommandReadTemperature(this));
         return mTemperature;
     }
     
@@ -128,28 +132,14 @@ public class RoboClaw implements
 
     private final void initialize() {
         handleCommand(new CommandReadFirmware(this));
-        
-//        handleCommand(new CommandReadPIDQPPS(m1));
-//        handleCommand(new CommandReadPIDQPPS(m2));
-        
-        handleCommand(new CommandReadMainBatteryVoltage(this));
-        handleCommand(new CommandReadLogicBatteryVoltage(this));
-        handleCommand(new CommandReadMotorCurrents(m1, m2));
-        handleCommand(new CommandReadTemperature(this));
         handleCommand(new CommandReadEncoderMode(m1, m2));
-        
-        updateData();
-        
         handleCommand(new CommandSetEncoderMode(m1, false, true));
         handleCommand(new CommandSetEncoderMode(m2, false, true));
+        
     }
     
-    public final void updateData() {
-//        handleCommand(new CommandReadErrorStatus(this));
-//        handleCommand(new CommandReadEncoderPosition(m1));
-//        handleCommand(new CommandReadEncoderPosition(m2));
-//        handleCommand(new CommandReadEncoderSpeed(m1));
-//        handleCommand(new CommandReadEncoderSpeed(m2));
+    public void shutdown() {
+        mRunning = false;
     }
     
     public String getFirmwareVersion() {
@@ -157,6 +147,7 @@ public class RoboClaw implements
     }
     
     public double getMainBatteryVoltage() {
+        handleCommand(new CommandReadMainBatteryVoltage(this));
         return mMainBatteryVoltage;
     }
 
@@ -165,6 +156,7 @@ public class RoboClaw implements
     }
     
     public double getLogicBatteryVoltage() {
+        handleCommand(new CommandReadLogicBatteryVoltage(this));
         return mLogicBatteryVoltage;
     }
     
@@ -203,7 +195,7 @@ public class RoboClaw implements
                 sb.append((int) commandBytes[i]);
                 sb.append(" ");
             }
-            LOGGER.log(Level.INFO, sb.toString());
+            LOGGER.log(Level.FINER, sb.toString());
             
             mOutputStream.write(commandBytes);
             mOutputStream.flush();
@@ -223,7 +215,7 @@ public class RoboClaw implements
                                 fixedResponse,
                                 fixedResponse.length);
                     if (bytesRead != length) {
-                        LOGGER.log(Level.INFO,
+                        LOGGER.log(Level.SEVERE,
                                 "Command returned " + bytesRead +
                                 " bytes but was expected to return " + length + " bytes");
                     }
@@ -234,7 +226,7 @@ public class RoboClaw implements
                             sb.append((int) fixedResponse[i]);
                             sb.append(" ");
                         }
-                        LOGGER.log(Level.INFO, sb.toString());
+                        LOGGER.log(Level.FINER, sb.toString());
                         
                         byte checksum = aCommand.calculateChecksum(
                                 commandBytes, commandBytes.length,
@@ -323,11 +315,14 @@ public class RoboClaw implements
         handleCommand(new CommandSetLogicBatteryMaxVoltage(aMaxVoltage));
     }
 
-    protected void setErrorStatus(byte b) {
+    protected void setErrorStatus(int b) {
         mErrorStatus = b;
     }
 
     public String getErrorStatus() {
+        
+        handleCommand(new CommandReadErrorStatus(this));
+        handleCommand(new CommandReadMotorCurrents(m1, m2));
         String s = "";
 
         if ((mErrorStatus & 0x01) != 0) {

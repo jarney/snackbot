@@ -23,6 +23,8 @@
  */
 package org.ensor.robots.roboclawdriver;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ensor.robots.motors.IComponent;
 import org.ensor.robots.motors.IConfigurable;
 import org.ensor.robots.motors.ICurrentMeasurable;
@@ -39,8 +41,9 @@ class RoboClawMotor implements
         IComponent,
         IMotor,
         ICurrentMeasurable,
-        IEncoder {
-
+        IEncoder
+{
+    private static final Logger LOGGER = Logger.getLogger(RoboClaw.class.getCanonicalName());
     private final RoboClaw mMotorController;
     private final int mMotorId;
     private double mCurrentDraw;
@@ -52,50 +55,18 @@ class RoboClawMotor implements
     private int mMinPos;
     private boolean mAbsoluteEncoder;
     private boolean mSupportRCEncoders;
-    private long mActualSpeed;
     private byte mBufferLength;
-    private long mEncoderValue;
-    private byte mEncoderStatus;
-    private long mEncoderLastReadTime;
+    private double mDutyCycle;
 
     private final SpeedServo mSpeedServo;
-    private final PositionServo mPositionServo;
 
     class SpeedServo implements IServo {
 
-        public void setPosition(final long aPosition) {
+        public void setPosition(final double aPosition) {
             mMotorController.handleCommand(
                 new CommandDriveMotorWithSignedSpeed(
                         mMotorId,
-                        aPosition)
-            );
-        }
-        
-    }
-    
-    class PositionServo implements IServo {
-
-        public void setPosition(final long aPosition) {
-            mMotorController.handleCommand(
-                    new CommandSetPositionPIDConstants(
-                        mMotorId,
-                        0x00010000,
-                        0x00008000,
-                        0x00004000,
-                        0,
-                        100,
-                        0,
-                        60000000)
-            );
-        
-            mMotorController.handleCommand(
-                new CommandDriveMotorWithSpeedAccelDecelPos(
-                    mMotorId,
-                    2000,
-                    2000,
-                    2000,
-                    aPosition,
-                    false)
+                        (long) aPosition)
             );
         }
         
@@ -110,7 +81,25 @@ class RoboClawMotor implements
         mSupportRCEncoders = false;
         mBufferLength = 0;
         mSpeedServo = new SpeedServo();
-        mPositionServo = new PositionServo();
+        
+/*        mMotorController.handleCommand(
+            new CommandSetPIDQPPSConstants(
+            mMotorId,
+            0x10000,
+            0x08000,
+            0x04000,
+            8400)
+        );
+*/
+        mMotorController.handleCommand(
+            new CommandReadPIDQPPS(this));
+
+        LOGGER.log(Level.SEVERE,
+                "Motor id : p = " + mPConstant +
+                        " i = " + mIConstant +
+                        " d = " + mDConstant +
+                        " qpps " + mQPPSConstant);
+
     }
 
 
@@ -124,7 +113,7 @@ class RoboClawMotor implements
     }
 
     public IServo getPositionServo() {
-        return mPositionServo;
+        return null;
     }
 
     public IServo getSpeedServo() {
@@ -194,12 +183,14 @@ class RoboClawMotor implements
     }
 
     public void setDutyCycle(final double aDutyCycle) {
+        mDutyCycle = aDutyCycle;
         mMotorController.handleCommand(
-                new CommandDriveMotorWithDutyCycle(
-                        mMotorId,
-                        aDutyCycle
-                )
+                new CommandDriveMotorWithDutyCycle(mMotorId, mDutyCycle)
         );
+    }
+
+    public double getDutyCycle() {
+        return mDutyCycle;
     }
     
     protected void setCurrentDraw(final double aCurrentDraw) {
@@ -226,10 +217,6 @@ class RoboClawMotor implements
         return mSupportRCEncoders;
     }
 
-    void setEncoderSpeed(final long d) {
-        mActualSpeed = d;
-    }
-    
     /**
      * This method returns the actual speed of the motor in
      * terms of 'pulses-per-second'.
@@ -237,7 +224,10 @@ class RoboClawMotor implements
      * @return The number of pulses per second.
      */
     public long getEncoderSpeed() {
-        return mActualSpeed;
+        long [] encoderSpeed = new long[1];
+        mMotorController.handleCommand(
+                new CommandReadEncoderSpeed(mMotorId, encoderSpeed));
+        return encoderSpeed[0];
     }
 
     void setBufferLength(final byte b) {
@@ -248,17 +238,18 @@ class RoboClawMotor implements
         return mBufferLength;
     }
 
-    void setQuadratureEncoderPosition(
-            final long pos,
-            final byte status,
-            final long time) {
-        mEncoderValue = pos;
-        mEncoderStatus = status;
-        mEncoderLastReadTime = time;
-    }
-
+    /**
+     * This method calls the RoboClaw to obtain the quadrature encoder
+     * position and returns the number of encoder pulses.
+     *
+     * @return The count of pulses since the last reset of the quadrature
+     *         encoder for this motor.
+     */
     public long getEncoderPosition() {
-        return mEncoderValue;
+        long [] encoderPosition = new long[2];
+        mMotorController.handleCommand(
+                new CommandReadEncoderPosition(mMotorId, encoderPosition));
+        return encoderPosition[0];
     }
     
 }

@@ -30,30 +30,42 @@ package org.ensor.robots.os;
  */
 public class Main {
 
-    public static void main(String []args) throws Exception {
-        ModuleManager moduleManager = new ModuleManager();
+    public static void main(String []args) {
         
-        moduleManager.register(
-                new org.ensor.robots.logging.Module()
-        );
-        
-        org.ensor.robots.roboclawdriver.Module roboClawModule =
-                new org.ensor.robots.roboclawdriver.Module();
-        moduleManager.register(roboClawModule);
-        
-        org.ensor.threads.biote.Module bioteModule =
-                new org.ensor.threads.biote.Module();
-        moduleManager.register(bioteModule);
+        try {
+            ModuleManager moduleManager = new ModuleManager();
 
-        org.ensor.robots.pathfollower.Module pathModule =
-                new org.ensor.robots.pathfollower.Module(bioteModule);
-        moduleManager.register(pathModule);
-        
-        org.ensor.robots.network.server.Module networkModule =
-            new org.ensor.robots.network.server.Module(bioteModule);
-        moduleManager.register(networkModule);
-        
-        moduleManager.startAll();
+            moduleManager.register(
+                    new org.ensor.robots.logging.Module()
+            );
+
+            org.ensor.robots.os.configuration.Module configModule =
+                    new org.ensor.robots.os.configuration.Module();
+            moduleManager.register(configModule);
+
+            org.ensor.robots.roboclawdriver.Module roboClawModule =
+                    new org.ensor.robots.roboclawdriver.Module();
+            moduleManager.register(roboClawModule);
+
+            org.ensor.threads.biote.Module bioteModule =
+                    new org.ensor.threads.biote.Module();
+            moduleManager.register(bioteModule);
+
+            org.ensor.robots.pathfollower.Module pathModule =
+                    new org.ensor.robots.pathfollower.Module(bioteModule,
+                            configModule);
+            moduleManager.register(pathModule);
+
+            org.ensor.robots.network.server.Module networkModule =
+                new org.ensor.robots.network.server.Module(bioteModule);
+            moduleManager.register(networkModule);
+
+            moduleManager.startAll();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
     }
     
 }

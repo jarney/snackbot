@@ -28,7 +28,6 @@ import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.data.atom.ImmutableDict;
 import org.ensor.data.atom.ImmutableList;
 import org.ensor.data.atom.ListAtom;
-import org.ensor.data.atom.xml.XMLSerializer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;

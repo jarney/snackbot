@@ -29,8 +29,8 @@ package org.ensor.robots.roboclawdriver;
  */
 class CommandReadMotorCurrents extends CommandResponseFixed {
 
-    RoboClawMotor mMotor1;
-    RoboClawMotor mMotor2;
+    private RoboClawMotor mMotor1;
+    private RoboClawMotor mMotor2;
     
     protected CommandReadMotorCurrents(RoboClawMotor m1, RoboClawMotor m2) {
         mMotor1 = m1;
@@ -62,5 +62,4 @@ class CommandReadMotorCurrents extends CommandResponseFixed {
             mMotor2.setCurrentDraw(current2);
         
     }
-    
 }

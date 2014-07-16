@@ -24,9 +24,8 @@
 
 package org.ensor.robots.network.server;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.ensor.data.atom.DictionaryAtom;
+import org.ensor.data.atom.ImmutableDict;
 import org.ensor.threads.biote.Biote;
 import org.ensor.threads.biote.BioteManager;
 import org.ensor.threads.biote.Event;
@@ -83,44 +82,40 @@ public class NetworkBiote extends Biote {
             sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, allStop);
         }
         else if (name.equals("differentialDrive")) {
-            Event forward = new Event("Mover-MoveRequestLeftRight", msg.getData());
+            Event forward = new Event("Mover-MoveRequest", msg.getData());
             sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
         }
-        else if (name.equals("forward")) {
+        else if (name.equals("driveMotor")) {
+            Event forward = new Event("Mover-DriveMotor", msg.getData());
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
+        }
+        else if (name.equals("subscribe")) {
             DictionaryAtom dict = DictionaryAtom.newAtom();
-            dict.setReal("direction", 0);
-            dict.setReal("velocity", 0.3f);
-            dict.setReal("delta_time", 1);
-            Event forward = new Event("Mover-MoveRequest", dict);
+            dict.setInt("bioteId", getBioteId());
+            Event subscribe = new Event("Mover-Subscribe", dict);
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, subscribe);
+        }
+        else if (name.equals("move")) {
+            DictionaryAtom dict = DictionaryAtom.newAtom();
+            dict.setReal("x", 1);
+            dict.setReal("y", 0);
+            dict.setReal("theta", Math.PI / 2);
+            Event forward = new Event("Mover-SetDestinationPoint", dict);
             sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
             startTimer(1000, new Event("Timer-Expire"), false);
         }
-        else if (name.equals("reverse")) {
+        else if (name.equals("reset")) {
             DictionaryAtom dict = DictionaryAtom.newAtom();
-            dict.setReal("direction", 0);
-            dict.setReal("velocity", -0.3f);
-            dict.setReal("delta_time", 1);
-            Event forward = new Event("Mover-MoveRequest", dict);
+            dict.setReal("x", 0);
+            dict.setReal("y", 0);
+            dict.setReal("theta", 0);
+            Event forward = new Event("Mover-Reset", dict);
             sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
-            startTimer(1000, new Event("Timer-Expire"), false);
         }
-        else if (name.equals("left")) {
-            DictionaryAtom dict = DictionaryAtom.newAtom();
-            dict.setReal("direction", -Math.PI/2);
-            dict.setReal("velocity", 0);
-            dict.setReal("delta_time", 1);
-            Event forward = new Event("Mover-MoveRequest", dict);
-            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
-            startTimer(1000, new Event("Timer-Expire"), false);
-        }
-        else if (name.equals("right")) {
-            DictionaryAtom dict = DictionaryAtom.newAtom();
-            dict.setReal("direction", Math.PI/2.0);
-            dict.setReal("velocity", 0);
-            dict.setReal("delta_time", 1);
-            Event forward = new Event("Mover-MoveRequest", dict);
-            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
-            startTimer(1000, new Event("Timer-Expire"), false);
+        else if (name.equals("updateConfiguration")) {
+            ImmutableDict updateConfig = msg.getData().getDictionary("data");
+            Event updateConfigEvent = new Event("Mover-UpdateConfig", updateConfig);
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, updateConfigEvent);
         }
     }
     

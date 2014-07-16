@@ -33,3 +33,9 @@ in building their own SNACKBOT-like robots.
 * [Waist Section Assembly](construction-waist-assembly.html)
 * [Head Section Assembly](construction-head-assembly.html)
 
+# Mini-snackbot
+
+These are drawings designed for building the miniature (1/3 scale) version.
+
+* [Mini](construction-mini.html)
+

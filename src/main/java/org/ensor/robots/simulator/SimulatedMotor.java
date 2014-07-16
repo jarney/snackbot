@@ -41,7 +41,7 @@ import org.ensor.robots.motors.ITemperatureSensor;
  */
 class SimulatedMotor implements IComponent, IServo, IEncoder {
     private long mEncoderPosition;
-    private long mDesiredSpeed;
+    private double mDesiredSpeed;
     
     private double mAngularErrorPerSecond;
     private double mEncoderPulsesPerRevolution;
@@ -122,10 +122,10 @@ class SimulatedMotor implements IComponent, IServo, IEncoder {
                 2 * Math.PI *
                 mEncoderPulsesPerRevolution);
         
-        return mDesiredSpeed + errorSpeed;
+        return (long)mDesiredSpeed + errorSpeed;
     }
 
-    public void setPosition(final long aPosition) {
+    public void setPosition(final double aPosition) {
         mDesiredSpeed = aPosition;
     }
 

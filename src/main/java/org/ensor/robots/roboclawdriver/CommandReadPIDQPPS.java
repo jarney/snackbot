@@ -49,25 +49,25 @@ class CommandReadPIDQPPS extends CommandResponseFixed {
 
     @Override
     protected void onResponse(byte[] aResponseBuffer, int aResponseLength) {
-        int p = aResponseBuffer[0] << 24 | 
-                aResponseBuffer[1] << 16 |
-                aResponseBuffer[2] << 8 | 
-                aResponseBuffer[3];
+        int p = (byteAsInt(aResponseBuffer[0]) << 24) |
+                (byteAsInt(aResponseBuffer[1]) << 16) |
+                (byteAsInt(aResponseBuffer[2]) << 8) |
+                byteAsInt(aResponseBuffer[3]);
         
-        int i = aResponseBuffer[4] << 24 | 
-                aResponseBuffer[5] << 16 |
-                aResponseBuffer[6] << 8 | 
-                aResponseBuffer[7];
+        int i = (byteAsInt(aResponseBuffer[4]) << 24) |
+                (byteAsInt(aResponseBuffer[5]) << 16) |
+                (byteAsInt(aResponseBuffer[6]) << 8) |
+                byteAsInt(aResponseBuffer[7]);
         
-        int d = aResponseBuffer[8] << 24 | 
-                aResponseBuffer[9] << 16 |
-                aResponseBuffer[10] << 8 | 
-                aResponseBuffer[11];
+        int d = (byteAsInt(aResponseBuffer[8]) << 24) |
+                (byteAsInt(aResponseBuffer[9]) << 16) |
+                (byteAsInt(aResponseBuffer[10]) << 8) |
+                byteAsInt(aResponseBuffer[11]);
         
-        int qpps = aResponseBuffer[12] << 24 | 
-                aResponseBuffer[13] << 16 |
-                aResponseBuffer[14] << 8 | 
-                aResponseBuffer[15];
+        int qpps = (byteAsInt(aResponseBuffer[12]) << 24) |
+                (byteAsInt(aResponseBuffer[13]) << 16) |
+                (byteAsInt(aResponseBuffer[14]) << 8) |
+                byteAsInt(aResponseBuffer[15]);
         
         mMotor.setPIDConstantsInternal(p, i, d);
         mMotor.setQPPSInternal(qpps);

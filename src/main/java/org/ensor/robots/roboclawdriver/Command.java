@@ -32,6 +32,14 @@ package org.ensor.robots.roboclawdriver;
  * @author jona
  */
 abstract class Command {
+
+    public static long byteAsULong(final byte b) {
+        return ((long) b) & 255L;
+    }
+    public static int byteAsInt(final byte b) {
+        return ((int) b) & 255;
+    }
+    
     private final int mReadMode;
 
     protected static final int READ_MODE_NONE = 0;
@@ -118,7 +126,7 @@ abstract class Command {
             cs += (aBytes2[i]);
         }
 
-        return (byte) (cs & 0x7f);
+        return (byte) ((cs & 0x7f));
     }
 
     protected int setLong(

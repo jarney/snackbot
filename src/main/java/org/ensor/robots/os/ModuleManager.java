@@ -42,6 +42,7 @@ import org.ensor.algorithms.toposort.TopologicalSort;
 public class ModuleManager implements IModuleManager {
     
     private final Map<Class, IModule> mModules;
+    private final List<IModule> mModulesRunning;
     
     class ModuleNode implements INode<IModule> {
 
@@ -73,6 +74,7 @@ public class ModuleManager implements IModuleManager {
     
     public ModuleManager() {
         mModules = new HashMap<Class, IModule>();
+        mModulesRunning = new ArrayList<IModule>();
     }
     
     /**
@@ -99,8 +101,29 @@ public class ModuleManager implements IModuleManager {
         List<IModule> sortedList =
                 topologicalSort.getTopologicalSort(moduleNodes);
         
-        for (IModule m : sortedList) {
-            m.start(this);
+        try {
+            for (IModule m : sortedList) {
+                m.start(this);
+                mModulesRunning.add(m);
+            }
+        }
+        // If there's an exception during startup, we shut down
+        // again and throw an exception to represent
+        // the exception which caused the shutdown.
+        catch (Exception ex) {
+            try {
+                Collections.reverse(mModulesRunning);
+                for (IModule m : mModulesRunning) {
+                    m.shutdown(this);
+                }
+            }
+            catch (Exception doubleFault) {
+                // We don't re-throw this because
+                // we really want to know the original cause
+                // of the startup failure.  Most likely this is
+                // what we want to fix and not the shutdown error.
+            }
+            throw ex;
         }
         
     }
@@ -111,16 +134,10 @@ public class ModuleManager implements IModuleManager {
      * are shut down, they don't have their dependency shut down first.
      */
     public void shutdownAll() throws Exception {
-        List<INode<IModule>> moduleNodes = getAllNodes();
-        TopologicalSort<IModule> topologicalSort =
-                new TopologicalSort<IModule>();
-        List<IModule> sortedList =
-                topologicalSort.getTopologicalSort(moduleNodes);
-
         // Shutdown happens in the reverse order of startup.
-        Collections.reverse(sortedList);
+        Collections.reverse(mModulesRunning);
         
-        for (IModule m : sortedList) {
+        for (IModule m : mModulesRunning) {
             m.shutdown(this);
         }
     }

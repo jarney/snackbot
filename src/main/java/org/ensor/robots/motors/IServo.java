@@ -44,13 +44,12 @@ public interface IServo {
 
     /**
      * This method can be used to set the 'position' of the servo.  The input
-     * parameter is a double precision floating point value which can range
-     * from '-1' to '1'.  These indicate the minimum and maximum position of
-     * the servo.  In the case of a 'speed' servo, this indicates the speed
-     * rather than the actual position since in this case what is being modeled
-     * as the 'control' parameter is the 'speed'.
-     * @param aPosition The relative position to set this servo to.  The
-     *                  relative position is a value between '-1' and '1'.
+     * parameter is a double precision floating point value.  The value of
+     * the servo position is abstract and the meaning depends on what type of
+     * servo controller it is.  In the case of a 'speed' servo, this indicates
+     * the speed rather than the actual position since in this case what is
+     * being modeled as the 'control' parameter is the 'speed'.
+     * @param aPosition The set point of the control system.
      */
-    void setPosition(long aPosition);
+    void setPosition(double aPosition);
 }

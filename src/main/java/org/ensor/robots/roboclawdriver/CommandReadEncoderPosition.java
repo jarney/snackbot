@@ -28,27 +28,26 @@ package org.ensor.robots.roboclawdriver;
  * @author jona
  */
 class CommandReadEncoderPosition extends CommandResponseFixed {
-    private final RoboClawMotor mMotor;
+    private final int mMotorId;
+    private final long[] mEncoderPosition;
 
     protected CommandReadEncoderPosition(
-            final RoboClawMotor aMotor) {
-        mMotor = aMotor;
+            final int aMotorId,
+            final long[] aEncoderPosition) {
+        mMotorId = aMotorId;
+        mEncoderPosition = aEncoderPosition;
     }
     
     @Override
     protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[2];
         
-        byte cmd = (byte) ((mMotor.getMotorId() == 0) ? 16 : 17);
+        byte cmd = (byte) ((mMotorId == 0) ? 16 : 17);
         
         int offset = 0;
         offset = setByte(b, offset, aAddress);
         setByte(b, offset, cmd);
         return b;
-    }
-
-    public static long byteAsULong(final byte b) {
-            return ((long)b) & 0x00000000000000FFL; 
     }
     
     @Override
@@ -57,14 +56,12 @@ class CommandReadEncoderPosition extends CommandResponseFixed {
             final int aResponseLength) {
 
 
-        long pos = (byteAsULong(aResponseBuffer[0]) << 24) |
-                (byteAsULong(aResponseBuffer[1]) << 16) |
-                (byteAsULong(aResponseBuffer[2]) << 8) |
-                byteAsULong(aResponseBuffer[3]);
+        mEncoderPosition[0] = (byteAsInt(aResponseBuffer[0]) << 24) |
+                (byteAsInt(aResponseBuffer[1]) << 16) |
+                (byteAsInt(aResponseBuffer[2]) << 8) |
+                byteAsInt(aResponseBuffer[3]);
         
-        byte status = aResponseBuffer[4];
-        long time = System.currentTimeMillis();
-        mMotor.setQuadratureEncoderPosition(pos, status, time);
+        mEncoderPosition[1] = aResponseBuffer[4];
     }
 
     @Override

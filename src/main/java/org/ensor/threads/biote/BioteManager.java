@@ -82,7 +82,7 @@ public class BioteManager {
          */
 	private final ConcurrentHashMap<Integer,TimerTask>		mTimers;
 	private final AtomicInteger					mTimerIds;
-	private final Timer                                             mTimer;
+	private       Timer                                             mTimer;
 
 	private final ConcurrentHashMap<Integer,Boolean>                mPendingBiotes;
         private ConcurrentHashMap<String, SystemStat> mStats;
@@ -182,8 +182,9 @@ public class BioteManager {
                 catch (Exception ex) {
                     mLogger.log(Level.SEVERE, "Exception shutting down", ex);
                 }
-
-                mTimer.cancel();
+                Timer t = mTimer;
+                mTimer = null;
+                t.cancel();
 
                 logString(true, 0, "Biote manager is no longer running.  Ther server is effectively down.");
         }
@@ -351,11 +352,13 @@ public class BioteManager {
             TimerTask task = new StimulateEventTask(bioteId, msg, repeating, timerId, this);
             mTimers.put(timerId, task);
             sampleStat("BioteManager.java:startTimer");
-            if (repeating) {
-                    mTimer.schedule(task, delay, delay);
-            }
-            else {
-                    mTimer.schedule(task, delay);
+            if (mTimer != null) {
+                if (repeating) {
+                        mTimer.schedule(task, delay, delay);
+                }
+                else {
+                        mTimer.schedule(task, delay);
+                }
             }
             return timerId;
 	}

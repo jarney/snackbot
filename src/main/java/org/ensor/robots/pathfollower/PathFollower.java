@@ -33,9 +33,8 @@ import org.ensor.data.atom.ImmutableDict;
 import org.ensor.data.atom.ImmutableList;
 import org.ensor.data.atom.ListAtom;
 import org.ensor.math.analysis.IFunction;
-import org.ensor.math.analysis.LinearFunction;
-import org.ensor.math.analysis.QuadraticFunction;
 import org.ensor.math.geometry.Vector3;
+import org.ensor.robots.os.configuration.Configuration;
 import org.ensor.threads.biote.Biote;
 import org.ensor.threads.biote.BioteManager;
 import org.ensor.threads.biote.Event;
@@ -140,7 +139,8 @@ public class PathFollower extends Biote {
      */
     public PathFollower(
             final BioteManager aBioteManager,
-            final int aMover) {
+            final int aMover,
+            final Configuration aConfiguration) {
         super(aBioteManager, false);
         mTimerId = null;
         mMoverBioteId = aMover;
@@ -401,7 +401,7 @@ public class PathFollower extends Biote {
             direction = direction.multiply(1 / directionLength);
 
             // This is the angle we need to head.
-            dir = Math.atan2(direction.getX(), direction.getY());
+            dir = Math.atan2(direction.getY(), direction.getX());
         }
 
         int idir = (int) (dir * 360 / Math.PI * 2);

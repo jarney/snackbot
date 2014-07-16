@@ -45,12 +45,13 @@ class CommandReadErrorStatus extends CommandResponseFixed {
 
     @Override
     protected void onResponse(byte[] aResponseBuffer, int aResponseLength) {
-        mRoboClaw.setErrorStatus(aResponseBuffer[0]);
+        mRoboClaw.setErrorStatus(aResponseBuffer[0] | 
+                aResponseBuffer[1] << 8);
     }
 
     @Override
     protected int getResponseLength() {
-        return 2;
+        return 3;
     }
     
 }

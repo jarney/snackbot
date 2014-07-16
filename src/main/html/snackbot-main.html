@@ -12,7 +12,11 @@
         <script src="sb-ui-aspect-ratio.js"></script>
         <script src="sb-ui-center.js"></script>
         <script src="sb-ui-canvas-dial.js"></script>
+        <script src="sb-ui-canvas-map.js"></script>
         <script src="sb-net.js"></script>
+        <script src="snackbot-main-control.js"></script>
+        <script src="snackbot-main-telemetry.js"></script>
+        <script src="snackbot-main-configure.js"></script>
         <script src="snackbot-main.js"></script>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="sb-ui-tabs.css">
@@ -45,10 +49,13 @@
                         </div>
 
                         <div id="telemetry">
-                            <button id="forward">Fwd</button>
-                            <button id="reverse">Back</button>
-                            <button id="left">Left</button>
-                            <button id="right">Right</button>
+                            <button id="move">Move</button>
+                            <button id="subscribe">Subscribe</button>
+                            <button id="reset">Reset</button>
+                            <br/>
+                            <canvas id="map_canvas" style="position: absolute; width: 100%; height:100%;"
+                                    ontouchstart="void(0)" ontouchend="void(0)" ontouchmove="void(0)">
+                            </canvas>
                         </div>
                         <div id="communications-log">
                             <div id="log">
@@ -56,7 +63,186 @@
                             </div>
                         </div>
                         <div id="configuration">
-                            conf
+                            
+                            <h1>Configuration and Callibration</h1>
+                            Before you begin operating Snackbot, you should
+                            calibrate and configure the systems to make
+                            sure that the assembly is correct and calibrated
+                            for optimal performance.
+                            <br/>
+                            <hr/>
+                            <p>
+                            The first step in configuration is to confirm that
+                            the motors are operating correctly.  Begin by
+                            confirming that the left and right motors
+                            are connected and run in the 'forward' and 'reverse'
+                            direction accordingly.  To confirm this, press the
+                            'Left FWD' button and confirm that the motor moves
+                            in the forward direction.  Repeat this for the right
+                            motor and the reverse directions.
+                            </p>
+                            
+                            <center>
+                            <table style="width:500px"><tr>
+                                <td style="width: 50%"><button id="configureLeftFwdTest">Left FWD</button></td>
+                                <td style="width: 50%"><button id="configureRightFwdTest">Right FWD</button></td>
+                            </tr><tr>
+                                <td style="width: 50%"><button id="configureLeftRevTest">Left REV</button></td>
+                                <td style="width: 50%"><button id="configureRightRevTest">Right REV</button></td>
+                            </tr><tr>
+                                <td id="leftSpeed" style="width: 50%"></td>
+                                <td id="rightSpeed"style="width: 50%"></td>
+                            </tr></table>
+                            </center>
+
+                            <p>
+                                The Motor IDs are the IDs of the main drive motors.
+                            </p>
+                            <label for="configureLeftMotorId">Left</label>
+                            <input type="text" id="configureLeftMotorId"/>
+                            <label for="configureRightMotorId">Right</label>
+                            <input type="text" id="configureRightMotorId"/>
+                            
+                            
+                            <p>
+                                If the left and right are reversed from one another
+                                then select this button to correct it.
+                                <input type="checkbox" id="configureLeftRightReversed"/>
+                                <label for="configureLeftRightReversed">Reverse Left and Right motors</label>
+                            </p>
+                            
+                            <p>
+                                If the left motor is moving in the wrong direction,
+                                select this button to correct it.
+                                <input type="checkbox" id="configureLeftDirectionReverse"/>
+                                <label for="configureLeftDirectionReverse">Reverse Left Direction</label>
+                            </p>
+                            <p>
+                                If the right motor is moving in the wrong direction,
+                                select this button to correct it.
+                                <input type="checkbox" id="configureRightDirectionReverse"/>
+                                <label for="configureRightDirectionReverse">Reverse Right Direction</label>
+                            </p>
+                            
+                            <p>
+                                The number of encoder counts per revolution
+                                for each of the left and right motors.
+                            </p>
+                            <label for="configureLeftEncoderTicksPerRevolution">Left</label>
+                            <input type="text" id="configureLeftEncoderTicksPerRevolution"/>
+                            <label for="configureRightEncoderTicksPerRevolution">Right</label>
+                            <input type="text" id="configureRightEncoderTicksPerRevolution"/>
+                            
+                            <br/>
+                            <hr/>
+                            <p>
+                                The diameter of each of the left and right
+                                wheels.
+                            </p>
+                            <label for="configureLeftWheelDiameter">Left</label>
+                            <input type="text" id="configureLeftWheelDiameter"/>
+                            <label for="configureRightWheelDiameter">Right</label>
+                            <input type="text" id="configureRightWheelDiameter"/>
+                            
+                            <br/>
+                            <hr/>
+                            <p>
+                                The calibration result after calibrating the
+                                differential drive dead-reckoning system.
+                                Before calibration, this value should be set to "0".
+                                
+                                The calibration process will result in values for
+                                these parameters designed to correct measurement errors.
+                            </p>
+                            <label for="configureLeftEncoderCalibrationTicks">Left</label>
+                            <input type="text" id="configureLeftEncoderCalibrationTicks"/>
+                            <label for="configureRightEncoderCalibrationTicks">Right</label>
+                            <input type="text" id="configureRightEncoderCalibrationTicks"/>
+                            
+                            <br/>
+                            <hr/>
+                            
+                            <p>
+                                The distance between wheels is a crucial parameter
+                                for a differential drive system.  This parameter
+                                controls how the input from the encoders
+                                is interpreted to compute the location of the
+                                robot based on the wheel position and speed.
+                            </p>
+                            <input type="text" id="configureWheelDistance"/>
+                            <br/>
+                            <hr/>
+                            
+                            <p>
+                                This value indicates the maximum speed of
+                                each of the motors.  For a symmetrical system,
+                                they should be the same.  The speed is measured
+                                in terms of "rotations per second".
+                            </p>
+                            <label for="configureLeftWheelMaxRotationSpeed">Left</label>
+                            <input type="text" id="configureLeftWheelMaxRotationSpeed"/>
+                            <label for="configureRightWheelMaxRotationSpeed">Right</label>
+                            <input type="text" id="configureRightWheelMaxRotationSpeed"/>
+                            <br/>
+                            <hr/>
+                            
+                            <p>
+                                The distance tolerance gives the number of meters
+                                that the robot needs to be from its goal in
+                                order to be 'close enough' to consider that it
+                                has reached it.
+                            </p>
+                            <input type="text" id="configureDistanceTolerance"/>
+                            
+                            <p>
+                                The angle tolerance gives the number of degrees
+                                the robot's angle needs to be off from its goal
+                                before it considers that it is 'close enough'
+                                to its goal.
+                            </p>
+                            <input type="text" id="configureAngleTolerance"/>
+                            
+
+                            <p>
+                                The deceleration distance gives the distance
+                                at which the robot begins to slow down
+                                as it arrives at its goal.
+                            </p>
+                            <input type="text" id="configureDecelerationDistance"/>
+            
+                            <br/>
+                            <hr/>
+                            
+                            
+                            <p>
+                                When the configuration is correct, select the
+                                "Save Configuration"
+                                button in order to ensure that the
+                                configuration is preserved.
+                            </p>
+                            <center>
+                                <button id="configureSave">Save Configuration</button>
+                            </center>
+                            
+                            <center>
+                                <div id="configureSaveResult"/>
+                            </center>
+                            
+                            <h1>Drive motors by speed</h1>
+                            
+                            
+                            <center>
+                            <table style="width:500px"><tr>
+                                <td style="width: 50%"><button id="configureLeftFwdTestSpeed">Left FWD</button></td>
+                                <td style="width: 50%"><button id="configureRightFwdTestSpeed">Right FWD</button></td>
+                            </tr><tr>
+                                <td style="width: 50%"><button id="configureLeftRevTestSpeed">Left REV</button></td>
+                                <td style="width: 50%"><button id="configureRightRevTestSpeed">Right REV</button></td>
+                            </tr><tr>
+                                <td id="leftSpeed2" style="width: 50%"></td>
+                                <td id="rightSpeed2" style="width: 50%"></td>
+                            </tr></table>
+                            </center>
                         </div>
                     </div>
                 </div>

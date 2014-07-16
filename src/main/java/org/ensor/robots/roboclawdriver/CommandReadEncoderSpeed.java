@@ -28,18 +28,21 @@ package org.ensor.robots.roboclawdriver;
  * @author jona
  */
 class CommandReadEncoderSpeed extends CommandResponseFixed {
-    private final RoboClawMotor mMotor;
+    private final int mMotorId;
+    private final long[] mEncoderSpeed;
 
     protected CommandReadEncoderSpeed(
-            final RoboClawMotor aMotor) {
-        mMotor = aMotor;
+            final int aMotorId,
+            final long[] aEncoderSpeed) {
+        mMotorId = aMotorId;
+        mEncoderSpeed = aEncoderSpeed;
     }
     
     @Override
     protected byte[] getCommand(final byte aAddress) {
         byte[] b = new byte[2];
         
-        byte cmd = (byte) ((mMotor.getMotorId() == 0) ? 30 : 31);
+        byte cmd = (byte) ((mMotorId == 0) ? 30 : 31);
         
         int offset = 0;
         offset = setByte(b, offset, aAddress);
@@ -52,17 +55,13 @@ class CommandReadEncoderSpeed extends CommandResponseFixed {
             final byte[] aResponseBuffer,
             final int aResponseLength) {
         
-        long speed = aResponseBuffer[0] << 24 | 
-                aResponseBuffer[1] << 16 | 
-                aResponseBuffer[2] << 8 | 
-                aResponseBuffer[3];
+        long speed = (byteAsInt(aResponseBuffer[0]) << 24) |
+                (byteAsInt(aResponseBuffer[1]) << 16) |
+                (byteAsInt(aResponseBuffer[2]) << 8) |
+                byteAsInt(aResponseBuffer[3]);
         
-        long s = speed * 125;
-        if (aResponseBuffer[4] != 0) {
-            s = -s;
-        }
+        mEncoderSpeed[0] = speed * 125;
         
-        mMotor.setEncoderSpeed(s);
     }
 
     @Override

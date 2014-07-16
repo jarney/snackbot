@@ -85,15 +85,6 @@ class TTYLinux implements ITTY {
 
         init(aTTY);
 
-//        mSerialPort = new SerialPort(aTTY);
-//        mSerialPort.openPort();
-//        mSerialPort.setParams(SerialPort.BAUDRATE_9600,
-//                SerialPort.DATABITS_8,
-//                SerialPort.STOPBITS_1,
-//                SerialPort.PARITY_NONE);
-//
-//        mOutputStream = new SerialOutputStream();
-//        mInputStream = new SerialInputStream();
         mOutputStream = new FileOutputStream(aTTY);
         mInputStream = new FileInputStream(aTTY);
         
@@ -101,7 +92,7 @@ class TTYLinux implements ITTY {
 
     /**
      * Set the TTY to "raw" and give it a 500ms timeout.
-     */
+     */     
     private void init(final String aTTY)
             throws IOException,
             InterruptedException {
@@ -139,10 +130,18 @@ class TTYLinux implements ITTY {
         commandList.add("quit");
         commandList.add("");
         commandList.add("-crtscts");
+        commandList.add("-echo");
+        commandList.add("-echoe");
+        commandList.add("-echok");
+        commandList.add("-echonl");
+        commandList.add("-echoctl");
+        commandList.add("-echoke");
+        commandList.add("-echoprt");
         commandList.add("time");
-        commandList.add("1");
+        commandList.add("5");
         commandList.add("min");
-        commandList.add("1");
+        commandList.add("0");
+        
 
         int rc = runCommand(commandList);
 

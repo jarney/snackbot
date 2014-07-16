@@ -47,6 +47,7 @@ public class Module implements IModule {
     }
 
     public void shutdown(IModuleManager aManager) throws Exception {
+        roboClaw.shutdown();
     }
 
 }

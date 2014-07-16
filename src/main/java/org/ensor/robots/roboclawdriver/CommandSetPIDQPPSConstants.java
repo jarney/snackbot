@@ -50,31 +50,16 @@ class CommandSetPIDQPPSConstants extends CommandResponseNone {
     @Override
     protected byte[] getCommand(byte aAddress) {
         byte[] b = new byte[19];
-        b[0] = aAddress;
-        b[1] = (byte) ((mMotorId == 0) ? 28 : 29);
-        
-        b[2] = (byte) ((mP >> 24) & 0xff);
-        b[3] = (byte) ((mP >> 16) & 0xff);
-        b[4] = (byte) ((mP >> 8) & 0xff);
-        b[5] = (byte) ((mP) & 0xff);
+        int offset = 0;
+        offset = setByte(b, offset, aAddress);
+        byte command = (byte) ((mMotorId == 0) ? 28 : 29);
+        offset = setByte(b, offset, command);
+        offset = setLong(b, offset, mD);
+        offset = setLong(b, offset, mP);
+        offset = setLong(b, offset, mI);
+        offset = setLong(b, offset, mQPPS);
+        setChecksum(b, offset);
 
-        b[6] = (byte) ((mI >> 24) & 0xff);
-        b[7] = (byte) ((mI >> 16) & 0xff);
-        b[8] = (byte) ((mI >> 8) & 0xff);
-        b[9] = (byte) ((mI) & 0xff);
-        
-        b[10] = (byte) ((mD >> 24) & 0xff);
-        b[11] = (byte) ((mD >> 16) & 0xff);
-        b[12] = (byte) ((mD >> 8) & 0xff);
-        b[13] = (byte) ((mD) & 0xff);
-
-        b[14] = (byte) ((mQPPS >> 24) & 0xff);
-        b[15] = (byte) ((mQPPS >> 16) & 0xff);
-        b[16] = (byte) ((mQPPS >> 8) & 0xff);
-        b[17] = (byte) ((mQPPS) & 0xff);
-        
-        b[18] = calculateChecksum(b);
-        
         return b;
     }
     

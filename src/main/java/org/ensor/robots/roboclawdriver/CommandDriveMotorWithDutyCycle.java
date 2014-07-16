@@ -48,15 +48,6 @@ class CommandDriveMotorWithDutyCycle  extends CommandResponseNone {
 
         int dc = (int) (mDutyCycle * 1500);
 
-        if (dc > 1000) {
-            dc = 1000;
-        }
-        if (dc < -1000) {
-            dc = -1000;
-        }
-
-        if (dc < 0) dc = -dc;
-        
         offset = setShort(b, offset, dc);
         setChecksum(b, offset);
 

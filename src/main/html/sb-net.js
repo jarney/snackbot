@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-function SnackbotConnection(host, _onMessage, _stateChange) {
+function SnackbotConnection(_onMessage, _stateChange) {
     this.wsUri = "ws://" + window.location.host + "/v1/biote/";
 
     this.stateChange = _stateChange;
@@ -33,7 +33,7 @@ function SnackbotConnection(host, _onMessage, _stateChange) {
     }
 
     this.onMessage = function(evt) {
-        var evtObj = JSON.parse(evt);
+        var evtObj = JSON.parse(evt.data);
         _onMessage(evtObj);
     };
 
@@ -64,7 +64,6 @@ SnackbotConnection.prototype.disconnect = function() {
     this.stateChange("log", "disconnect: " + this.wsUri);
     this.websocket.close();
 };
-
 
 SnackbotConnection.prototype.send = function(message) {
     var jsonAsString = JSON.stringify(message);
