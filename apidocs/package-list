@@ -1,6 +1,7 @@
 org.ensor.algorithms.astar
 org.ensor.algorithms.astar.grid
 org.ensor.algorithms.binarytree
+org.ensor.algorithms.control.pid
 org.ensor.algorithms.cubicspline
 org.ensor.algorithms.toposort
 org.ensor.data.atom
@@ -13,13 +14,13 @@ org.ensor.java.utilities
 org.ensor.math.analysis
 org.ensor.math.geometry
 org.ensor.robots.client.viewer
+org.ensor.robots.differentialdrive
 org.ensor.robots.logging
 org.ensor.robots.motors
-org.ensor.robots.motors.differentialdrive
 org.ensor.robots.network.client
 org.ensor.robots.network.server
 org.ensor.robots.os
-org.ensor.robots.pathfollower
+org.ensor.robots.os.configuration
 org.ensor.robots.roboclawdriver
 org.ensor.robots.simulator
 org.ensor.threads.biote
