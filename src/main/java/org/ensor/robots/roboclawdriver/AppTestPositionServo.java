@@ -28,7 +28,7 @@ import org.ensor.robots.motors.ComponentManager;
 import org.ensor.robots.motors.IComponent;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
-import org.ensor.robots.motors.IServo;
+import org.ensor.algorithms.control.pid.IServo;
 import static org.ensor.robots.roboclawdriver.App.poll;
 
 /**

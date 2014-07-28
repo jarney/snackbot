@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.pathfollower;
+package org.ensor.robots.differentialdrive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +118,7 @@ public class PathFollower extends Biote {
     
     /// The biote to notify when the path
     // has been completed.
-    private Integer mCompleteNotify;
+    private Long mCompleteNotify;
     
     private NaturalSpline3D mSpline;
     

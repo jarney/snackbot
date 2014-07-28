@@ -91,7 +91,7 @@ abstract class DictBase extends Atom
      * @param key The key for the integer to retrieve.
      * @return The integer associated with this dictionary key.
      */
-    public int getInt(final String key) {
+    public long getInt(final String key) {
         return ((IntAtom) getValue(key)).getValue();
     }
     /**

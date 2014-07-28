@@ -96,11 +96,7 @@ public class NetworkBiote extends Biote {
             sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, subscribe);
         }
         else if (name.equals("move")) {
-            DictionaryAtom dict = DictionaryAtom.newAtom();
-            dict.setReal("x", 1);
-            dict.setReal("y", 0);
-            dict.setReal("theta", Math.PI / 2);
-            Event forward = new Event("Mover-SetDestinationPoint", dict);
+            Event forward = new Event("Mover-SetDestinationPoint", msg.getData());
             sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
             startTimer(1000, new Event("Timer-Expire"), false);
         }

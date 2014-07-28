@@ -123,7 +123,7 @@ public final class DictionaryAtom extends DictBase
      * @param aKey The key to add to the dictionary.
      * @param aValue The integer value to associate.
      */
-    public void setInt(final String aKey, final int aValue) {
+    public void setInt(final String aKey, final long aValue) {
         setValue(aKey, IntAtom.newAtom(aValue));
     }
     /**

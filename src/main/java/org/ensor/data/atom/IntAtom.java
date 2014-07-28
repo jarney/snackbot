@@ -47,10 +47,10 @@ public final class IntAtom extends Atom {
         new IntAtom(9)
     };
 
-    private final int mValue;
+    private final long mValue;
     private IntAtom(final long value) {
         super(ATOM_TYPE_INT);
-        mValue = (int) value;
+        mValue = (long) value;
     }
     private IntAtom(final int value) {
         super(ATOM_TYPE_INT);
@@ -84,7 +84,7 @@ public final class IntAtom extends Atom {
      * This method returns the integer value of this atom.
      * @return The integer value of this atom.
      */
-    public int getValue() {
+    public long getValue() {
         return mValue;
     }
     /**
@@ -104,7 +104,7 @@ public final class IntAtom extends Atom {
     }
     @Override
     public int hashCode() {
-        return mValue;
+        return (int)(mValue & 0xffffffffL);
     }
 
     @Override

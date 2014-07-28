@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.pathfollower;
+package org.ensor.robots.differentialdrive;
 
 import org.ensor.robots.os.IModule;
 import org.ensor.robots.os.IModuleManager;
@@ -63,13 +63,14 @@ public class Module implements IModule {
                 mConfigModule.getConfiguration()
         );
         mgr.createBiote(ddBiote);
-        
+        /*
         PathFollower pathFollower = new PathFollower(
                 mgr,
                 ddBiote.getBioteId(),
                 mConfigModule.getConfiguration()
         );
         mgr.createBiote(pathFollower);
+        */
     }
 
     public void shutdown(IModuleManager aManager) throws Exception {

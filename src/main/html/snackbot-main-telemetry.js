@@ -39,7 +39,10 @@ function sbTelemetry(snackbot) {
     });
     $( "#move" ).button().click(function( event ) {
             snackbot.send({
-                eventName: "move"
+                eventName: "move",
+                x: 1.0,
+                y: 0.0,
+                theta: (3.14/2)
             });
 
         });

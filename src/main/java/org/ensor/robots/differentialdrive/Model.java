@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.pathfollower;
+package org.ensor.robots.differentialdrive;
 /**
  * This class implements an elementary model for
  * differential steering based on
@@ -33,7 +33,7 @@ package org.ensor.robots.pathfollower;
  *
  * @author jona
  */
-public class SimpleModel {
+public class Model {
 
     private double mWheelDistance;
     private double mHalfWheelDistance;
@@ -46,20 +46,32 @@ public class SimpleModel {
      * of the wheels.  The model assumes that the wheels rotate along the
      * same axis independently of each other.
      */
-    public SimpleModel(final double aWheelDistance) {
+    public Model(final double aWheelDistance) {
         mWheelDistance = aWheelDistance;
         mHalfWheelDistance = mWheelDistance / 2;
     }
-    
+    /**
+     * This method adjusts the distance between the two wheels of
+     * a differential drive system.
+     * @param aWheelDistance The distance between wheels (in meters) of the
+     *                       differential drive system.
+     */
     public void setWheelDistance(final double aWheelDistance) {
         mWheelDistance = aWheelDistance;
         mHalfWheelDistance = mWheelDistance / 2;
     }
+
+    /**
+     * This method returns the distance between two wheels
+     * in a differential drive system.
+     * @return The distance between wheels (in meters) of the
+     *         differential drive system.
+     */
     public double getWheelDistance() {
         return mWheelDistance;
     }
-    
-    
+
+
     /**
      * This method calculates the speed and turn rate
      * from the given wheel velocities.
@@ -76,6 +88,21 @@ public class SimpleModel {
         double dthetadt = (vr - vl) / mWheelDistance;
         return new SpeedAndTurnRate(v, dthetadt);
     }
+    /**
+     * This method calculates the speed and turn rate
+     * from the given wheel velocities.
+     *
+     * @param aLeftVelocity The left wheel velocity.
+     * @param aRightVelocity The right wheel velocity.
+     * @return The speed and rate of turn for the assembly.
+     */
+    public SpeedAndTurnRate calculateBearing(
+            final double aLeftVelocity,
+            final double aRightVelocity) {
+        double v = (aRightVelocity + aLeftVelocity) / 2;
+        double dthetadt = (aRightVelocity - aLeftVelocity) / mWheelDistance;
+        return new SpeedAndTurnRate(v, dthetadt);
+    }
 
     /**
      * This method returns the difference in wheel speeds
@@ -85,10 +112,10 @@ public class SimpleModel {
      * @return The difference in wheel speeds required in order to achieve the
      *         turn rate.
      */
-    public double speedDifferenceForTurnRate(double aTurnRate) {
+    public double speedDifferenceForTurnRate(final double aTurnRate) {
         return mWheelDistance * Math.abs(aTurnRate);
     }
-    
+
     /**
      * This method helps to calculate the speed turn rate which would
      * result from each wheel moving at the given speed in opposite directions.
@@ -97,10 +124,10 @@ public class SimpleModel {
      *                    directions (m/s)
      * @return The number of radians per second that the object will turn.
      */
-    public double turnRateForSpeed(double aWheelSpeed) {
+    public double turnRateForSpeed(final double aWheelSpeed) {
         return Math.abs(2 * aWheelSpeed) / mWheelDistance;
     }
-    
+
     /**
      * This method calculates the speed of each of the
      * wheels given the total velocity and rate of turn
@@ -112,7 +139,6 @@ public class SimpleModel {
     public WheelVelocities calculateWheelVelocities(
             final double aVelocity,
             final double aRadiansPerSecond) {
-        
         double rotationVelocity = mHalfWheelDistance * aRadiansPerSecond;
         double vl = aVelocity + rotationVelocity;
         double vr = aVelocity - rotationVelocity;

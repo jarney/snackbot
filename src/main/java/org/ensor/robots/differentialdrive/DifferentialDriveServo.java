@@ -22,11 +22,11 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.pathfollower;
+package org.ensor.robots.differentialdrive;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ensor.robots.motors.IServo;
+import org.ensor.algorithms.control.pid.IServo;
 import org.ensor.robots.network.server.BioteSocket;
 
 /**
@@ -36,7 +36,7 @@ import org.ensor.robots.network.server.BioteSocket;
 public class DifferentialDriveServo {
 
         // Differential drive model.
-    private final SimpleModel mDifferentialDriveModel;
+    private final Model mDifferentialDriveModel;
     private final IServo mRight;
     private final IServo mLeft;
     private double mSpeed;
@@ -46,6 +46,12 @@ public class DifferentialDriveServo {
     private final SpeedControl mSpeedControl;
     private final AngleControl mAngleControl;
     private double mCurrentAngle;
+    
+    private double mLeftSpeed;
+    private double mRightSpeed;
+    
+    public double getLeftSpeed() { return mLeftSpeed; }
+    public double getRightSpeed() { return mRightSpeed; }
     
     class SpeedControl implements IServo {
         public void setPosition(double aPosition) {
@@ -63,7 +69,7 @@ public class DifferentialDriveServo {
     }
     
     public DifferentialDriveServo(
-            final SimpleModel aDifferentialDriveModel,
+            final Model aDifferentialDriveModel,
             final double aMaxVel,
             final IServo aLeft,
             final IServo aRight) {
@@ -133,7 +139,7 @@ public class DifferentialDriveServo {
             speed = 0;
         }
         
-        SimpleModel.WheelVelocities wheelVelocities = mDifferentialDriveModel.
+        Model.WheelVelocities wheelVelocities = mDifferentialDriveModel.
                 calculateWheelVelocities(
                         speed,
                         absoluteTurnRate
@@ -145,17 +151,17 @@ public class DifferentialDriveServo {
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
             "Trying to make speed " + speed + " and turn rate " + absoluteTurnRate);
 
-        double dr = wheelVelocities.getRightVelocity();
-        double dl = wheelVelocities.getLeftVelocity();
+        mRightSpeed = wheelVelocities.getRightVelocity();
+        mLeftSpeed = wheelVelocities.getLeftVelocity();
         
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
             "Velocities : " +
                     mSpeed + " l/r: " + 
-            dl + " : " +
-            dr);
+            mLeftSpeed + " : " +
+            mRightSpeed);
         
-        mLeft.setPosition(dl);
-        mRight.setPosition(dr);
+        mLeft.setPosition(mLeftSpeed);
+        mRight.setPosition(mRightSpeed);
     }
     
 }

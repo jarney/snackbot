@@ -36,7 +36,7 @@ import org.ensor.robots.motors.IConfigurable;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
-import org.ensor.robots.motors.IServo;
+import org.ensor.algorithms.control.pid.IServo;
 import org.ensor.robots.motors.ITemperatureSensor;
 
 /**
@@ -325,6 +325,10 @@ public class RoboClaw implements
         handleCommand(new CommandReadMotorCurrents(m1, m2));
         String s = "";
 
+        if (mErrorStatus != 0) {
+            s = s + Integer.toHexString(mErrorStatus) + ":";
+        }
+        
         if ((mErrorStatus & 0x01) != 0) {
             s = s + "M1 Over Current:";
         }
@@ -338,16 +342,40 @@ public class RoboClaw implements
             s = s + "Temperature:";
         }
         if ((mErrorStatus & 0x10) != 0) {
-            s = s + "Main Battery High:";
+            s = s + "Temperature2:";
         }
         if ((mErrorStatus & 0x20) != 0) {
-            s = s + "Main battery low:";
+            s = s + "Main Battery High:";
         }
         if ((mErrorStatus & 0x40) != 0) {
-            s = s + "Logic battery high:";
+            s = s + "Main battery low:";
         }
         if ((mErrorStatus & 0x80) != 0) {
+            s = s + "Logic battery high:";
+        }
+        if ((mErrorStatus & 0x100) != 0) {
             s = s + "Logic battery low:";
+        }
+        if ((mErrorStatus & 0x200) != 0) {
+            s = s + "Fault M1:";
+        }
+        if ((mErrorStatus & 0x400) != 0) {
+            s = s + "Fault M2:";
+        }
+        if ((mErrorStatus & 0x800) != 0) {
+            s = s + "MBATHigh";
+        }
+        if ((mErrorStatus & 0x1000) != 0) {
+            s = s + "Warn Overcurrent M1:";
+        }
+        if ((mErrorStatus & 0x2000) != 0) {
+            s = s + "Warn Overcurrent M2:";
+        }
+        if ((mErrorStatus & 0x4000) != 0) {
+            s = s + "TEMP1:";
+        }
+        if ((mErrorStatus & 0x8000) != 0) {
+            s = s + "TEMP2:";
         }
         return s;
     }

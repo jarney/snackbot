@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * all copiesa or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,12 +22,8 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.pathfollower;
-
 /**
- *
- * @author jona
+ * This package contains an implementation of a 
+ * <a href="http://en.wikipedia.org/wiki/PID_controller">PID controller</a>.
  */
-public interface IGoalReachedListener {
-    void reached();
-}
+package org.ensor.algorithms.control.pid;

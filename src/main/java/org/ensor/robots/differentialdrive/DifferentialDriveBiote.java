@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.pathfollower;
+package org.ensor.robots.differentialdrive;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -31,11 +31,13 @@ import java.util.logging.Logger;
 import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.math.geometry.Vector2;
 import org.ensor.robots.motors.ComponentManager;
+import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
-import org.ensor.robots.motors.IServo;
+import org.ensor.algorithms.control.pid.IServo;
 import org.ensor.robots.network.server.BioteSocket;
 import org.ensor.robots.os.configuration.Configuration;
+import org.ensor.robots.roboclawdriver.RoboClaw;
 import org.ensor.threads.biote.Biote;
 import org.ensor.threads.biote.BioteManager;
 import org.ensor.threads.biote.Event;
@@ -86,7 +88,7 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     private Vector2 mPosition;
     private double mDirection;
 
-    private int mBioteId;
+    private long mBioteId;
     
     private double mLeftEncoderUnitsPerMeter;
     private double mRightEncoderUnitsPerMeter;
@@ -94,14 +96,18 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     private double mRightWheelDirection;
     private static final Event TICK_EVENT = new Event("Mover-Tick");
     private static final int TICK_DURATION_MILLISECONDS = 100;
+    private RoboClaw mRoboClaw;
+    private ICurrentMeasurable mM1;
+    private ICurrentMeasurable mM2;
     
-    private SimpleModel mSimpleModel;
+    private Model mSimpleModel;
     private PathServo mPathServo;
     private DifferentialDriveServo mDifferentialDrive;
     private WheelSpeedControl mLeftSpeedControl;
     private WheelSpeedControl mRightSpeedControl;
     private String leftMotorId;
     private String rightMotorId;
+    private final RingBuffer<DictionaryAtom> mLoggingRingBuffer;
 
     class WheelSpeedControl implements IServo {
         private final double mPulsesPerMeter;
@@ -133,6 +139,8 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             final Configuration aConfiguration) {
         super(aBioteManager, false);
         mConfiguration = aConfiguration;
+        
+        mLoggingRingBuffer = new RingBuffer<DictionaryAtom>(100);
         
         DictionaryAtom config = 
             mConfiguration.getConfigurationNode(
@@ -271,6 +279,10 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         IServo rightSpeedControl = ComponentManager.
                 getComponent(rightMotorId).getSpeedServo();
         
+        mRoboClaw = (RoboClaw) ComponentManager.getComponent("roboclaw-0");
+        mM1 = ComponentManager.getComponent("roboclaw-0-motor0").getElectricalMonitor();
+        mM2 = ComponentManager.getComponent("roboclaw-0-motor1").getElectricalMonitor();
+        
         mLeftMotor = ComponentManager.
                 getComponent(leftMotorId).getMotorInterface();
         mRightMotor = ComponentManager.
@@ -287,7 +299,7 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
                 rightSpeedControl, "right");
 
         if (mSimpleModel == null) {
-            mSimpleModel = new SimpleModel(wheelDistance);
+            mSimpleModel = new Model(wheelDistance);
         }
         else {
             mSimpleModel.setWheelDistance(wheelDistance);
@@ -366,10 +378,20 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     }
     
     private void onTick(Event msg) {
-        long newRightPosition = mRightEncoder.getEncoderPosition();
-        long newLeftPosition = mLeftEncoder.getEncoderPosition();
+        
         long now = System.currentTimeMillis();
         long dt = (now - mLastUpdateTime);
+        
+        long newRightPosition = mRightEncoder.getEncoderPosition();
+        long newLeftPosition = mLeftEncoder.getEncoderPosition();
+        
+        String errorStatus = mRoboClaw.getErrorStatus();
+        double logicBattery = mRoboClaw.getLogicBatteryVoltage();
+        double mainBattery = mRoboClaw.getMainBatteryVoltage();
+        double temperature = mRoboClaw.getTemperature();
+        double Im1 = mM1.getCurrentDraw();
+        double Im2 = mM2.getCurrentDraw();
+        
 
         // Left/right speed in ticks/sec.
         double leftSpeedCounts = (newLeftPosition - mLeftPosition) * 1000.0 / (double)dt;
@@ -378,15 +400,14 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         double leftSpeed = leftSpeedCounts / mLeftEncoderUnitsPerMeter;
         double rightSpeed = rightSpeedCounts / mRightEncoderUnitsPerMeter;
         
-        SimpleModel.WheelVelocities wv = new SimpleModel.WheelVelocities(leftSpeed, rightSpeed);
-        SimpleModel.SpeedAndTurnRate bearing = mSimpleModel.calculateBearing(wv);
+        Model.WheelVelocities wv = new Model.WheelVelocities(leftSpeed, rightSpeed);
+        Model.SpeedAndTurnRate bearing = mSimpleModel.calculateBearing(wv);
         
         Vector2 distanceTraveled = new Vector2(
                 bearing.getVelocity() * dt / 1000.0 * Math.cos(mDirection),
                 bearing.getVelocity() * dt / 1000.0 * Math.sin(mDirection)
         );
         mPosition = mPosition.add(distanceTraveled);
-        double oldDirection = mDirection;
         mDirection = mDirection + bearing.getTurnRate() * dt / 1000.0;
 
         mPathServo.setCurrentPosition(mPosition, mDirection);
@@ -394,6 +415,40 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         if (mPathServo.isMoving()) {
             mDifferentialDrive.setAngle(mDirection);
             mDifferentialDrive.tick();
+        }
+        
+        DictionaryAtom logData = DictionaryAtom.newAtom();
+        logData.setInt("time", now);
+        logData.setString("error_status", errorStatus);
+        logData.setReal("logic_battery", logicBattery);
+        logData.setReal("main_battery", mainBattery);
+        logData.setReal("temperature", temperature);
+        logData.setReal("current_m1", Im1);
+        logData.setReal("current_m2", Im2);
+        logData.setReal("leftSpeed", leftSpeed);
+        logData.setReal("rightSpeed", rightSpeed);
+        logData.setReal("leftSpeedSetpoint", mDifferentialDrive.getLeftSpeed());
+        logData.setReal("rightSpeedSetpoint", mDifferentialDrive.getRightSpeed());
+        mLoggingRingBuffer.add(logData);
+        
+        if (errorStatus.length() != 0) {
+            for (DictionaryAtom d : mLoggingRingBuffer) {
+                Logger.getLogger(BioteSocket.class.getName()).log(
+                        Level.INFO,
+                        "Error condition:" + 
+                                d.getInt("time") +
+                                ": " + d.getString("error_status") + 
+                                ": Vlogic = " + d.getReal("logic_battery") + 
+                                ": Vmain = " + d.getReal("main_battery") + 
+                                ": temp = " + d.getReal("temperature") + 
+                                ": Im1 = " + d.getReal("current_m1") + 
+                                ": Im2 = " + d.getReal("current_m2") + 
+                                ": vl = " + d.getReal("leftSpeed") + 
+                                ": vr = " + d.getReal("rightSpeed") +
+                                ": svl = " + d.getReal("leftSpeedSetpoint") + 
+                                ": svr = " + d.getReal("rightSpeedSetpoint"));
+            }
+            mLoggingRingBuffer.clear();
         }
 
         if (mRightPosition != newRightPosition ||
@@ -425,8 +480,11 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
                 
                 DictionaryAtom dict = DictionaryAtom.newAtom();
                 dict.setString("eventName", "position-update");
+                dict.setInt("time", System.currentTimeMillis());
                 dict.setReal("x", mPosition.getX());
                 dict.setReal("y", mPosition.getY());
+                dict.setReal("angle", mDirection);
+                dict.setReal("v", bearing.getVelocity());
                 dict.setReal("leftSpeed", leftSpeed);
                 dict.setReal("rightSpeed", rightSpeed);
                 Event positionUpdate = new Event("Net-Out", dict);

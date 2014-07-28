@@ -22,43 +22,36 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.simulator;
+package org.ensor.robots.differentialdrive;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.ensor.robots.motors.IEncoder;
-import org.ensor.algorithms.control.pid.IServo;
-import org.junit.Test;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author jona
  */
-public class SimulateMotorTest {
-
-    @Test
-    public void testSimulator() {
-        
-        SimulatedMotor sm = new SimulatedMotor(Math.PI / 180, 2000);
-        
-        IServo s = sm.getSpeedServo();
-        IEncoder e = sm.getEncoder();
-        
-        s.setPosition(1000);
-        
-        for (int i = 0; i < 10; i++) {
-            long pos = e.getEncoderPosition();
-            System.out.println("Position : " + pos);
-            
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SimulateMotorTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        
-        
+public class RingBuffer<T> implements Iterable<T> {
+    private final List<T> mData;
+    private final int mSize;
+    
+    public RingBuffer(int aSize) {
+        mData = new LinkedList<T>();
+        mSize = aSize;
     }
     
+    public void add(T aData) {
+        mData.add(aData);
+        if (mData.size() > mSize) {
+            mData.remove(0);
+        }
+    }
+
+    public Iterator<T> iterator() {
+        return mData.iterator();
+    }
+    public void clear() {
+        mData.clear();
+    }
 }

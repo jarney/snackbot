@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.motors;
+package org.ensor.algorithms.control.pid;
 
 /**
  * A servo object is an object which represents a physical servo device.

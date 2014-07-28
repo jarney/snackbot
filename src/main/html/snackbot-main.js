@@ -68,6 +68,7 @@ $(
         sbControl(snackbot);
         sbTelemetry(snackbot);
         sbConfigure(snackbot);
+        sbPIDTuning(snackbot);
         
         snackbot.connection = new SnackbotConnection(
             function (msg) {

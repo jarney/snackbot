@@ -30,7 +30,7 @@ import org.ensor.robots.motors.IConfigurable;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
-import org.ensor.robots.motors.IServo;
+import org.ensor.algorithms.control.pid.IServo;
 import org.ensor.robots.motors.ITemperatureSensor;
 
 /**

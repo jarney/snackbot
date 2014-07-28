@@ -50,7 +50,7 @@ public class BioteManager {
         /*
          * This is the list of all biotes indexed by biote ID.
          */
-	private final ConcurrentHashMap<Integer,Biote>			mBiotes;
+	private final ConcurrentHashMap<Long,Biote>			mBiotes;
         private final AtomicInteger                                     mBioteIdGenerator;
 
         /* This is the scheduler data structure.  Biotes in this
@@ -104,7 +104,7 @@ public class BioteManager {
                 mInstances.put(mInstanceId, this);
 		mTimerIds = new AtomicInteger(0);
 		mTimer = new Timer();
-                mBiotes = new ConcurrentHashMap<Integer,Biote>();
+                mBiotes = new ConcurrentHashMap<Long,Biote>();
                 mBioteIdGenerator = new AtomicInteger(Constants.BIOTE_FIRST_GENERATED_ID);
                 mRunning = new AtomicBoolean(true);
                 mTimers = new ConcurrentHashMap<Integer, TimerTask>();
@@ -200,12 +200,12 @@ public class BioteManager {
             t.start();
             
 	}
-        protected void logString(boolean system, int bioteId, String message) {
+        protected void logString(boolean system, long bioteId, String message) {
             if (!system) return;
             long threadId = Thread.currentThread().getId();
             mLogger.info( mInstanceId + ":" + "[" + threadId + "]" + "[" + bioteId + "]" + message);
         }
-        protected void logString(boolean system, int bioteId, String message, Atom atom) {
+        protected void logString(boolean system, long bioteId, String message, Atom atom) {
             if (!system) return;
             long threadId = Thread.currentThread().getId();
             if (atom == null) {
@@ -286,7 +286,7 @@ public class BioteManager {
 	private void addBiote(Biote b) {
 		mBiotes.put(b.getBioteId(), b);
 	}
-        protected void __protected_friend_Biote__removeBiote(int bioteId) {
+        protected void __protected_friend_Biote__removeBiote(long bioteId) {
             Biote biote = mBiotes.remove(bioteId);
             logString(true, bioteId, "Biote is now destroyed...");
         }
@@ -301,14 +301,14 @@ public class BioteManager {
          * @param sourceBioteId Biote ID of the biote that is sending the message.
          * @return Returns false if the biote does not exist and returns true if the biote existed so that the event could be sent.
          */
-	public boolean sendStimulus(int bioteId, Event msg, int sourceBioteId) {
+	public boolean sendStimulus(long bioteId, Event msg, long sourceBioteId) {
                 Biote b = mBiotes.get(bioteId);
                 if (b == null) {
                     logString(true, sourceBioteId, "Dropping event: '" + msg.getEventName() + "' to non-existent biote: " + bioteId);
                     return false;
                 }
                 sampleStat("BioteManager.java:sendStimulus");
-                int targetBioteId = b.getTargetBioteId(msg.getEventName());
+                long targetBioteId = b.getTargetBioteId(msg.getEventName());
                 Biote targetBiote = mBiotes.get(targetBioteId);
                 if (targetBiote == null) {
                     logString(true, sourceBioteId, "Event: '" + msg.getEventName() + "' should have been routed to biote: " + targetBioteId + " which did not exist.  Sending to biote " + bioteId + " instead.");
@@ -347,7 +347,7 @@ public class BioteManager {
          * @return Returns a unique timer ID for the timer that was just
          *                 created.
          */
-	public int startTimer(int bioteId, int delay, Event msg, boolean repeating) {
+	public int startTimer(long bioteId, int delay, Event msg, boolean repeating) {
             int timerId = mTimerIds.addAndGet(1);
             TimerTask task = new StimulateEventTask(bioteId, msg, repeating, timerId, this);
             mTimers.put(timerId, task);
@@ -483,14 +483,14 @@ class BioteThread implements Runnable {
 };
 
 class StimulateEventTask extends TimerTask {
-	private final int               mBioteId;
+	private final long              mBioteId;
 	private final Event             mEPropTree;
         private boolean                 mRepeating;
         private final int               mTimerId;
         private final BioteManager      mBioteManager;
         
 	StimulateEventTask(
-                final int bioteId,
+                final long bioteId,
                 final Event msg,
                 final boolean repeating,
                 final int timerId,

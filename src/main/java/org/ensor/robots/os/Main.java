@@ -51,8 +51,8 @@ public class Main {
                     new org.ensor.threads.biote.Module();
             moduleManager.register(bioteModule);
 
-            org.ensor.robots.pathfollower.Module pathModule =
-                    new org.ensor.robots.pathfollower.Module(bioteModule,
+            org.ensor.robots.differentialdrive.Module pathModule =
+                    new org.ensor.robots.differentialdrive.Module(bioteModule,
                             configModule);
             moduleManager.register(pathModule);
 

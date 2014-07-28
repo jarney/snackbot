@@ -102,12 +102,10 @@ $.fn.sbUICanvasDial = function(options) {
     }
     
     function dragStart(evt) {
-        logger("dragStart");
         dragState.startx = evt.clientX;
         dragState.starty = evt.clientY;
         dragState.x = dragState.startx;
         dragState.y = dragState.starty;
-        logger("dragStart start timer");
         dragState.timer = window.setInterval(dragRepaint, 100);
         return false;
     }
@@ -128,9 +126,7 @@ $.fn.sbUICanvasDial = function(options) {
 
     function touchStart(evt) {
         evt.preventDefault();
-        logger("touch before start");
         var targetEvent = evt.originalEvent.touches[0] || evt.originalEvent.changedTouches[0];
-        logger("touch start");
         dragStart(targetEvent);
         return false;
     }
@@ -141,9 +137,7 @@ $.fn.sbUICanvasDial = function(options) {
     }
     function touchMove(evt) {
         evt.preventDefault();
-        logger("touch before move");
         var targetEvent = evt.originalEvent.touches[0] || evt.originalEvent.changedTouches[0];
-        logger("touch move");
         dragMove(targetEvent);
         return false;
     }

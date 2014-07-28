@@ -146,7 +146,7 @@ public class TestBioteManager {
     class BioteOne extends Biote {
         
         int mTimer;
-        int mBioteTwoId;
+        long mBioteTwoId;
 
         public BioteOne(BioteManager aBioteManager) {
             super(aBioteManager, false);

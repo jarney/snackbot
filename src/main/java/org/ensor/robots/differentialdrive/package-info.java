@@ -25,4 +25,4 @@
  * This package contains the simulation code required to control a robot
  * to follow a particular path laid out by the navigation system.
  */
-package org.ensor.robots.pathfollower;
+package org.ensor.robots.differentialdrive;

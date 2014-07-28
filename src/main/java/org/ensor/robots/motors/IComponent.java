@@ -24,6 +24,8 @@
 
 package org.ensor.robots.motors;
 
+import org.ensor.algorithms.control.pid.IServo;
+
 /**
  * This interface models a component of a robotic system.
  * This interface mainly reports what types of capabilities the

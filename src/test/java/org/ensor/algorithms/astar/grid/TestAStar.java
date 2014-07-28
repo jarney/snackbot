@@ -144,15 +144,15 @@ public class TestAStar {
         
         for (int i = 0; i < array.size(); i++) {
             ImmutableDict node = array.getDictionary(i);
-            aMap.addNode(node.getInt("x"), node.getInt("y"),
-                    node.getInt("passableFlags"));
+            aMap.addNode((int)node.getInt("x"), (int)node.getInt("y"),
+                    (int)node.getInt("passableFlags"));
         }
 
         ImmutableDict start = jsonObject.getDictionary("start");
         ImmutableDict end = jsonObject.getDictionary("end");
         
-        GridNode s = new GridNode(start.getInt("x"), start.getInt("y"), 1);
-        GridNode e = new GridNode(end.getInt("x"), end.getInt("y"), 1);
+        GridNode s = new GridNode((int)start.getInt("x"), (int)start.getInt("y"), 1);
+        GridNode e = new GridNode((int)end.getInt("x"), (int)end.getInt("y"), 1);
         
 
         List<GridNode>       path;

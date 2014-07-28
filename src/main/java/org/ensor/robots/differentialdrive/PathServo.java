@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.pathfollower;
+package org.ensor.robots.differentialdrive;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.math.geometry.Vector2;
-import org.ensor.robots.motors.IServo;
+import org.ensor.algorithms.control.pid.IServo;
 import org.ensor.robots.network.server.BioteSocket;
 
 /**

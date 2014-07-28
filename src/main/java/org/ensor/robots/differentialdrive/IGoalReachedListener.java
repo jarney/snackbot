@@ -22,43 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.simulator;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.ensor.robots.motors.IEncoder;
-import org.ensor.algorithms.control.pid.IServo;
-import org.junit.Test;
+package org.ensor.robots.differentialdrive;
 
 /**
  *
  * @author jona
  */
-public class SimulateMotorTest {
-
-    @Test
-    public void testSimulator() {
-        
-        SimulatedMotor sm = new SimulatedMotor(Math.PI / 180, 2000);
-        
-        IServo s = sm.getSpeedServo();
-        IEncoder e = sm.getEncoder();
-        
-        s.setPosition(1000);
-        
-        for (int i = 0; i < 10; i++) {
-            long pos = e.getEncoderPosition();
-            System.out.println("Position : " + pos);
-            
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SimulateMotorTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        
-        
-    }
-    
+public interface IGoalReachedListener {
+    void reached();
 }

@@ -81,7 +81,7 @@ abstract class ListBase extends Atom implements
      *          size-1).
      * @return The element at the specified index.
      */
-    public int getInt(final int i) {
+    public long getInt(final int i) {
         return ((IntAtom) get(i)).getValue();
     }
     /**

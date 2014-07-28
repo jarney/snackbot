@@ -54,7 +54,7 @@ import org.ensor.java.utilities.StackTrace;
 public abstract class Biote {
     private final BioteManager mBioteManager;
     private final HashMap<String,LinkedList<IEventHandler> > mEventSubscriptions;
-    private int                                     mBioteId;
+    private long                                    mBioteId;
     protected final boolean                         mUseBlockingQueue;
 
     private static final int                                                BIOTE_STATE_IDLE = 0;
@@ -190,7 +190,7 @@ public abstract class Biote {
          *
          * @return
          */
-	public int getBioteId() {return mBioteId;}
+	public long getBioteId() {return mBioteId;}
 	protected void setBioteId(int bioteId) {mBioteId = bioteId;}
 	public int startTimer(int delayMS, Event msg, boolean repeating) {
 		return mBioteManager.startTimer(getBioteId(), delayMS, msg, repeating);
@@ -206,7 +206,7 @@ public abstract class Biote {
          * @param eventName
          * @return
          */
-        public int getTargetBioteId(String eventName) {
+        public long getTargetBioteId(String eventName) {
             Integer targetBioteId = null;
             synchronized(mStateLock) {
                 targetBioteId = mEventRouting.get(eventName);
@@ -258,7 +258,7 @@ public abstract class Biote {
          * @param msg
          * @throws Exception
          */
-	public void sendStimulus(int bioteId, Event msg) {
+	public void sendStimulus(long bioteId, Event msg) {
             mBioteManager.sendStimulus(bioteId, msg, getBioteId());
 	}
         /**

@@ -1,4 +1,4 @@
-/*
+/* 
  * The MIT License
  *
  * Copyright 2014 Jon Arney, Ensor Robotics.
@@ -22,43 +22,41 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.simulator;
+function sbPIDTuning(snackbot) {
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.ensor.robots.motors.IEncoder;
-import org.ensor.algorithms.control.pid.IServo;
-import org.junit.Test;
+    var setAngle = 0;
+    var setPointList = new CBuffer(50);
+    var actualPointList = new CBuffer(50);
+    var pointSets = [setPointList, actualPointList];
+    var pi = 3.14159265;
+    var twopi = pi*2;
+    
+    $("#setpoint").val("0.0");
+    
+    pidGrapher = $("#pidCanvas").sbUIGraph({pointSets: pointSets});
+    pidGrapher.setY(-pi, pi);
+    pidGrapher.repaint();
+    
+    snackbot.subscribe("position-update", function(msg) {
+        var myangle = msg.angle;
+        while (myangle > twopi) myangle -= twopi;
+        while (myangle < -twopi) myangle += twopi;
+        actualPointList.push({ x: msg.time, y: myangle});
+        setPointList.push({x: msg.time, y: setAngle});
 
-/**
- *
- * @author jona
- */
-public class SimulateMotorTest {
+        pidGrapher.setX(msg.time - 50 * 100, msg.time);
+        pidGrapher.repaint();
+    });
 
-    @Test
-    public void testSimulator() {
-        
-        SimulatedMotor sm = new SimulatedMotor(Math.PI / 180, 2000);
-        
-        IServo s = sm.getSpeedServo();
-        IEncoder e = sm.getEncoder();
-        
-        s.setPosition(1000);
-        
-        for (int i = 0; i < 10; i++) {
-            long pos = e.getEncoderPosition();
-            System.out.println("Position : " + pos);
-            
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SimulateMotorTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        
-        
-    }
+    $( "#pidSetSetpoint" ).button().click(function( event ) {
+        var angle = $("#setpoint").val();
+        setAngle = angle * 3.14159265 / 180;
+        snackbot.send({
+            eventName: "move",
+            x: 0.0,
+            y: 0.0,
+            theta: setAngle
+        });
+    });
     
 }
