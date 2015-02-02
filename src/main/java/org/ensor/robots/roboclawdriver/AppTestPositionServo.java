@@ -24,8 +24,7 @@
 
 package org.ensor.robots.roboclawdriver;
 
-import org.ensor.robots.motors.ComponentManager;
-import org.ensor.robots.motors.IComponent;
+import org.ensor.robots.os.api.ComponentManager;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.algorithms.control.pid.IServo;
@@ -40,17 +39,24 @@ public class AppTestPositionServo {
     public static void main(String[] args) throws Exception {
         RoboClaw roboClaw = new RoboClaw("/dev/ttyACM0");
 
-        IComponent c1 = ComponentManager.getComponent("roboclaw-0-motor0");
-        IComponent c2 = ComponentManager.getComponent("roboclaw-0-motor1");
-        
-        ICurrentMeasurable ce1 = c1.getElectricalMonitor();
-        ICurrentMeasurable ce2 = c2.getElectricalMonitor();
-        IEncoder e1 = c1.getEncoder();
-        IEncoder e2 = c2.getEncoder();
-
-        IServo s1 = c1.getPositionServo();
-        IServo s2 = c2.getPositionServo();
-        
+        ICurrentMeasurable ce1 =
+                ComponentManager.getComponent("roboclaw-0-motor0-current",
+                        ICurrentMeasurable.class);
+        IEncoder e1 =
+                ComponentManager.getComponent("roboclaw-0-motor0-encoder",
+                        IEncoder.class);
+        IServo s1 =
+                ComponentManager.getComponent("roboclaw-0-motor0-position",
+                        IServo.class);
+        ICurrentMeasurable ce2 =
+                ComponentManager.getComponent("roboclaw-0-motor1-current",
+                        ICurrentMeasurable.class);
+        IEncoder e2 =
+                ComponentManager.getComponent("roboclaw-0-motor1-encoder",
+                        IEncoder.class);
+        IServo s2 =
+                ComponentManager.getComponent("roboclaw-0-motor1-position",
+                        IServo.class);
         int i;
         for (i = 0; i < 4; i++) {
 

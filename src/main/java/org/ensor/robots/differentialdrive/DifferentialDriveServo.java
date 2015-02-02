@@ -57,6 +57,10 @@ public class DifferentialDriveServo {
         public void setPosition(double aPosition) {
             mSpeed = aPosition;
         }
+
+        public void setPID(double P, double I, double D, double aMinError, double aMaxError) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }
     class AngleControl implements IServo {
         public void setPosition(double aPosition) {
@@ -64,6 +68,10 @@ public class DifferentialDriveServo {
             double twopi = Math.PI * 2;
             while (mAngle > twopi) mAngle -= twopi;
             while (mAngle < 0) mAngle += twopi;
+        }
+
+        public void setPID(double P, double I, double D, double aMinError, double aMaxError) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         
     }
@@ -112,16 +120,16 @@ public class DifferentialDriveServo {
         double absoluteTurnRate;
         double speed;
         if (dAngle > Math.PI/2) {
-            absoluteTurnRate = mDifferentialDriveModel.turnRateForSpeed(mMaxVel/4);
+            absoluteTurnRate = mDifferentialDriveModel.turnRateForSpeed(mMaxVel);
             speed = 0;
         }
         else if (dAngle < -Math.PI/2) {
-            absoluteTurnRate = -mDifferentialDriveModel.turnRateForSpeed(mMaxVel/4);
+            absoluteTurnRate = -mDifferentialDriveModel.turnRateForSpeed(mMaxVel);
             speed = 0;
         }
         else {
             absoluteTurnRate = dAngle / (Math.PI/2) *
-                    mDifferentialDriveModel.turnRateForSpeed(mMaxVel/4);
+                    mDifferentialDriveModel.turnRateForSpeed(mMaxVel);
             speed = mSpeed -
                     mDifferentialDriveModel.
                             speedDifferenceForTurnRate(absoluteTurnRate);
@@ -142,7 +150,7 @@ public class DifferentialDriveServo {
         Model.WheelVelocities wheelVelocities = mDifferentialDriveModel.
                 calculateWheelVelocities(
                         speed,
-                        absoluteTurnRate
+                        absoluteTurnRate/1.5
                 );
         
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,

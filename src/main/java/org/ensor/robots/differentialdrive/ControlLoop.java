@@ -53,6 +53,10 @@ public class ControlLoop {
         public void setPosition(double aValue) {
             mTurnRate = aValue;
         }
+
+        public void setPID(double P, double I, double D, double aMinError, double aMaxError) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }
     
     

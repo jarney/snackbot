@@ -30,8 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.io.tty.ITTY;
 import org.ensor.io.tty.TTYFactory;
-import org.ensor.robots.motors.ComponentManager;
-import org.ensor.robots.motors.IComponent;
+import org.ensor.robots.os.api.ComponentManager;
 import org.ensor.robots.motors.IConfigurable;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
@@ -44,7 +43,6 @@ import org.ensor.robots.motors.ITemperatureSensor;
  * @author jona
  */
 public class RoboClaw implements
-        IComponent,
         IConfigurable,
         ITemperatureSensor {
     
@@ -116,7 +114,20 @@ public class RoboClaw implements
         
         ComponentManager mgr = ComponentManager.getInstance();
         mgr.registerComponent("roboclaw-0-motor0", m1);
+        mgr.registerComponent("roboclaw-0-motor0-current", m1.getElectricalMonitor());
+        mgr.registerComponent("roboclaw-0-motor0-speed", m1.getSpeedServo());
+        //mgr.registerComponent("roboclaw-0-motor0-position", m1.getPositionServo());
+        mgr.registerComponent("roboclaw-0-motor0-encoder", m1.getEncoder());
+        mgr.registerComponent("roboclaw-0-motor0-motor", m1.getMotorInterface());
+        
         mgr.registerComponent("roboclaw-0-motor1", m2);
+        mgr.registerComponent("roboclaw-0-motor1-current", m2.getElectricalMonitor());
+        mgr.registerComponent("roboclaw-0-motor1-speed", m2.getSpeedServo());
+        //mgr.registerComponent("roboclaw-0-motor1-position", m2.getPositionServo());
+        mgr.registerComponent("roboclaw-0-motor1-encoder", m2.getEncoder());
+        mgr.registerComponent("roboclaw-0-motor1-motor", m2.getMotorInterface());
+        
+        mgr.registerComponent("roboclaw-0-temperature", getTemperatureSensor());
         mgr.registerComponent("roboclaw-0", this);
         
     }

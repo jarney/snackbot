@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.motors;
+package org.ensor.robots.os.api;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,10 +42,10 @@ public class ComponentManager {
 
     private static final ComponentManager INSTANCE = new ComponentManager();
 
-    private final Map<String, IComponent> mComponents;
+    private final Map<String, Object> mComponents;
 
     ComponentManager() {
-        mComponents = new ConcurrentHashMap<String, IComponent>();
+        mComponents = new ConcurrentHashMap<String, Object>();
     }
 
     /**
@@ -64,21 +64,24 @@ public class ComponentManager {
      * @param aName The fully-qualified name of the component.
      * @param aComponent The component being registered.
      */
-    public void registerComponent(
+    public static void registerComponent(
             final String aName,
-            final IComponent aComponent) {
-        mComponents.put(aName, aComponent);
+            final Object aComponent) {
+        INSTANCE.mComponents.put(aName, aComponent);
     }
 
     /**
      * This method returns the component with the given
      * fully-qualified name.
      *
+     * @param <T> Type of the component to return.
      * @param aName The fully-qualified name of a component.
+     * @param aType Type of component to return.
      * @return The component with the specified ID.
      */
-    public static IComponent getComponent(final String aName) {
-        return INSTANCE.mComponents.get(aName);
+    public static <T> T getComponent(
+            final String aName,
+            final Class<T> aType) {
+        return (T) INSTANCE.mComponents.get(aName);
     }
-
 }

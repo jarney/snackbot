@@ -42,8 +42,8 @@ public class PIDController implements IServo {
     private double mKi;
     private double mKp;
     private double mKd;
-    private double mMaxOutput;
-    private double mMinOutput;
+    private double mMaxError;
+    private double mMinError;
     private double mSetpoint;
 
     private final ISensor mSensor;
@@ -107,45 +107,8 @@ public class PIDController implements IServo {
         mKp = aKp;
         mKi = aKi;
         mKp = aKd;
-        mMinOutput = aMinOutput;
-        mMaxOutput = aMaxOutput;
-    }
-
-    /**
-     * This method allows setting the PID constants for the control system
-     * to facilitate the tuning process.  Note that any wound-up integral
-     * component is reset when the coefficients are changed.
-     *
-     * @param aKp A constant to multiply with the error to obtain an output.
-     * @param aKi A constant to multiply with the integral of error to obtain
-     *            an output.
-     * @param aKd A constant to multiply with the differential of error to
-     *            obtain an output.
-     */
-    public void setCoefficients(
-            final double aKp,
-            final double aKi,
-            final double aKd) {
-        mKp = aKp;
-        mKi = aKi;
-        mKd = aKd;
-        mEIntegral = 0;
-    }
-
-    /**
-     * This method sets the minimum and maximum allowed outputs for the
-     * system.
-     *
-     * @param aMinOutput The minimum value of the output the system is allowed
-     *                   to produce.
-     * @param aMaxOutput The maximum value of output the system is allowed to
-     *                   produce.
-     */
-    public void setRange(
-            final double aMinOutput,
-            final double aMaxOutput) {
-        mMinOutput = aMinOutput;
-        mMaxOutput = aMaxOutput;
+        mMinError = aMinOutput;
+        mMaxError = aMaxOutput;
     }
 
     /**
@@ -199,12 +162,12 @@ public class PIDController implements IServo {
         // control, don't bother with the integral
         // or differential components.  This prevents
         // the problem commonly known as "integral wind-up".
-        if (up >= mMaxOutput) {
-            mController.setPosition(mMaxOutput);
+        if (e >= mMaxError) {
+            mController.setPosition(mMaxError * mKp);
             mEIntegral = 0;
         }
-        else if (up <= mMinOutput) {
-            mController.setPosition(mMinOutput);
+        else if (e <= mMinError) {
+            mController.setPosition(mMinError * mKp);
             mEIntegral = 0;
         }
         else {
@@ -220,9 +183,6 @@ public class PIDController implements IServo {
 
             double output = up + ui + ud;
 
-            output = Math.min(output, mMaxOutput);
-            output = Math.max(output, mMinOutput);
-
             mController.setPosition(output);
 
             mEIntegral += (dt * e);
@@ -230,5 +190,32 @@ public class PIDController implements IServo {
 
         mELast = e;
 
+    }
+
+    /**
+     * This method establishes the PID parameters for the controller.
+     *
+     * @param aKp A constant to multiply with the error to obtain an output.
+     * @param aKi A constant to multiply with the integral of error to obtain
+     *            an output.
+     * @param aKd A constant to multiply with the differential of error to
+     *            obtain an output.
+     * @param aMinOutput The minimum value of the output the system is allowed
+     *                   to produce.
+     * @param aMaxOutput The maximum value of output the system is allowed to
+     *                   produce.
+     */
+    public void setPID(
+            final double aKp,
+            final double aKi,
+            final double aKd,
+            final double aMinOutput,
+            final double aMaxOutput) {
+        mKp = aKp;
+        mKi = aKi;
+        mKd = aKd;
+        mEIntegral = 0;
+        mMinError = aMinOutput;
+        mMaxError = aMaxOutput;
     }
 }

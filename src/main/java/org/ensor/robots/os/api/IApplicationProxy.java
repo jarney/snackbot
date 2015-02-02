@@ -22,33 +22,20 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.motors;
-
-import java.util.List;
+package org.ensor.robots.os.api;
 
 /**
- * This interface models a container which can contain
- * one or more component objects.
  *
  * @author jona
  */
-public interface IComponentContainer {
+class IApplicationProxy {
 
-    /**
-     * This method returns the component associated with the given
-     * component ID.
-     * @param aComponentId The ID of a component.
-     * @return A handle to the specific component associated with the given
-     *         identifier.
-     */
-    IComponent getComponent(String aComponentId);
+    void sendDeviceOpened(String aDeviceId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-    /**
-     * This method returns a list of components that this object controls
-     * or contains.
-     * @return A list of component IDs which are contained or controlled
-     *         by this object.
-     */
-    List<String> getComponents();
+    void sendDeviceClosed(String aDeviceId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

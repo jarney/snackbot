@@ -89,6 +89,10 @@ public class NetworkBiote extends Biote {
             Event forward = new Event("Mover-DriveMotor", msg.getData());
             sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
         }
+        else if (name.equals("Mover-Set-Speeds")) {
+            Event forward = new Event("Mover-Set-Speeds", msg.getData());
+            sendStimulus(DIFFERENTIAL_DRIVE_BIOTE, forward);
+        }
         else if (name.equals("subscribe")) {
             DictionaryAtom dict = DictionaryAtom.newAtom();
             dict.setInt("bioteId", getBioteId());

@@ -6,6 +6,18 @@
         <meta name="viewport" content="width=device-width">
         <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
         <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="http://code.highcharts.com/highcharts.src.js"></script>
+        <script src="http://code.highcharts.com/highcharts-more.js"></script>
+        <script src="http://code.highcharts.com/highcharts-more.src.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.src.js"></script>
+        <script src="http://code.highcharts.com/adapters/mootools-adapter.js"></script>
+        <script src="http://code.highcharts.com/adapters/mootools-adapter.src.js"></script>
+        <script src="http://code.highcharts.com/adapters/prototype-adapter.js"></script>
+        <script src="http://code.highcharts.com/adapters/prototype-adapter.src.js"></script>
+
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
         <script src="cbuffer.js"></script>
         <script src="sb-ui-tabs.js"></script>
@@ -188,6 +200,25 @@
                             <input type="text" id="configureRightWheelMaxRotationSpeed"/>
                             <br/>
                             <hr/>
+                            <p>
+                                These are the PID regulator speeds
+                            </p>
+                            <label for="configureLeftWheelPIDP">Left PID P</label>
+                            <input type="text" id="configureLeftWheelPIDP"/>
+                            <label for="configureRightWheelPIDP">Right PID P</label>
+                            <input type="text" id="configureRightWheelPIDP"/>
+                            <br/>
+                            <label for="configureLeftWheelPIDI">Left PID I</label>
+                            <input type="text" id="configureLeftWheelPIDI"/>
+                            <label for="configureRightWheelPIDI">Right PID I</label>
+                            <input type="text" id="configureRightWheelPIDI"/>
+                            <br/>
+                            <label for="configureLeftWheelPIDD">Left PID D</label>
+                            <input type="text" id="configureLeftWheelPIDD"/>
+                            <label for="configureRightWheelPIDD">Right PID D</label>
+                            <input type="text" id="configureRightWheelPIDD"/>
+                            <br/>
+                            <hr/>
                             
                             <p>
                                 The distance tolerance gives the number of meters
@@ -250,30 +281,20 @@
                         <div id="pid">
                             <h1>PID Configuration</h1>
                             
-                            <label for="configSetpoint">Setpoint</label>
-                            <input type="text" id="setpoint"/>
+                            <label for="pidLeftSpeed">Left Speed</label>
+                            <div id="pidLeftSpeed" style="width: 25%"></div>
+                            <br/>
+                            <label for="pidRightSpeed">Right Speed</label>
+                            <div id="pidRightSpeed" style="width: 25%"></div>
+                            <br/>
                             
-                            <button id="pidSetSetpoint">Save Configuration</button>
+                            
+                            
+                            <button id="pidSetSetpoint">Reset</button>
                             <br/>
                             <hr/>
                             
-                            
-                            <label for="configP">Proportional</label>
-                            <input type="text" id="configP"/>
-                            <br/>
-                            <hr/>
-                            <label for="configI">Integral</label>
-                            <input type="text" id="configI"/>
-                            <br/>
-                            <hr/>
-                            <label for="configD">Derivative</label>
-                            <input type="text" id="configD"/>
-                            <br/>
-                            <hr/>
-                            
-                            <canvas id="pidCanvas" style="position: absolute; width: 100%; height:100%;"
-                                    ontouchstart="void(0)" ontouchend="void(0)" ontouchmove="void(0)">
-                            </canvas>
+                            <div id="pidGraph" style="width: 100%;"></div>
 
                         </div>
                     </div>

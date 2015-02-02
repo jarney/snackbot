@@ -25,7 +25,6 @@ package org.ensor.robots.roboclawdriver;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ensor.robots.motors.IComponent;
 import org.ensor.robots.motors.IConfigurable;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
@@ -38,7 +37,6 @@ import org.ensor.robots.motors.ITemperatureSensor;
  * @author jona
  */
 class RoboClawMotor implements
-        IComponent,
         IMotor,
         ICurrentMeasurable,
         IEncoder
@@ -62,12 +60,31 @@ class RoboClawMotor implements
 
     class SpeedServo implements IServo {
 
+        private final RoboClawMotor mMotor;
+        public SpeedServo(RoboClawMotor aMotor) {
+            mMotor = aMotor;
+        }
+        
         public void setPosition(final double aPosition) {
             mMotorController.handleCommand(
                 new CommandDriveMotorWithSignedSpeed(
                         mMotorId,
                         (long) aPosition)
             );
+        }
+        
+        public void setPID(final double P, final double I, final double D, final double aMinError, double aMaxError) {
+            mMotorController.handleCommand(
+                new CommandSetPIDQPPSConstants(
+                    mMotorId,
+                    (int)(P * 65536.0),
+                    (int)(I * 65536.0),
+                    (int)(D * 65536.0),
+                    (int)aMaxError
+                )
+            );
+            mMotorController.handleCommand(
+                new CommandReadPIDQPPS(mMotor));
         }
         
     }
@@ -80,17 +97,17 @@ class RoboClawMotor implements
         mAbsoluteEncoder = false;
         mSupportRCEncoders = false;
         mBufferLength = 0;
-        mSpeedServo = new SpeedServo();
+        mSpeedServo = new SpeedServo(this);
         
-/*        mMotorController.handleCommand(
-            new CommandSetPIDQPPSConstants(
-            mMotorId,
-            0x10000,
-            0x08000,
-            0x04000,
-            8400)
-        );
-*/
+//        mMotorController.handleCommand(
+//            new CommandSetPIDQPPSConstants(
+//            mMotorId,
+//            0x00010000,
+//            0x00008000,
+//            0x00004000,
+//            44000)
+//        );
+//
         mMotorController.handleCommand(
             new CommandReadPIDQPPS(this));
 

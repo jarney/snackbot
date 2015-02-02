@@ -24,39 +24,159 @@
 
 function sbPIDTuning(snackbot) {
 
-    var setAngle = 0;
-    var setPointList = new CBuffer(50);
-    var actualPointList = new CBuffer(50);
-    var pointSets = [setPointList, actualPointList];
-    var pi = 3.14159265;
-    var twopi = pi*2;
+    var rightSetpointList = [];
+    var leftSetpointList = [];
+    var rightActualList = [];
+    var leftActualList = [];
+
+    var currentLeftSpeed = 0;
+    var currentRightSpeed = 0;
+    var currentLeftSetpoint = 0;
+    var currentRightSetpoint = 0;
+
+    var startTime = (new Date()).getTime();
+
+
+    for (var i = -49; i <= 0; i += 1) {
+        
+        var pt = {
+            x: i * 100,
+            y: 0.0
+        };
+        rightSetpointList.push(pt);
+        leftSetpointList.push(pt);
+        rightActualList.push(pt);
+        leftActualList.push(pt);
+    }
+
+
+    var chart;
     
-    $("#setpoint").val("0.0");
-    
-    pidGrapher = $("#pidCanvas").sbUIGraph({pointSets: pointSets});
-    pidGrapher.setY(-pi, pi);
-    pidGrapher.repaint();
+   
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+
+    $('#pidGraph').highcharts({
+        chart: {
+            type: 'scatter',
+            animation: false,
+            marginRight: 10,
+            events: {
+                load: function () {
+                    chart = this;
+                }
+            }
+        },
+        title: {
+            text: 'Setpoint vs speed'
+        },
+        xAxis: {
+            type: 'linear',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: 'Speed (m/s)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }],
+            min: -1.5,
+            max: 1.5
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.numberFormat(this.x, 2) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 2);
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        series: [
+            {
+            name: 'Left Speed',
+            data: leftActualList
+            },
+            {
+            name: 'Right Speed',
+            data: rightActualList
+            },
+            {
+            name: 'Left Setpoint',
+            data: leftSetpointList
+            },
+            {
+            name: 'Right Setpoint',
+            data: rightSetpointList
+            }
+    ]
+    });
     
     snackbot.subscribe("position-update", function(msg) {
-        var myangle = msg.angle;
-        while (myangle > twopi) myangle -= twopi;
-        while (myangle < -twopi) myangle += twopi;
-        actualPointList.push({ x: msg.time, y: myangle});
-        setPointList.push({x: msg.time, y: setAngle});
-
-        pidGrapher.setX(msg.time - 50 * 100, msg.time);
-        pidGrapher.repaint();
+        currentLeftSpeed = msg.leftSpeed;
+        currentRightSpeed = msg.rightSpeed;
+        updateGraph();
     });
 
     $( "#pidSetSetpoint" ).button().click(function( event ) {
-        var angle = $("#setpoint").val();
-        setAngle = angle * 3.14159265 / 180;
-        snackbot.send({
-            eventName: "move",
-            x: 0.0,
-            y: 0.0,
-            theta: setAngle
-        });
+        $( "#pidRightSpeed").slider({value: 0});
+        $( "#pidLeftSpeed").slider({value: 0});
+    });
+
+    $("#pidRightSpeed").slider({
+        min: -2.3,
+        max: 2.3,
+        step: 0.05,
+        change: function(evt, ui) {
+            currentRightSetpoint = ui.value;
+            snackbot.send({
+                eventName: "Mover-Set-Speeds",
+                leftSpeed: currentLeftSetpoint,
+                rightSpeed: currentRightSetpoint
+            });
+            updateGraph();
+        }
+    });
+    $("#pidLeftSpeed").slider({
+        min: -2.3,
+        max: 2.3,
+        step: 0.05,
+        change: function(evt, ui) {
+            currentLeftSetpoint = ui.value;
+            snackbot.send({
+                eventName: "Mover-Set-Speeds",
+                leftSpeed: currentLeftSetpoint,
+                rightSpeed: currentRightSetpoint
+            });
+            updateGraph();
+        }
     });
     
+    function updateGraph() {
+        var time = (new Date()).getTime() - startTime;
+        chart.series[0].addPoint({x: time, y: currentLeftSpeed}, false, true);
+        chart.series[1].addPoint({x: time, y: currentRightSpeed}, false, true);
+        chart.series[2].addPoint({x: time, y: currentLeftSetpoint}, false, true);
+        chart.series[3].addPoint({x: time, y: currentRightSetpoint}, false, true);
+        chart.redraw();
+    }
+
+    snackbot.subscribe("differential-drive-configuration", function(msg) {
+        var cfg = msg.configuration;
+        var leftMaxSpeed = cfg.leftWheelMaxRotationSpeed / 60.0 * cfg.leftWheelDiameter * 3.14159265;
+        var rightMaxSpeed = cfg.rightWheelMaxRotationSpeed / 60.0 * cfg.rightWheelDiameter * 3.14159265;
+        var totalMaxSpeed = (leftMaxSpeed > rightMaxSpeed) ? leftMaxSpeed : rightMaxSpeed;
+        chart.yAxis[0].setExtremes(-totalMaxSpeed, totalMaxSpeed, true, false);
+    });
+
 }

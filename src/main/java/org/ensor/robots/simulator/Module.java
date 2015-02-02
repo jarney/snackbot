@@ -24,8 +24,7 @@
 
 package org.ensor.robots.simulator;
 
-import org.ensor.robots.motors.ComponentManager;
-import org.ensor.robots.motors.IComponent;
+import org.ensor.robots.os.api.ComponentManager;
 import org.ensor.robots.os.IModule;
 import org.ensor.robots.os.IModuleManager;
 
@@ -43,10 +42,10 @@ public class Module implements IModule {
 
     public void start(IModuleManager aManager) throws Exception {
         
-        IComponent mLeftMotor = new SimulatedMotor(Math.PI / 180, 2000);
-        IComponent mRightMotor = new SimulatedMotor(Math.PI / 180, 2000);
+        SimulatedMotor mLeftMotor = new SimulatedMotor(Math.PI / 180, 2000);
+        SimulatedMotor mRightMotor = new SimulatedMotor(Math.PI / 180, 2000);
         
-        ComponentManager.getInstance().
+        ComponentManager.
                 registerComponent(
                         "simulator-speed-left",
                         mLeftMotor);

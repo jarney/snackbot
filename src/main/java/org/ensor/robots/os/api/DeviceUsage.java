@@ -21,37 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.ensor.robots.roboclawdriver;
+
+package org.ensor.robots.os.api;
 
 /**
  *
  * @author jona
  */
-class CommandReadErrorStatus extends CommandResponseFixed {
-
-    private final RoboClaw mRoboClaw;
-    
-    protected CommandReadErrorStatus(RoboClaw aRoboClaw) {
-        mRoboClaw = aRoboClaw;
-    }
-
-    @Override
-    protected byte[] getCommand(byte aAddress) {
-        byte[] b = new byte[2];
-        b[0] = aAddress;
-        b[1] = 90;
-        return b;
-    }
-
-    @Override
-    protected void onResponse(byte[] aResponseBuffer, int aResponseLength) {
-        mRoboClaw.setErrorStatus(aResponseBuffer[0] << 8 | 
-                aResponseBuffer[1]);
-    }
-
-    @Override
-    protected int getResponseLength() {
-        return 3;
-    }
-    
+public class DeviceUsage {
+    public static final int READONLY = 1;
 }

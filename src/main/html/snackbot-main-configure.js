@@ -44,6 +44,14 @@ function sbConfigure(snackbot) {
         $("#configureAngleTolerance").val(cfg.angleTolerance);
         $("#configureDecelerationDistance").val(cfg.decelerationDistance);
         
+        $("#configureLeftWheelPIDP").val(cfg.leftPID_P);
+        $("#configureLeftWheelPIDI").val(cfg.leftPID_I);
+        $("#configureLeftWheelPIDD").val(cfg.leftPID_D);
+        
+        $("#configureRightWheelPIDP").val(cfg.rightPID_P);
+        $("#configureRightWheelPIDI").val(cfg.rightPID_I);
+        $("#configureRightWheelPIDD").val(cfg.rightPID_D);
+        
         if (cfg.leftWheelDirection > 0) {
             $("#configureLeftDirectionReverse").prop("checked", false);
         }
@@ -136,7 +144,16 @@ function sbConfigure(snackbot) {
             angleTolerance: parseFloat($("#configureAngleTolerance").val()),
             decelerationDistance: parseFloat($("#configureDecelerationDistance").val()),
             leftWheelDirection: leftWheelDirection,
-            rightWheelDirection: rightWheelDirection
+            rightWheelDirection: rightWheelDirection,
+            
+            leftPID_P: parseFloat($("#configureLeftWheelPIDP").val()),
+            leftPID_I: parseFloat($("#configureLeftWheelPIDI").val()),
+            leftPID_D: parseFloat($("#configureLeftWheelPIDD").val()),
+            
+            rightPID_P: parseFloat($("#configureRightWheelPIDP").val()),
+            rightPID_I: parseFloat($("#configureRightWheelPIDI").val()),
+            rightPID_D: parseFloat($("#configureRightWheelPIDD").val())
+
         };
         
         snackbot.send({

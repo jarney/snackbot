@@ -24,7 +24,6 @@
 
 package org.ensor.robots.simulator;
 
-import org.ensor.robots.motors.IComponent;
 import org.ensor.robots.motors.IConfigurable;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
@@ -39,7 +38,7 @@ import org.ensor.robots.motors.ITemperatureSensor;
  * on the encoders meant to help simulate real-world slippage conditions.
  * @author jona
  */
-class SimulatedMotor implements IComponent, IServo, IEncoder {
+class SimulatedMotor implements IServo, IEncoder {
     private long mEncoderPosition;
     private double mDesiredSpeed;
     
@@ -127,6 +126,10 @@ class SimulatedMotor implements IComponent, IServo, IEncoder {
 
     public void setPosition(final double aPosition) {
         mDesiredSpeed = aPosition;
+    }
+
+    public void setPID(double P, double I, double D, double aMinError, double aMaxError) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 

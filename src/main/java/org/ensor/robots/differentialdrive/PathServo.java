@@ -156,6 +156,9 @@ public class PathServo {
     public void setDistanceTolerance(final double aDistanceTolerance) {
         mDistanceTolerance = aDistanceTolerance;
     }
+    public void setDecelerationDistance(final double aDecelerationDistance) {
+        mDecelerationDistance = aDecelerationDistance;
+    }
     public double getDistanceTolerance() {
         return mDistanceTolerance;
     }
@@ -169,9 +172,12 @@ public class PathServo {
         if (aDistance > mDecelerationDistance) {
             return mMaxMovementSpeed;
         }
+        
+        double deceleration = (aDistance / mDecelerationDistance);
+        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, "Relative speed: " + deceleration + " of " + mMaxMovementSpeed);
         double speed = 
-                mMaxMovementSpeed * 
-                    (aDistance / mDecelerationDistance);
+                mMaxMovementSpeed * deceleration;
+                    
         
         return speed;
     }
@@ -218,6 +224,7 @@ public class PathServo {
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
             "Turning forward: " + distanceFromGoal);
 
+        
         mSpeedServo.setPosition(0.0);
         mDirectionServo.setPosition(mTargetDirection);
     }

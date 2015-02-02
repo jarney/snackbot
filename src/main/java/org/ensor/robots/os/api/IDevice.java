@@ -22,36 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.differentialdrive;
-
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+package org.ensor.robots.os.api;
 
 /**
  *
  * @author jona
  */
-public class RingBuffer<T> implements Iterable<T> {
-    private final List<T> mData;
-    private final int mSize;
-    
-    public RingBuffer(int aSize) {
-        mData = new LinkedList<T>();
-        mSize = aSize;
-    }
-    
-    public void add(T aData) {
-        mData.add(aData);
-        if (mData.size() > mSize) {
-            mData.remove(0);
-        }
-    }
-
-    public Iterator<T> iterator() {
-        return mData.iterator();
-    }
-    public void clear() {
-        mData.clear();
-    }
+public interface IDevice {
+    public <T> T getDevice(Class<T> aClass);
 }

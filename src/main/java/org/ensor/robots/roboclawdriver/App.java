@@ -23,8 +23,7 @@
  */
 package org.ensor.robots.roboclawdriver;
 
-import org.ensor.robots.motors.ComponentManager;
-import org.ensor.robots.motors.IComponent;
+import org.ensor.robots.os.api.ComponentManager;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
@@ -69,13 +68,18 @@ public final class App {
     public static void main( String[] args ) throws Exception {
         RoboClaw roboClaw = new RoboClaw("/dev/ttyACM0");
 
-        IComponent c1 = ComponentManager.getComponent("roboclaw-0-motor0");
-        IComponent c2 = ComponentManager.getComponent("roboclaw-0-motor1");
-        
-        ICurrentMeasurable cc1 = c1.getElectricalMonitor();
-        IEncoder ce1 = c1.getEncoder();
-        ICurrentMeasurable cc2 = c2.getElectricalMonitor();
-        IEncoder ce2 = c2.getEncoder();
+        ICurrentMeasurable cc1 = 
+                ComponentManager.getComponent("roboclaw-0-motor0-current",
+                        ICurrentMeasurable.class);
+        IEncoder ce1 =
+                ComponentManager.getComponent("roboclaw-0-motor0-encoder",
+                        IEncoder.class);
+        ICurrentMeasurable cc2 =
+                ComponentManager.getComponent("roboclaw-0-motor1-current",
+                        ICurrentMeasurable.class);
+        IEncoder ce2 =
+                ComponentManager.getComponent("roboclaw-0-motor1-encoder",
+                        IEncoder.class);
         
         
         while (true) {

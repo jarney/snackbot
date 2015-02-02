@@ -131,5 +131,7 @@ public class Odometry {
         );
         mCurrentPosition = mCurrentPosition.add(distanceTraveled);
         mDirection = mDirection + bearing.getTurnRate() * dt;
+        
+        // Publish position and direction update.
     }
 }

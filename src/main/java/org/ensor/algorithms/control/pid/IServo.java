@@ -52,4 +52,8 @@ public interface IServo {
      * @param aPosition The set point of the control system.
      */
     void setPosition(double aPosition);
+    
+    // HACK!  This should be in a PID regulator interface instead.
+    void setPID(double P, double I, double D, double aMinError, double aMaxError);
+    
 }

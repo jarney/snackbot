@@ -24,13 +24,14 @@
 
 package org.ensor.robots.differentialdrive;
 
+import org.ensor.algorithms.containers.RingBuffer;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.math.geometry.Vector2;
-import org.ensor.robots.motors.ComponentManager;
+import org.ensor.robots.os.api.ComponentManager;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
@@ -69,7 +70,27 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     public static final String CONFIG_DECELERATION_DISTANCE = "decelerationDistance";
     public static final String CONFIG_LEFT_WHEEL_DIRECTION = "leftWheelDirection";
     public static final String CONFIG_RIGHT_WHEEL_DIRECTION = "rightWheelDirection";
+    
+    // PID constants for left motor.
+    public static final String CONFIG_LEFT_PID_P = "leftPID_P";
+    public static final String CONFIG_LEFT_PID_I = "leftPID_I";
+    public static final String CONFIG_LEFT_PID_D = "leftPID_D";
+    
+    // PID constants for right motor.
+    public static final String CONFIG_RIGHT_PID_P = "rightPID_P";
+    public static final String CONFIG_RIGHT_PID_I = "rightPID_I";
+    public static final String CONFIG_RIGHT_PID_D = "rightPID_D";
 
+    // PID constants for distance->speed control.
+    public static final String CONFIG_DISTANCE_PID_P = "distancePID_P";
+    public static final String CONFIG_DISTANCE_PID_I = "distancePID_I";
+    public static final String CONFIG_DISTANCE_PID_D = "distancePID_D";
+    
+    // PID constants for angle -> angle speed control.
+    public static final String CONFIG_ANGLE_PID_P = "anglePID_P";
+    public static final String CONFIG_ANGLE_PID_I = "anglePID_I";
+    public static final String CONFIG_ANGLE_PID_D = "anglePID_D";
+    
     private final Configuration mConfiguration;
     private DictionaryAtom mConfigDict;
 
@@ -109,6 +130,9 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     private String rightMotorId;
     private final RingBuffer<DictionaryAtom> mLoggingRingBuffer;
 
+    private double mLeftMaxSpeed;
+    private double mRightMaxSpeed;
+    
     class WheelSpeedControl implements IServo {
         private final double mPulsesPerMeter;
         private final IServo mSpeedControl;
@@ -129,6 +153,9 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             Logger.getLogger(BioteSocket.class.getName()).log(
                     Level.INFO,
                     mLogPrefix + " = " + aPosition + ":" + spd);
+        }
+
+        public void setPID(double P, double I, double D, double aMinError, double aMaxError) {
         }
     
     }
@@ -167,6 +194,22 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             config.setReal(CONFIG_DECELERATION_DISTANCE, 0.5);
             config.setReal(CONFIG_LEFT_WHEEL_DIRECTION, 1);
             config.setReal(CONFIG_RIGHT_WHEEL_DIRECTION, 1);
+            
+            config.setReal(CONFIG_LEFT_PID_P, 1.0);
+            config.setReal(CONFIG_LEFT_PID_I, 0.0);
+            config.setReal(CONFIG_LEFT_PID_D, 0.0);
+            
+            config.setReal(CONFIG_RIGHT_PID_P, 1.0);
+            config.setReal(CONFIG_RIGHT_PID_I, 0.0);
+            config.setReal(CONFIG_RIGHT_PID_D, 0.0);
+            
+            config.setReal(CONFIG_DISTANCE_PID_P, 1.0);
+            config.setReal(CONFIG_DISTANCE_PID_I, 0.0);
+            config.setReal(CONFIG_DISTANCE_PID_D, 0.0);
+            
+            config.setReal(CONFIG_ANGLE_PID_P, 1.0);
+            config.setReal(CONFIG_ANGLE_PID_I, 0.0);
+            config.setReal(CONFIG_ANGLE_PID_D, 0.0);
             
             mConfiguration.setConfigurationNode(
                     "org.ensor.robots.pathfollower.DifferentialDriveBiote",
@@ -223,6 +266,12 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             }
         });
         
+        subscribe("Mover-Set-Speeds", new IEventHandler() {
+            public void process(Event msg) throws Exception {
+                onSetSpeeds(msg);
+            }
+
+        });
         
         mJourneyLog = new PrintStream(new FileOutputStream("server-current/html/journey-log.txt"));
 
@@ -253,12 +302,12 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         double rightMaxRPM = aConfigDict.getReal(CONFIG_RIGHT_WHEEL_MAX_ROTATION_SPEED);
 
         // rev/min * (1/60 min/sec) * PI*Diameter meters/rev = meters/sec
-        double leftMaxSpeed = leftMaxRPM / 60.0 *
+        mLeftMaxSpeed = leftMaxRPM / 60.0 *
                 aConfigDict.getReal(CONFIG_LEFT_WHEEL_DIAMETER) * Math.PI;
-        double rightMaxSpeed = rightMaxRPM / 60.0 *
+        mRightMaxSpeed = rightMaxRPM / 60.0 *
                 aConfigDict.getReal(CONFIG_RIGHT_WHEEL_DIAMETER) * Math.PI;
         
-        double maxMovementSpeed = (leftMaxSpeed + rightMaxSpeed)/2;
+        double maxMovementSpeed = (mLeftMaxSpeed + mRightMaxSpeed)/2;
         
         double wheelDistance = aConfigDict.getReal(CONFIG_WHEEL_DISTANCE);
         double distanceTolerance = aConfigDict.getReal(CONFIG_DISTANCE_TOLERANCE);
@@ -274,24 +323,43 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         String leftMotorId = aConfigDict.getString(CONFIG_LEFT_MOTOR_ID);
         String rightMotorId = aConfigDict.getString(CONFIG_RIGHT_MOTOR_ID);
         
-        IServo leftSpeedControl = ComponentManager.
-                getComponent(leftMotorId).getSpeedServo();
-        IServo rightSpeedControl = ComponentManager.
-                getComponent(rightMotorId).getSpeedServo();
+        mRoboClaw = ComponentManager.getComponent("roboclaw-0",
+                RoboClaw.class);
         
-        mRoboClaw = (RoboClaw) ComponentManager.getComponent("roboclaw-0");
-        mM1 = ComponentManager.getComponent("roboclaw-0-motor0").getElectricalMonitor();
-        mM2 = ComponentManager.getComponent("roboclaw-0-motor1").getElectricalMonitor();
+        IServo leftSpeedControl = ComponentManager.
+                getComponent(leftMotorId + "-speed", IServo.class);
+        IServo rightSpeedControl = ComponentManager.
+                getComponent(rightMotorId + "-speed", IServo.class);
+        
+        long leftqpps = (long)(aConfigDict.getReal(CONFIG_LEFT_ENCODER_TICKS_PER_REVOLUTION) * leftMaxRPM / 60);
+        long rightqpps = (long)(aConfigDict.getReal(CONFIG_RIGHT_ENCODER_TICKS_PER_REVOLUTION) * rightMaxRPM / 60);
+        
+        leftSpeedControl.setPID(
+                aConfigDict.getReal(CONFIG_LEFT_PID_P),
+                aConfigDict.getReal(CONFIG_LEFT_PID_I),
+                aConfigDict.getReal(CONFIG_LEFT_PID_D),
+                -leftqpps, leftqpps);
+        
+        rightSpeedControl.setPID(
+                aConfigDict.getReal(CONFIG_RIGHT_PID_P),
+                aConfigDict.getReal(CONFIG_RIGHT_PID_I),
+                aConfigDict.getReal(CONFIG_RIGHT_PID_D),
+                -rightqpps, rightqpps);
+        
+        mM1 = ComponentManager.
+                getComponent(leftMotorId + "-current", ICurrentMeasurable.class);
+        mM2 = ComponentManager.
+                getComponent(rightMotorId + "-current", ICurrentMeasurable.class);
         
         mLeftMotor = ComponentManager.
-                getComponent(leftMotorId).getMotorInterface();
+                getComponent(leftMotorId + "-motor", IMotor.class);
         mRightMotor = ComponentManager.
-                getComponent(rightMotorId).getMotorInterface();
+                getComponent(rightMotorId + "-motor", IMotor.class);
 
         mLeftEncoder = ComponentManager.
-                getComponent(leftMotorId).getEncoder();
+                getComponent(leftMotorId + "-encoder", IEncoder.class);
         mRightEncoder = ComponentManager.
-                getComponent(rightMotorId).getEncoder();
+                getComponent(rightMotorId + "-encoder", IEncoder.class);
         
         mLeftSpeedControl = new WheelSpeedControl(mLeftEncoderUnitsPerMeter,
                 leftSpeedControl, "left");
@@ -330,6 +398,7 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             mPathServo.setMaxMovementSpeed(maxMovementSpeed);
             mPathServo.setDistanceTolerance(distanceTolerance);
             mPathServo.setAngleTolerance(angleTolerance);
+            mPathServo.setDecelerationDistance(decelerationDistance);
         }
         mConfigDict = aConfigDict;
         mConfiguration.setConfigurationNode(
@@ -375,6 +444,18 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         mLeftSpeedControl.setPosition((long) 0);
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
                 "Path Abort");
+    }
+    
+    private void onSetSpeeds(Event msg) {
+        mPosition = new Vector2(0.0, 0.0);
+        mDirection = 0;
+        mPathServo.abort();
+        double right = msg.getData().getReal("rightSpeed");
+        double left = msg.getData().getReal("leftSpeed");
+        mRightSpeedControl.setPosition(right);
+        mLeftSpeedControl.setPosition(left);
+        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
+                "Setting speed l=" + left + " r=" + right);
     }
     
     private void onTick(Event msg) {

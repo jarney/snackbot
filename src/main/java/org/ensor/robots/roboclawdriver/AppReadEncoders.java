@@ -24,8 +24,7 @@
 
 package org.ensor.robots.roboclawdriver;
 
-import org.ensor.robots.motors.ComponentManager;
-import org.ensor.robots.motors.IComponent;
+import org.ensor.robots.os.api.ComponentManager;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.ICurrentMeasurable;
 import static org.ensor.robots.roboclawdriver.App.poll;
@@ -41,13 +40,18 @@ public class AppReadEncoders {
 
         roboClaw.handleCommand(new CommandSetMainBatteryMinVoltage(6));
         
-        IComponent c1 = ComponentManager.getComponent("roboclaw-0-motor0");
-        IComponent c2 = ComponentManager.getComponent("roboclaw-0-motor1");
-        
-        ICurrentMeasurable ce1 = c1.getElectricalMonitor();
-        ICurrentMeasurable ce2 = c2.getElectricalMonitor();
-        IEncoder e1 = c1.getEncoder();
-        IEncoder e2 = c2.getEncoder();
+        ICurrentMeasurable ce1 =
+                ComponentManager.getComponent("roboclaw-0-motor0-current",
+                        ICurrentMeasurable.class);
+        IEncoder e1 =
+                ComponentManager.getComponent("roboclaw-0-motor0-encoder",
+                        IEncoder.class);
+        ICurrentMeasurable ce2 =
+                ComponentManager.getComponent("roboclaw-0-motor1-current",
+                        ICurrentMeasurable.class);
+        IEncoder e2 =
+                ComponentManager.getComponent("roboclaw-0-motor1-encoder",
+                        IEncoder.class);
         
 
         while (true) {
