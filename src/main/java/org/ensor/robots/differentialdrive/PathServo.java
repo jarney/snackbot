@@ -27,7 +27,7 @@ package org.ensor.robots.differentialdrive;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.math.geometry.Vector2;
-import org.ensor.algorithms.control.pid.IServo;
+import org.ensor.algorithms.control.pid.PIDController;
 import org.ensor.robots.network.server.BioteSocket;
 
 /**
@@ -39,21 +39,21 @@ import org.ensor.robots.network.server.BioteSocket;
  * @author jona
  */
 public class PathServo {
+    private static Logger mLogger = Logger.getLogger(PathServo.class.getName());
 
     private Vector2 mCurrentPosition;
-    private double mCurrentDirection;
+    private double mCurrentAngle;
     
     private Vector2 mTargetPosition;
     private double mTargetDirection;
 
-    private double mMaxMovementSpeed;
+    private PIDController mDistanceServo;
     private double mDistanceTolerance;
+    
+    private PIDController mAngleServo;
     private double mAngleTolerance;
-    private double mDecelerationDistance;
+    
     private IGoalReachedListener mGoalReachedListener;
-
-    private IServo mSpeedServo;
-    private IServo mDirectionServo;
     
     private int mState;
     
@@ -68,7 +68,6 @@ public class PathServo {
      * maximum speed and turn speed in order to
      * place a bound on the speed at which the object
      * will attempt to move.
-     * @param aMaxMovementSpeed The maximum speed of the object in m/s.
      * @param aDistanceTolerance The distance (in meters) at which we decide we
      *                           are close enough to our goal to consider that
      *                           we have reached it.
@@ -81,32 +80,27 @@ public class PathServo {
      *                             ready to traverse to a new goal.
      */
     public PathServo(
-            final double aMaxMovementSpeed,
             final double aDistanceTolerance,
             final double aAngleTolerance,
-            final double aDecelerationDistance,
-            final IServo aSpeedServo,
-            final IServo aDirectionServo,
+            final PIDController aSpeedServo,
+            final PIDController aDirectionServo,
             final IGoalReachedListener aGoalReachedListener
     ) {
         
-        mMaxMovementSpeed = aMaxMovementSpeed;
         mDistanceTolerance = aDistanceTolerance;
         
         mAngleTolerance = aAngleTolerance;
 
-        mDecelerationDistance = aDecelerationDistance;
-        
         mGoalReachedListener = aGoalReachedListener;
         
         mTargetPosition = null;
         mTargetDirection = 0.0;
         
         mCurrentPosition = null;
-        mCurrentDirection = 0.0;
+        mCurrentAngle = 0.0;
         
-        mSpeedServo = aSpeedServo;
-        mDirectionServo = aDirectionServo;
+        mDistanceServo = aSpeedServo;
+        mAngleServo = aDirectionServo;
         
         mState = STATE_IDLE;
         
@@ -145,19 +139,12 @@ public class PathServo {
             final double aCurrentDirection
     ) {
         mCurrentPosition = aCurrentPosition;
-        mCurrentDirection = aCurrentDirection;
-    }
-    public void setMaxMovementSpeed(final double aMaxMovementSpeed) {
-        mMaxMovementSpeed = aMaxMovementSpeed;
-    }
-    public double getMaxMovementSpeed() {
-        return mMaxMovementSpeed;
+        double y = Math.sin(aCurrentDirection);
+        double x = Math.cos(aCurrentDirection);
+        mCurrentAngle = Math.atan2(y, x);
     }
     public void setDistanceTolerance(final double aDistanceTolerance) {
         mDistanceTolerance = aDistanceTolerance;
-    }
-    public void setDecelerationDistance(final double aDecelerationDistance) {
-        mDecelerationDistance = aDecelerationDistance;
     }
     public double getDistanceTolerance() {
         return mDistanceTolerance;
@@ -168,65 +155,57 @@ public class PathServo {
     public double getAngleTolerance() {
         return mAngleTolerance;
     }
-    private double speedForDistance(double aDistance) {
-        if (aDistance > mDecelerationDistance) {
-            return mMaxMovementSpeed;
-        }
+    private void tickMoving(final double dt) {
+        Vector2 vectorToGoal = mTargetPosition.subtract(mCurrentPosition);
+        double distanceFromGoal = vectorToGoal.length();
         
-        double deceleration = (aDistance / mDecelerationDistance);
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO, "Relative speed: " + deceleration + " of " + mMaxMovementSpeed);
-        double speed = 
-                mMaxMovementSpeed * deceleration;
-                    
-        
-        return speed;
-    }
-    
-    private void tickMoving() {
-        Vector2 moveVector = mTargetPosition.subtract(mCurrentPosition);
-        
-        double distanceFromGoal = moveVector.length();
         if (distanceFromGoal < mDistanceTolerance) {
             mState = STATE_TURNING;
             return;
         }
         
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
-                "current position " + mCurrentPosition.getX() + "," + mCurrentPosition.getY());
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
-                "target position " + mTargetPosition.getX() + "," + mTargetPosition.getY());
+        double angle = Math.atan2(vectorToGoal.getY(), vectorToGoal.getX());
 
+        mLogger.log(Level.INFO, "Current distance is " + distanceFromGoal);
+        mLogger.log(Level.INFO, "Current angle is " + mCurrentAngle);
         
-        double speed = speedForDistance(distanceFromGoal);
-        moveVector = moveVector.multiply(1 / distanceFromGoal);
-        double angle = Math.atan2(moveVector.getY(), moveVector.getX());
-
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
-                "move vector " + moveVector.getX() + "," + moveVector.getY());
+        // Let the distance servo
+        // calculate an appropriate speed
+        // for the distance to the goal.
+        mDistanceServo.setPosition(0.0);
+        mDistanceServo.tick(dt, distanceFromGoal, "Distance");
         
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
-            "Moving forward: " + speed + " toward " + angle +
-            " goal is " + distanceFromGoal + " from here");
-        
-        mSpeedServo.setPosition(speed);
-        mDirectionServo.setPosition(angle);
+        // Let the angle servo calculate
+        // an appropriate angular velocity
+        // for the distance to the goal.
+        mAngleServo.setPosition(angle);
+        mAngleServo.tick(dt, mCurrentAngle, "Angle");
         
     }
 
-    public void tickTurning() {
+    public void tickTurning(double dt) {
 
-        double distanceFromGoal = Math.abs(mCurrentDirection - mTargetDirection);
+        double distanceFromGoal = mCurrentAngle - mTargetDirection;
         
-        if (distanceFromGoal < mAngleTolerance) {
+        if (Math.abs(distanceFromGoal) < mAngleTolerance) {
             mGoalReachedListener.reached();
             mState = STATE_IDLE;
         }
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
-            "Turning forward: " + distanceFromGoal);
-
+            "Turning forward torward " + mTargetDirection + " current " + mCurrentAngle);
+ 
         
-        mSpeedServo.setPosition(0.0);
-        mDirectionServo.setPosition(mTargetDirection);
+        // With these parameters, the distance
+        // servo should calculate a zero forward
+        // speed and we should simply spin in place.
+        mDistanceServo.setPosition(0.0);
+        mDistanceServo.tick(dt, 0.0, "Distance");
+        
+
+        // Let the direction servo calculate a suitable
+        // direction to turn toward the goal.
+        mAngleServo.setPosition(mTargetDirection);
+        mAngleServo.tick(dt, mCurrentAngle, "Angle");
     }
     
     private void tickIdle() {
@@ -234,20 +213,22 @@ public class PathServo {
 
     public void abort() {
         mState = STATE_IDLE;
+        mDistanceServo.reset();
+        mAngleServo.reset();
     }
     
     public boolean isMoving() {
         return mState == STATE_MOVING || mState == STATE_TURNING;
     }
     
-    public void tick() {
+    public void tick(double dt) {
 
         switch (mState) {
             case STATE_MOVING:
-                tickMoving();
+                tickMoving(dt);
                 break;
             case STATE_TURNING:
-                tickTurning();
+                tickTurning(dt);
                 break;
             case STATE_IDLE:
                 tickIdle();

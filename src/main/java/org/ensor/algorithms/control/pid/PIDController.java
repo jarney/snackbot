@@ -24,6 +24,9 @@
 
 package org.ensor.algorithms.control.pid;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * This class represents a PID controller which is responsible
  * for calculating the appropriate process control output in order
@@ -38,15 +41,15 @@ package org.ensor.algorithms.control.pid;
  * @author jona
  */
 public class PIDController implements IServo {
-
+    private static Logger mLogger = Logger.getLogger(PIDController.class.getName());
+    
     private double mKi;
     private double mKp;
     private double mKd;
-    private double mMaxError;
-    private double mMinError;
+    private double mMaxOutput;
+    private double mMinOutput;
     private double mSetpoint;
 
-    private final ISensor mSensor;
     private final IServo mController;
 
     private double mEIntegral;
@@ -58,7 +61,6 @@ public class PIDController implements IServo {
      * control output, and the given PID coefficients.  No limits
      * are established for the minimum and maximum output values
      * apart from the minimum and maximum values for a 'double' value.
-     * @param aSensor A sensor input to read the current state of the system.
      * @param aController A control output to affect the state of the system.
      * @param aKp A constant to multiply with the error to obtain an output.
      * @param aKi A constant to multiply with the integral of error to obtain
@@ -67,13 +69,12 @@ public class PIDController implements IServo {
      *            obtain an output.
      */
     public PIDController(
-            final ISensor aSensor,
             final IServo aController,
             final double aKp,
             final double aKi,
             final double aKd
     ) {
-        this(aSensor, aController, aKp, aKi, aKd,
+        this(aController, aKp, aKi, aKd,
                 Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
@@ -83,7 +84,6 @@ public class PIDController implements IServo {
      * control output, and the given PID coefficients.  The minimum
      * and maximum range of the output is also given in order to allow
      * limiting the output to prevent damage to the system.
-     * @param aSensor A sensor input to read the current state of the system.
      * @param aController A control output to affect the state of the system.
      * @param aKp A constant to multiply with the error to obtain an output.
      * @param aKi A constant to multiply with the integral of error to obtain
@@ -94,7 +94,6 @@ public class PIDController implements IServo {
      * @param aMaxOutput The maximum allowed output.
      */
     public PIDController(
-            final ISensor aSensor,
             final IServo aController,
             final double aKp,
             final double aKi,
@@ -102,13 +101,12 @@ public class PIDController implements IServo {
             final double aMinOutput,
             final double aMaxOutput
     ) {
-        mSensor = aSensor;
         mController =  aController;
         mKp = aKp;
         mKi = aKi;
-        mKp = aKd;
-        mMinError = aMinOutput;
-        mMaxError = aMaxOutput;
+        mKd = aKd;
+        mMinOutput = aMinOutput;
+        mMaxOutput = aMaxOutput;
     }
 
     /**
@@ -141,6 +139,11 @@ public class PIDController implements IServo {
         return mKd;
     }
 
+    public void reset() {
+        mELast = 0;
+        mEIntegral = 0;
+    }
+    
     /**
      * The PID controller must execute the 'tick' loop periodically in order
      * to measure the integral and differential components of the error
@@ -148,43 +151,44 @@ public class PIDController implements IServo {
      * a simulation tick loop in order to correctly control a system using the
      * PID simulator.
      * @param dt The amount of time elapsed since the last simulation loop.
+     * @param aCurrentValue The current value of the PID controller.
      */
-    public void tick(final double dt) {
+    public void tick(final double dt, final double aCurrentValue, String aDebugId) {
 
-        double actualPosition = mSensor.getValue();
+        double actualPosition = aCurrentValue;
 
-        double e = mSetpoint - actualPosition;
+        double e = actualPosition - mSetpoint;
 
         double up = e * mKp;
 
+        double eDifferential = (mELast - e) / dt;
+
+        double ui = mEIntegral * mKi;
+        double ud = eDifferential * mKd;
+
+        double output = up + ui + ud;
+        mLogger.log(Level.INFO, aDebugId + " p = " + mKp + " i = " + mKi + " d = " + mKd);
+        mLogger.log(Level.INFO, aDebugId + " : error : " + e + " output : " + output);
+        
         // If we're already fully saturated
         // at the output based on the proportional
         // control, don't bother with the integral
         // or differential components.  This prevents
         // the problem commonly known as "integral wind-up".
-        if (e >= mMaxError) {
-            mController.setPosition(mMaxError * mKp);
-            mEIntegral = 0;
+        if (output >= mMaxOutput) {
+            mLogger.log(Level.INFO, aDebugId + " : max output");
+            mController.setPosition(mMaxOutput);
         }
-        else if (e <= mMinError) {
-            mController.setPosition(mMinError * mKp);
-            mEIntegral = 0;
+        else if (output <= mMinOutput) {
+            mLogger.log(Level.INFO, aDebugId + " : min output");
+            mController.setPosition(mMinOutput);
         }
         else {
             // In the intermediate range, apply the
             // integral and differential also.
             // It is in this range that we begin to wind up the integral
             // component.
-
-            double eDifferential = mELast - e;
-
-            double ui = mEIntegral * mKi;
-            double ud = eDifferential * mKd;
-
-            double output = up + ui + ud;
-
             mController.setPosition(output);
-
             mEIntegral += (dt * e);
         }
 
@@ -215,7 +219,7 @@ public class PIDController implements IServo {
         mKi = aKi;
         mKd = aKd;
         mEIntegral = 0;
-        mMinError = aMinOutput;
-        mMaxError = aMaxOutput;
+        mMinOutput = aMinOutput;
+        mMaxOutput = aMaxOutput;
     }
 }

@@ -34,18 +34,18 @@ import org.ensor.robots.network.server.BioteSocket;
  * @author jona
  */
 public class DifferentialDriveServo {
+    private static Logger mLogger = Logger.getLogger(PathServo.class.getName());
 
         // Differential drive model.
     private final Model mDifferentialDriveModel;
     private final IServo mRight;
     private final IServo mLeft;
     private double mSpeed;
-    private double mAngle;
+    private double mTurnRate;
     private double mMaxVel;
     
     private final SpeedControl mSpeedControl;
-    private final AngleControl mAngleControl;
-    private double mCurrentAngle;
+    private final TurnRateControl mTurnRateControl;
     
     private double mLeftSpeed;
     private double mRightSpeed;
@@ -54,7 +54,7 @@ public class DifferentialDriveServo {
     public double getRightSpeed() { return mRightSpeed; }
     
     class SpeedControl implements IServo {
-        public void setPosition(double aPosition) {
+        public void setPosition(final double aPosition) {
             mSpeed = aPosition;
         }
 
@@ -62,12 +62,9 @@ public class DifferentialDriveServo {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
-    class AngleControl implements IServo {
-        public void setPosition(double aPosition) {
-            mAngle = aPosition;
-            double twopi = Math.PI * 2;
-            while (mAngle > twopi) mAngle -= twopi;
-            while (mAngle < 0) mAngle += twopi;
+    class TurnRateControl implements IServo {
+        public void setPosition(final double aPosition) {
+            mTurnRate = aPosition;
         }
 
         public void setPID(double P, double I, double D, double aMinError, double aMaxError) {
@@ -86,7 +83,7 @@ public class DifferentialDriveServo {
         mDifferentialDriveModel = aDifferentialDriveModel;
         mMaxVel = aMaxVel;
         mSpeedControl = new SpeedControl();
-        mAngleControl = new AngleControl();
+        mTurnRateControl = new TurnRateControl();
     }
     public void setMaxMovementSpeed(double aMaxMovementSpeed) {
         mMaxVel = aMaxMovementSpeed;
@@ -98,75 +95,53 @@ public class DifferentialDriveServo {
         return mSpeedControl;
     }
     public IServo getAngleControl() {
-        return mAngleControl;
-    }
-    
-    public void setAngle(double aCurrentAngle) {
-        mCurrentAngle = aCurrentAngle;
-        double twopi = Math.PI * 2;
-        while (mCurrentAngle > twopi) mCurrentAngle -= twopi;
-        while (mCurrentAngle < 0) mCurrentAngle += twopi;
+        return mTurnRateControl;
     }
     
     public void tick() {
+        double speed = mSpeed;
+        double turnRate = mTurnRate;
         
-        double dAngle = mCurrentAngle - mAngle;
+        mLogger.log(Level.INFO, "Speed/turn rate: " + speed + ":" + turnRate);
+        
+        double maxTurnRate = mDifferentialDriveModel.turnRateForSpeed(mMaxVel);
+        if (turnRate > maxTurnRate) {
+            turnRate = maxTurnRate;
+        }
+        else if (turnRate < -maxTurnRate) {
+            turnRate = -maxTurnRate;
+        }
+        
+        double maxSpeedForTurnRate =
+                mDifferentialDriveModel.speedDifferenceForTurnRate(turnRate);
 
-        dAngle = Math.atan2(Math.sin(dAngle), Math.cos(dAngle));
-        
-        // The cosine of the difference in angles will tell us
-        // how close the angles are to one another.  From this, we
-        // deduce how quickly to turn.
-        double absoluteTurnRate;
-        double speed;
-        if (dAngle > Math.PI/2) {
-            absoluteTurnRate = mDifferentialDriveModel.turnRateForSpeed(mMaxVel);
-            speed = 0;
-        }
-        else if (dAngle < -Math.PI/2) {
-            absoluteTurnRate = -mDifferentialDriveModel.turnRateForSpeed(mMaxVel);
-            speed = 0;
-        }
-        else {
-            absoluteTurnRate = dAngle / (Math.PI/2) *
-                    mDifferentialDriveModel.turnRateForSpeed(mMaxVel);
-            speed = mSpeed -
-                    mDifferentialDriveModel.
-                            speedDifferenceForTurnRate(absoluteTurnRate);
+        double maxVel = mMaxVel - maxSpeedForTurnRate;
+        if (maxVel <= 0) {
+            maxVel = 0.0;
         }
         
-
         // If this would lead us to travel faster than
         // our desired speed, then we move only at our desired speed.
         // This allows us to continue to turn at a high rate
         // while still allowing correct speed control.
-        if (speed > mSpeed) {
-            speed = mSpeed;
+        if (speed > maxVel) {
+            speed = maxVel;
         }
-        if (speed < 0) {
+        else if (speed < 0) {
             speed = 0;
         }
-        
+
         Model.WheelVelocities wheelVelocities = mDifferentialDriveModel.
                 calculateWheelVelocities(
                         speed,
-                        absoluteTurnRate/1.5
+                        turnRate
                 );
-        
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
-            "dAngle is " + dAngle + " current angle: " + mCurrentAngle + " desired angle " + mAngle);
-        
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
-            "Trying to make speed " + speed + " and turn rate " + absoluteTurnRate);
 
+        
         mRightSpeed = wheelVelocities.getRightVelocity();
         mLeftSpeed = wheelVelocities.getLeftVelocity();
         
-        Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
-            "Velocities : " +
-                    mSpeed + " l/r: " + 
-            mLeftSpeed + " : " +
-            mRightSpeed);
+        mLogger.log(Level.INFO, "Speeds: " + mLeftSpeed + ":" + mRightSpeed);
         
         mLeft.setPosition(mLeftSpeed);
         mRight.setPosition(mRightSpeed);

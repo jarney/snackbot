@@ -107,4 +107,14 @@ public class Vector2
     public double length() {
         return EuclideanMetric.VECTOR2.distance(ZERO, this);
     }
+    
+    /**
+     * Computes the inner product of the two vectors.
+     * @param aOther The vector to multiply by for the inner product.
+     * @return The inner product of this vector and another vector.
+     */
+    public double innerProduct(Vector2 aOther) {
+        return mX * aOther.mX + mY * aOther.mY;
+    }
+    
 }

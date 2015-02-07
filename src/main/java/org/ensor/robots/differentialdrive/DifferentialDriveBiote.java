@@ -36,6 +36,7 @@ import org.ensor.robots.motors.ICurrentMeasurable;
 import org.ensor.robots.motors.IEncoder;
 import org.ensor.robots.motors.IMotor;
 import org.ensor.algorithms.control.pid.IServo;
+import org.ensor.algorithms.control.pid.PIDController;
 import org.ensor.robots.network.server.BioteSocket;
 import org.ensor.robots.os.configuration.Configuration;
 import org.ensor.robots.roboclawdriver.RoboClaw;
@@ -123,6 +124,8 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     
     private Model mSimpleModel;
     private PathServo mPathServo;
+    private PIDController mAngleController;
+    private PIDController mDistanceController;
     private DifferentialDriveServo mDifferentialDrive;
     private WheelSpeedControl mLeftSpeedControl;
     private WheelSpeedControl mRightSpeedControl;
@@ -179,36 +182,36 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             config.setString(CONFIG_LEFT_MOTOR_ID, "roboclaw-0-motor1");
             config.setString(CONFIG_RIGHT_MOTOR_ID, "roboclaw-0-motor0");
             
-            config.setReal(CONFIG_LEFT_ENCODER_TICKS_PER_REVOLUTION, 1200.0);
-            config.setReal(CONFIG_RIGHT_ENCODER_TICKS_PER_REVOLUTION, 1200.0);
+            config.setReal(CONFIG_LEFT_ENCODER_TICKS_PER_REVOLUTION, 1920.0);
+            config.setReal(CONFIG_RIGHT_ENCODER_TICKS_PER_REVOLUTION, 1920.0);
             config.setReal(CONFIG_LEFT_WHEEL_DIAMETER, 0.09);
             config.setReal(CONFIG_RIGHT_WHEEL_DIAMETER, 0.09);
             config.setReal(CONFIG_LEFT_ENCODER_CALIBRATION_TICKS_PER_METER, 0);
             config.setReal(CONFIG_RIGHT_ENCODER_CALIBRATION_TICKS_PER_METER, 0);
             
             config.setReal(CONFIG_WHEEL_DISTANCE, 0.36195);
-            config.setReal(CONFIG_LEFT_WHEEL_MAX_ROTATION_SPEED, 500);
-            config.setReal(CONFIG_RIGHT_WHEEL_MAX_ROTATION_SPEED, 500);
+            config.setReal(CONFIG_LEFT_WHEEL_MAX_ROTATION_SPEED, 350);
+            config.setReal(CONFIG_RIGHT_WHEEL_MAX_ROTATION_SPEED, 350);
             config.setReal(CONFIG_DISTANCE_TOLERANCE, 0.05);
             config.setReal(CONFIG_ANGLE_TOLERANCE, 10);
             config.setReal(CONFIG_DECELERATION_DISTANCE, 0.5);
             config.setReal(CONFIG_LEFT_WHEEL_DIRECTION, 1);
             config.setReal(CONFIG_RIGHT_WHEEL_DIRECTION, 1);
             
-            config.setReal(CONFIG_LEFT_PID_P, 1.0);
-            config.setReal(CONFIG_LEFT_PID_I, 0.0);
+            config.setReal(CONFIG_LEFT_PID_P, 32);
+            config.setReal(CONFIG_LEFT_PID_I, 8);
             config.setReal(CONFIG_LEFT_PID_D, 0.0);
             
-            config.setReal(CONFIG_RIGHT_PID_P, 1.0);
-            config.setReal(CONFIG_RIGHT_PID_I, 0.0);
+            config.setReal(CONFIG_RIGHT_PID_P, 32);
+            config.setReal(CONFIG_RIGHT_PID_I, 8);
             config.setReal(CONFIG_RIGHT_PID_D, 0.0);
             
             config.setReal(CONFIG_DISTANCE_PID_P, 1.0);
             config.setReal(CONFIG_DISTANCE_PID_I, 0.0);
             config.setReal(CONFIG_DISTANCE_PID_D, 0.0);
             
-            config.setReal(CONFIG_ANGLE_PID_P, 1.0);
-            config.setReal(CONFIG_ANGLE_PID_I, 0.0);
+            config.setReal(CONFIG_ANGLE_PID_P, 3.0);
+            config.setReal(CONFIG_ANGLE_PID_I, 0.003);
             config.setReal(CONFIG_ANGLE_PID_D, 0.0);
             
             mConfiguration.setConfigurationNode(
@@ -385,20 +388,52 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         }
 
         if (mPathServo == null) {
+            
+            mDistanceController =
+                    new PIDController(
+                            mDifferentialDrive.getSpeedControl(),
+                            aConfigDict.getReal(CONFIG_DISTANCE_PID_P),
+                            aConfigDict.getReal(CONFIG_DISTANCE_PID_I),
+                            aConfigDict.getReal(CONFIG_DISTANCE_PID_D),
+                            -maxMovementSpeed,
+                            maxMovementSpeed
+                    );
+
+            mAngleController =
+                    new PIDController(
+                            mDifferentialDrive.getAngleControl(),
+                            aConfigDict.getReal(CONFIG_ANGLE_PID_P),
+                            aConfigDict.getReal(CONFIG_ANGLE_PID_I),
+                            aConfigDict.getReal(CONFIG_ANGLE_PID_D),
+                            -mSimpleModel.turnRateForSpeed(maxMovementSpeed),
+                            mSimpleModel.turnRateForSpeed(maxMovementSpeed)
+                    );
+            
             mPathServo = new PathServo(
-                maxMovementSpeed,
                 distanceTolerance,
                 angleTolerance,
-                decelerationDistance,
-                mDifferentialDrive.getSpeedControl(),
-                mDifferentialDrive.getAngleControl(),
+                mDistanceController,
+                mAngleController,
                 this);
+
         }
         else {
-            mPathServo.setMaxMovementSpeed(maxMovementSpeed);
+            mDistanceController.setPID(
+                aConfigDict.getReal(CONFIG_DISTANCE_PID_P),
+                aConfigDict.getReal(CONFIG_DISTANCE_PID_I),
+                aConfigDict.getReal(CONFIG_DISTANCE_PID_D),
+                -maxMovementSpeed,
+                maxMovementSpeed
+            );
+            mAngleController.setPID(
+                aConfigDict.getReal(CONFIG_ANGLE_PID_P),
+                aConfigDict.getReal(CONFIG_ANGLE_PID_I),
+                aConfigDict.getReal(CONFIG_ANGLE_PID_D),
+                -mSimpleModel.turnRateForSpeed(maxMovementSpeed),
+                mSimpleModel.turnRateForSpeed(maxMovementSpeed)
+            );
             mPathServo.setDistanceTolerance(distanceTolerance);
             mPathServo.setAngleTolerance(angleTolerance);
-            mPathServo.setDecelerationDistance(decelerationDistance);
         }
         mConfigDict = aConfigDict;
         mConfiguration.setConfigurationNode(
@@ -492,9 +527,8 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         mDirection = mDirection + bearing.getTurnRate() * dt / 1000.0;
 
         mPathServo.setCurrentPosition(mPosition, mDirection);
-        mPathServo.tick();
+        mPathServo.tick(dt);
         if (mPathServo.isMoving()) {
-            mDifferentialDrive.setAngle(mDirection);
             mDifferentialDrive.tick();
         }
         
