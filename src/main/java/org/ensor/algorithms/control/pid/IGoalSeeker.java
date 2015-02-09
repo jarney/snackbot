@@ -25,9 +25,18 @@
 package org.ensor.algorithms.control.pid;
 
 /**
+ * This interface represents an object which keeps track of whether it
+ * has reached its goal.  When this object has reached its goal, it will
+ * return 'true'.  This is useful for regulators which seek a particular
+ * goal and indicate that the goal has been reached to within a particular
+ * tolerance.
  *
  * @author jona
  */
-public interface IPIDRegulator {
-
+public interface IGoalSeeker {
+    /**
+     * This method returns true when its goal is reached.
+     * @return True if this object has reached its goal.
+     */
+    boolean goalReached();
 }

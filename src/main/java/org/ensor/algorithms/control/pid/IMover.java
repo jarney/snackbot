@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Jon Arney, Ensor Robotics.
+ * Copyright 2015 Jon Arney, Ensor Robotics.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,17 @@
 
 package org.ensor.algorithms.control.pid;
 
+import org.ensor.algorithms.control.pid.IGoalSeeker;
+import org.ensor.algorithms.control.pid.IRegulator;
+
 /**
- * This class represents a sensor which can measure the input value
- * of some parameter.  This is a crucial component of a control system because
- * it closes the feedback loop between input and output.
+ * This interface represents an object which can control its movement
+ * and indicate when the control is within the tolerances set up for that
+ * movement.  For example, control movement to a particular point and
+ * indicating that the point was reached.
  * @author jona
- * @param <SensorValueType> The type of data returned by this sensor.
- *                          The sensor should return the current value
- *                          of the system parameter(s).  The job of the
- *                          controller is to make sure the actual value
- *                          of the system converges to the setpoint and this
- *                          sensor is used to determine the relative compliance.
  */
-public interface ISensor<SensorValueType> {
-    
-    /**
-     * This method returns the value of the sensor measurement.  The sensor
-     * value should, as accurately as possible, return the actual value of
-     * the system state.  The job of the controller is to ensure that this
-     * sensor value is driven to match the setpoint of the system.
-     * @return The value measured by the sensor for the given parameter.
-     */
-    SensorValueType getValue();
+public interface IMover<SensorType, ControllerType>
+    extends IRegulator<SensorType, ControllerType>, IGoalSeeker {
+
 }

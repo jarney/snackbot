@@ -40,8 +40,9 @@ import java.util.logging.Logger;
  * through a tuning process.
  * @author jona
  */
-public class PIDController implements IServo {
-    private static Logger mLogger = Logger.getLogger(PIDController.class.getName());
+public class PIDController implements IRegulator<Double, Double> {
+    private static final Logger LOG =
+            Logger.getLogger(PIDController.class.getName());
     
     private double mKi;
     private double mKp;
@@ -49,8 +50,7 @@ public class PIDController implements IServo {
     private double mMaxOutput;
     private double mMinOutput;
     private double mSetpoint;
-
-    private final IServo mController;
+    private final String mDebugId;
 
     private double mEIntegral;
     private double mELast;
@@ -61,7 +61,6 @@ public class PIDController implements IServo {
      * control output, and the given PID coefficients.  No limits
      * are established for the minimum and maximum output values
      * apart from the minimum and maximum values for a 'double' value.
-     * @param aController A control output to affect the state of the system.
      * @param aKp A constant to multiply with the error to obtain an output.
      * @param aKi A constant to multiply with the integral of error to obtain
      *            an output.
@@ -69,13 +68,12 @@ public class PIDController implements IServo {
      *            obtain an output.
      */
     public PIDController(
-            final IServo aController,
             final double aKp,
             final double aKi,
             final double aKd
     ) {
-        this(aController, aKp, aKi, aKd,
-                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        this(aKp, aKi, aKd,
+                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, "");
     }
 
     /**
@@ -84,7 +82,6 @@ public class PIDController implements IServo {
      * control output, and the given PID coefficients.  The minimum
      * and maximum range of the output is also given in order to allow
      * limiting the output to prevent damage to the system.
-     * @param aController A control output to affect the state of the system.
      * @param aKp A constant to multiply with the error to obtain an output.
      * @param aKi A constant to multiply with the integral of error to obtain
      *            an output.
@@ -92,21 +89,22 @@ public class PIDController implements IServo {
      *            obtain an output.
      * @param aMinOutput The minimum allowed output.
      * @param aMaxOutput The maximum allowed output.
+     * @param aDebugId The ID of the controller for debug purposes.
      */
     public PIDController(
-            final IServo aController,
             final double aKp,
             final double aKi,
             final double aKd,
             final double aMinOutput,
-            final double aMaxOutput
+            final double aMaxOutput,
+            final String aDebugId
     ) {
-        mController =  aController;
         mKp = aKp;
         mKi = aKi;
         mKd = aKd;
         mMinOutput = aMinOutput;
         mMaxOutput = aMaxOutput;
+        mDebugId = aDebugId;
     }
 
     /**
@@ -139,6 +137,13 @@ public class PIDController implements IServo {
         return mKd;
     }
 
+    /**
+     * This method is used to reset the internal state
+     * of the PID controller.  This is useful for resetting any
+     * integral windup which may have accumulated during a time when
+     * the 'tick' method was not called (for instance if the control of
+     * this controller is suspended for any length of time).
+     */
     public void reset() {
         mELast = 0;
         mEIntegral = 0;
@@ -151,11 +156,13 @@ public class PIDController implements IServo {
      * a simulation tick loop in order to correctly control a system using the
      * PID simulator.
      * @param dt The amount of time elapsed since the last simulation loop.
-     * @param aCurrentValue The current value of the PID controller.
      */
-    public void tick(final double dt, final double aCurrentValue, String aDebugId) {
+    public void tick(
+            final double dt,
+            final ISensor<Double> aSensor,
+            final IController<Double> aController) {
 
-        double actualPosition = aCurrentValue;
+        double actualPosition = aSensor.getValue();
 
         double e = actualPosition - mSetpoint;
 
@@ -167,8 +174,8 @@ public class PIDController implements IServo {
         double ud = eDifferential * mKd;
 
         double output = up + ui + ud;
-        mLogger.log(Level.INFO, aDebugId + " p = " + mKp + " i = " + mKi + " d = " + mKd);
-        mLogger.log(Level.INFO, aDebugId + " : error : " + e + " output : " + output);
+        LOG.log(Level.INFO, mDebugId + " p = " + mKp + " i = " + mKi + " d = " + mKd);
+        LOG.log(Level.INFO, mDebugId + " : error : " + e + " output : " + output);
         
         // If we're already fully saturated
         // at the output based on the proportional
@@ -176,24 +183,23 @@ public class PIDController implements IServo {
         // or differential components.  This prevents
         // the problem commonly known as "integral wind-up".
         if (output >= mMaxOutput) {
-            mLogger.log(Level.INFO, aDebugId + " : max output");
-            mController.setPosition(mMaxOutput);
+            LOG.log(Level.INFO, mDebugId + " : max output");
+            aController.setOutput(mMaxOutput);
         }
         else if (output <= mMinOutput) {
-            mLogger.log(Level.INFO, aDebugId + " : min output");
-            mController.setPosition(mMinOutput);
+            LOG.log(Level.INFO, mDebugId + " : min output");
+            aController.setOutput(mMinOutput);
         }
         else {
             // In the intermediate range, apply the
             // integral and differential also.
             // It is in this range that we begin to wind up the integral
             // component.
-            mController.setPosition(output);
+            aController.setOutput(output);
             mEIntegral += (dt * e);
         }
 
         mELast = e;
-
     }
 
     /**
@@ -222,4 +228,5 @@ public class PIDController implements IServo {
         mMinOutput = aMinOutput;
         mMaxOutput = aMaxOutput;
     }
+
 }

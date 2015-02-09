@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Jon Arney, Ensor Robotics.
+ * Copyright 2015 Jon Arney, Ensor Robotics.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.differentialdrive;
+package org.ensor.algorithms.control.pid;
 
 /**
  *
  * @author jona
  */
-public class EncoderSpeedSensor {
-
+public interface IController<T> {
+    void setOutput(T aT);
 }

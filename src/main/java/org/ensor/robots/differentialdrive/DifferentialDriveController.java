@@ -26,6 +26,7 @@ package org.ensor.robots.differentialdrive;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ensor.algorithms.control.pid.IController;
 import org.ensor.algorithms.control.pid.IServo;
 import org.ensor.robots.network.server.BioteSocket;
 
@@ -33,47 +34,22 @@ import org.ensor.robots.network.server.BioteSocket;
  *
  * @author jona
  */
-public class DifferentialDriveServo {
-    private static Logger mLogger = Logger.getLogger(PathServo.class.getName());
+public class DifferentialDriveController implements IController<SpeedAndTurnRate> {
+    private static Logger LOG = Logger.getLogger(DifferentialDriveController.class.getName());
 
         // Differential drive model.
     private final Model mDifferentialDriveModel;
     private final IServo mRight;
     private final IServo mLeft;
-    private double mSpeed;
-    private double mTurnRate;
     private double mMaxVel;
-    
-    private final SpeedControl mSpeedControl;
-    private final TurnRateControl mTurnRateControl;
     
     private double mLeftSpeed;
     private double mRightSpeed;
     
     public double getLeftSpeed() { return mLeftSpeed; }
     public double getRightSpeed() { return mRightSpeed; }
-    
-    class SpeedControl implements IServo {
-        public void setPosition(final double aPosition) {
-            mSpeed = aPosition;
-        }
 
-        public void setPID(double P, double I, double D, double aMinError, double aMaxError) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-    }
-    class TurnRateControl implements IServo {
-        public void setPosition(final double aPosition) {
-            mTurnRate = aPosition;
-        }
-
-        public void setPID(double P, double I, double D, double aMinError, double aMaxError) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-        
-    }
-    
-    public DifferentialDriveServo(
+    public DifferentialDriveController(
             final Model aDifferentialDriveModel,
             final double aMaxVel,
             final IServo aLeft,
@@ -82,8 +58,6 @@ public class DifferentialDriveServo {
         mRight = aRight;
         mDifferentialDriveModel = aDifferentialDriveModel;
         mMaxVel = aMaxVel;
-        mSpeedControl = new SpeedControl();
-        mTurnRateControl = new TurnRateControl();
     }
     public void setMaxMovementSpeed(double aMaxMovementSpeed) {
         mMaxVel = aMaxMovementSpeed;
@@ -91,18 +65,12 @@ public class DifferentialDriveServo {
     public double getMaxMovementSpeed() {
         return mMaxVel;
     }
-    public IServo getSpeedControl() {
-        return mSpeedControl;
-    }
-    public IServo getAngleControl() {
-        return mTurnRateControl;
-    }
     
-    public void tick() {
-        double speed = mSpeed;
-        double turnRate = mTurnRate;
+    public void setOutput(SpeedAndTurnRate aT) {
+        double speed = aT.getVelocity();
+        double turnRate = aT.getTurnRate();
         
-        mLogger.log(Level.INFO, "Speed/turn rate: " + speed + ":" + turnRate);
+        LOG.log(Level.INFO, "Speed/turn rate: " + speed + ":" + turnRate);
         
         double maxTurnRate = mDifferentialDriveModel.turnRateForSpeed(mMaxVel);
         if (turnRate > maxTurnRate) {
@@ -131,7 +99,7 @@ public class DifferentialDriveServo {
             speed = 0;
         }
 
-        Model.WheelVelocities wheelVelocities = mDifferentialDriveModel.
+        WheelVelocities wheelVelocities = mDifferentialDriveModel.
                 calculateWheelVelocities(
                         speed,
                         turnRate
@@ -141,7 +109,7 @@ public class DifferentialDriveServo {
         mRightSpeed = wheelVelocities.getRightVelocity();
         mLeftSpeed = wheelVelocities.getLeftVelocity();
         
-        mLogger.log(Level.INFO, "Speeds: " + mLeftSpeed + ":" + mRightSpeed);
+        LOG.log(Level.INFO, "Speeds: " + mLeftSpeed + ":" + mRightSpeed);
         
         mLeft.setPosition(mLeftSpeed);
         mRight.setPosition(mRightSpeed);

@@ -27,8 +27,12 @@ package org.ensor.robots.differentialdrive;
 import org.ensor.algorithms.containers.RingBuffer;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ensor.algorithms.control.pid.IMover;
+import org.ensor.algorithms.control.pid.ISensor;
 import org.ensor.data.atom.DictionaryAtom;
 import org.ensor.math.geometry.Vector2;
 import org.ensor.robots.os.api.ComponentManager;
@@ -107,52 +111,92 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     private long mLeftPosition;
     private long mRightPosition;
     private long mLastUpdateTime;
-    private Vector2 mPosition;
-    private double mDirection;
-
-    private long mBioteId;
     
-    private double mLeftEncoderUnitsPerMeter;
-    private double mRightEncoderUnitsPerMeter;
+    private long mBioteId;
+
+    private WheelSpeedSensor mLeftSpeedSensor;
+    private WheelSpeedSensor mRightSpeedSensor;
+    
+    private WheelSpeedControl mLeftSpeedControl;
+    private WheelSpeedControl mRightSpeedControl;
+    
+    private Odometry mOdometry;
     private double mLeftWheelDirection;
     private double mRightWheelDirection;
+    
     private static final Event TICK_EVENT = new Event("Mover-Tick");
     private static final int TICK_DURATION_MILLISECONDS = 100;
+    
     private RoboClaw mRoboClaw;
     private ICurrentMeasurable mM1;
     private ICurrentMeasurable mM2;
     
     private Model mSimpleModel;
-    private PathServo mPathServo;
+    private IMover<Position, SpeedAndTurnRate> mPathServo;
     private PIDController mAngleController;
     private PIDController mDistanceController;
-    private DifferentialDriveServo mDifferentialDrive;
-    private WheelSpeedControl mLeftSpeedControl;
-    private WheelSpeedControl mRightSpeedControl;
-    private String leftMotorId;
-    private String rightMotorId;
+    private DifferentialDriveController mDifferentialDrive;
+    private double mDistanceTolerance;
+    private double mAngleTolerance;
     private final RingBuffer<DictionaryAtom> mLoggingRingBuffer;
 
     private double mLeftMaxSpeed;
     private double mRightMaxSpeed;
     
+    class WheelSpeedSensor implements ISensor<Double> {
+        private double mEncoderUnitsPerMeter;
+        private double mSpeedCounts;
+        
+        public WheelSpeedSensor(final double aEncoderUnitsPerMeter) {
+            mEncoderUnitsPerMeter = aEncoderUnitsPerMeter;
+        }
+        public double getEncoderUnitsPerMeter() {
+            return mEncoderUnitsPerMeter;
+        }
+        
+        public void setEncoderUnitsPerMeter(
+                final double aEncoderUnitsPerMeter
+        ) {
+            mEncoderUnitsPerMeter = aEncoderUnitsPerMeter;
+        }
+        
+        
+        public void setSpeedCounts(final double aSpeedCounts) {
+            mSpeedCounts = aSpeedCounts;
+        }
+        
+        public Double getValue() {
+            return mSpeedCounts / mEncoderUnitsPerMeter;
+        }
+        
+    }
+    
     class WheelSpeedControl implements IServo {
-        private final double mPulsesPerMeter;
+        private double mEncoderUnitsPerMeter;
         private final IServo mSpeedControl;
         private final String mLogPrefix;
         
         public WheelSpeedControl(
-                final double aPulsesPerMeter,
+                final double aEncoderUnitsPerMeter,
                 final IServo aSpeedControl,
                 final String aLogPrefix) {
             mSpeedControl = aSpeedControl;
-            mPulsesPerMeter = aPulsesPerMeter;
+            mEncoderUnitsPerMeter = aEncoderUnitsPerMeter;
             mLogPrefix = aLogPrefix;
         }
         
+        public double getEncoderUnitsPerMeter() {
+            return mEncoderUnitsPerMeter;
+        }
+        
+        public void setPulsesPerMeter(
+                final double aEncoderUnitsPerMeter) {
+            mEncoderUnitsPerMeter = aEncoderUnitsPerMeter;
+        }
+        
         public void setPosition(double aPosition) {
-            mSpeedControl.setPosition(aPosition * mPulsesPerMeter);
-            long spd = (long) (aPosition * mPulsesPerMeter);
+            mSpeedControl.setPosition(aPosition * mEncoderUnitsPerMeter);
+            long spd = (long) (aPosition * mEncoderUnitsPerMeter);
             Logger.getLogger(BioteSocket.class.getName()).log(
                     Level.INFO,
                     mLogPrefix + " = " + aPosition + ":" + spd);
@@ -282,8 +326,6 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         
         readConfiguration(mConfigDict);
 
-        mPosition = new Vector2(0, 0);
-        mDirection = 0;
         mBioteId = 0;
         
     }
@@ -291,12 +333,12 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     private void readConfiguration(DictionaryAtom aConfigDict) {
         // Wheel distance (in meters)
         
-        mLeftEncoderUnitsPerMeter =
+        double leftEncoderUnitsPerMeter =
                 aConfigDict.getReal(CONFIG_LEFT_ENCODER_TICKS_PER_REVOLUTION) /
                 (aConfigDict.getReal(CONFIG_LEFT_WHEEL_DIAMETER) * Math.PI) + 
                 aConfigDict.getReal(CONFIG_LEFT_ENCODER_CALIBRATION_TICKS_PER_METER);
         
-        mRightEncoderUnitsPerMeter =
+        double rightEncoderUnitsPerMeter =
                 aConfigDict.getReal(CONFIG_RIGHT_ENCODER_TICKS_PER_REVOLUTION) /
                 (aConfigDict.getReal(CONFIG_RIGHT_WHEEL_DIAMETER) * Math.PI) + 
                 aConfigDict.getReal(CONFIG_RIGHT_ENCODER_CALIBRATION_TICKS_PER_METER);
@@ -313,15 +355,16 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         double maxMovementSpeed = (mLeftMaxSpeed + mRightMaxSpeed)/2;
         
         double wheelDistance = aConfigDict.getReal(CONFIG_WHEEL_DISTANCE);
-        double distanceTolerance = aConfigDict.getReal(CONFIG_DISTANCE_TOLERANCE);
-        double angleTolerance = aConfigDict.getReal(CONFIG_ANGLE_TOLERANCE)
+        mDistanceTolerance = aConfigDict.getReal(CONFIG_DISTANCE_TOLERANCE);
+        mAngleTolerance = aConfigDict.getReal(CONFIG_ANGLE_TOLERANCE)
                 * Math.PI * 2 / 360.0;
         double decelerationDistance = aConfigDict.getReal(CONFIG_DECELERATION_DISTANCE);
 
         mLeftWheelDirection = aConfigDict.getReal(CONFIG_LEFT_WHEEL_DIRECTION);
         mRightWheelDirection = aConfigDict.getReal(CONFIG_RIGHT_WHEEL_DIRECTION);
-        mLeftEncoderUnitsPerMeter *= mLeftWheelDirection;
-        mRightEncoderUnitsPerMeter *= mRightWheelDirection;
+        
+        leftEncoderUnitsPerMeter *= mLeftWheelDirection;
+        rightEncoderUnitsPerMeter *= mRightWheelDirection;
         
         String leftMotorId = aConfigDict.getString(CONFIG_LEFT_MOTOR_ID);
         String rightMotorId = aConfigDict.getString(CONFIG_RIGHT_MOTOR_ID);
@@ -364,11 +407,14 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         mRightEncoder = ComponentManager.
                 getComponent(rightMotorId + "-encoder", IEncoder.class);
         
-        mLeftSpeedControl = new WheelSpeedControl(mLeftEncoderUnitsPerMeter,
+        mLeftSpeedControl = new WheelSpeedControl(leftEncoderUnitsPerMeter,
                 leftSpeedControl, "left");
-        mRightSpeedControl = new WheelSpeedControl(mRightEncoderUnitsPerMeter,
+        mRightSpeedControl = new WheelSpeedControl(rightEncoderUnitsPerMeter,
                 rightSpeedControl, "right");
 
+        mLeftSpeedSensor = new WheelSpeedSensor(leftEncoderUnitsPerMeter);
+        mRightSpeedSensor = new WheelSpeedSensor(rightEncoderUnitsPerMeter);
+        
         if (mSimpleModel == null) {
             mSimpleModel = new Model(wheelDistance);
         }
@@ -376,8 +422,16 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             mSimpleModel.setWheelDistance(wheelDistance);
         }
 
+        mOdometry = new Odometry(
+                mSimpleModel,
+                mLeftSpeedSensor,
+                mRightSpeedSensor
+        );
+        
+
+        
         if (mDifferentialDrive == null) {
-            mDifferentialDrive = new DifferentialDriveServo(
+            mDifferentialDrive = new DifferentialDriveController(
                     mSimpleModel,
                     maxMovementSpeed,
                     mLeftSpeedControl,
@@ -391,31 +445,24 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             
             mDistanceController =
                     new PIDController(
-                            mDifferentialDrive.getSpeedControl(),
                             aConfigDict.getReal(CONFIG_DISTANCE_PID_P),
                             aConfigDict.getReal(CONFIG_DISTANCE_PID_I),
                             aConfigDict.getReal(CONFIG_DISTANCE_PID_D),
                             -maxMovementSpeed,
-                            maxMovementSpeed
+                            maxMovementSpeed,
+                            "distance"
                     );
 
             mAngleController =
                     new PIDController(
-                            mDifferentialDrive.getAngleControl(),
                             aConfigDict.getReal(CONFIG_ANGLE_PID_P),
                             aConfigDict.getReal(CONFIG_ANGLE_PID_I),
                             aConfigDict.getReal(CONFIG_ANGLE_PID_D),
                             -mSimpleModel.turnRateForSpeed(maxMovementSpeed),
-                            mSimpleModel.turnRateForSpeed(maxMovementSpeed)
+                            mSimpleModel.turnRateForSpeed(maxMovementSpeed),
+                            "angle"
                     );
             
-            mPathServo = new PathServo(
-                distanceTolerance,
-                angleTolerance,
-                mDistanceController,
-                mAngleController,
-                this);
-
         }
         else {
             mDistanceController.setPID(
@@ -432,8 +479,6 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
                 -mSimpleModel.turnRateForSpeed(maxMovementSpeed),
                 mSimpleModel.turnRateForSpeed(maxMovementSpeed)
             );
-            mPathServo.setDistanceTolerance(distanceTolerance);
-            mPathServo.setAngleTolerance(angleTolerance);
         }
         mConfigDict = aConfigDict;
         mConfiguration.setConfigurationNode(
@@ -471,10 +516,13 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     }
     
     private void onReset(Event msg) {
-        mPosition = new Vector2(msg.getData().getReal("x"),
-                msg.getData().getReal("y"));
-        mDirection = msg.getData().getReal("theta");
-        mPathServo.abort();
+        mOdometry.setPosition(new Vector2(
+                msg.getData().getReal("x"),
+                msg.getData().getReal("y"))
+        );
+        mOdometry.setVelocity(Vector2.ZERO);
+        mOdometry.setDirection(msg.getData().getReal("theta"));
+        mPathServo = null;
         mRightSpeedControl.setPosition((long) 0);
         mLeftSpeedControl.setPosition((long) 0);
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
@@ -482,9 +530,10 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     }
     
     private void onSetSpeeds(Event msg) {
-        mPosition = new Vector2(0.0, 0.0);
-        mDirection = 0;
-        mPathServo.abort();
+        mOdometry.setPosition(Vector2.ZERO);
+        mOdometry.setVelocity(Vector2.ZERO);
+        mOdometry.setDirection(0);
+        mPathServo = null;
         double right = msg.getData().getReal("rightSpeed");
         double left = msg.getData().getReal("leftSpeed");
         mRightSpeedControl.setPosition(right);
@@ -496,7 +545,9 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
     private void onTick(Event msg) {
         
         long now = System.currentTimeMillis();
-        long dt = (now - mLastUpdateTime);
+        long dtms = (now - mLastUpdateTime);
+        
+        double dt = ((double) dtms) / (double)1000.0;
         
         long newRightPosition = mRightEncoder.getEncoderPosition();
         long newLeftPosition = mLeftEncoder.getEncoderPosition();
@@ -510,27 +561,19 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         
 
         // Left/right speed in ticks/sec.
-        double leftSpeedCounts = (newLeftPosition - mLeftPosition) * 1000.0 / (double)dt;
-        double rightSpeedCounts = (newRightPosition - mRightPosition) * 1000.0 / (double)dt;
-        
-        double leftSpeed = leftSpeedCounts / mLeftEncoderUnitsPerMeter;
-        double rightSpeed = rightSpeedCounts / mRightEncoderUnitsPerMeter;
-        
-        Model.WheelVelocities wv = new Model.WheelVelocities(leftSpeed, rightSpeed);
-        Model.SpeedAndTurnRate bearing = mSimpleModel.calculateBearing(wv);
-        
-        Vector2 distanceTraveled = new Vector2(
-                bearing.getVelocity() * dt / 1000.0 * Math.cos(mDirection),
-                bearing.getVelocity() * dt / 1000.0 * Math.sin(mDirection)
-        );
-        mPosition = mPosition.add(distanceTraveled);
-        mDirection = mDirection + bearing.getTurnRate() * dt / 1000.0;
+        mLeftSpeedSensor.setSpeedCounts(((double) (newLeftPosition - mLeftPosition)) / dt);
+        mRightSpeedSensor.setSpeedCounts(((double) (newRightPosition - mRightPosition)) / dt);
 
-        mPathServo.setCurrentPosition(mPosition, mDirection);
-        mPathServo.tick(dt);
-        if (mPathServo.isMoving()) {
-            mDifferentialDrive.tick();
+        mOdometry.tick(dt);
+        
+        if (mPathServo != null) {
+            mPathServo.tick(dt, mOdometry.getPositionSensor(), mDifferentialDrive);
+            if (mPathServo.goalReached()) {
+                reached();
+                mPathServo = null;
+            }
         }
+        
         
         DictionaryAtom logData = DictionaryAtom.newAtom();
         logData.setInt("time", now);
@@ -540,11 +583,14 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         logData.setReal("temperature", temperature);
         logData.setReal("current_m1", Im1);
         logData.setReal("current_m2", Im2);
-        logData.setReal("leftSpeed", leftSpeed);
-        logData.setReal("rightSpeed", rightSpeed);
+        logData.setReal("leftSpeed", mLeftSpeedSensor.getValue());
+        logData.setReal("rightSpeed", mRightSpeedSensor.getValue());
         logData.setReal("leftSpeedSetpoint", mDifferentialDrive.getLeftSpeed());
         logData.setReal("rightSpeedSetpoint", mDifferentialDrive.getRightSpeed());
         mLoggingRingBuffer.add(logData);
+
+        
+        Position p = mOdometry.getPositionSensor().getValue();
         
         if (errorStatus.length() != 0) {
             for (DictionaryAtom d : mLoggingRingBuffer) {
@@ -571,37 +617,31 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
             
             Logger.getLogger(BioteSocket.class.getName()).log(
                     Level.INFO,
-                    "bearing: v = " + bearing.getVelocity() + " d = " + mDirection);
-        
-            Logger.getLogger(BioteSocket.class.getName()).log(
-                    Level.INFO,
-                    "leftSpeed = " + leftSpeedCounts + " rightSpeed = " + rightSpeedCounts + 
-                    " leftSpeed = " + leftSpeed + " rightSpeed = " + rightSpeed);
-        
+                    "bearing: v = " + mOdometry.getPositionSensor().getValue().getVelocity().length() + " d = " + p.getAngle());
         
             Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
                     "Distance traveled " +
-                            distanceTraveled.getX() + "," + distanceTraveled.getY());
+                            p.getVelocity().getX() + "," + p.getVelocity().getY());
         
             Logger.getLogger(BioteSocket.class.getName()).log(
                     Level.INFO,
-                    "dt = " + dt +
+                    "dt = " + dtms +
                     " r = " + newRightPosition +
                     " l = " + newLeftPosition +
-                    " x = " + mPosition.getX() +
-                    " y = " + mPosition.getY() +
-                    " theta = " + mDirection);
+                    " x = " + p.getPosition().getX() +
+                    " y = " + p.getPosition().getY() +
+                    " theta = " + p.getAngle());
             if (mBioteId != 0) {
                 
                 DictionaryAtom dict = DictionaryAtom.newAtom();
                 dict.setString("eventName", "position-update");
                 dict.setInt("time", System.currentTimeMillis());
-                dict.setReal("x", mPosition.getX());
-                dict.setReal("y", mPosition.getY());
-                dict.setReal("angle", mDirection);
-                dict.setReal("v", bearing.getVelocity());
-                dict.setReal("leftSpeed", leftSpeed);
-                dict.setReal("rightSpeed", rightSpeed);
+                dict.setReal("x", p.getPosition().getX());
+                dict.setReal("y", p.getPosition().getY());
+                dict.setReal("angle", p.getAngle());
+                dict.setReal("v", mOdometry.getPositionSensor().getValue().getAngle());
+                dict.setReal("leftSpeed", mLeftSpeedSensor.getValue());
+                dict.setReal("rightSpeed", mRightSpeedSensor.getValue());
                 Event positionUpdate = new Event("Net-Out", dict);
                 sendStimulus(mBioteId, positionUpdate);
                 
@@ -640,7 +680,23 @@ public class DifferentialDriveBiote extends Biote implements IGoalReachedListene
         double theta = aEvent.getData().getReal("theta");
 
         Vector2 dest = new Vector2(x, y);
-        mPathServo.setDestination(dest, theta);
+
+        List<IMover<Position, SpeedAndTurnRate>> list =
+                new ArrayList<IMover<Position, SpeedAndTurnRate>>();
+        
+        MoverToPoint mtp = new MoverToPoint(
+            dest, mDistanceTolerance,
+            mDistanceController,
+            mAngleController);
+        list.add(mtp);
+
+        MoverToAngle mta = new MoverToAngle(
+                theta, mAngleTolerance,
+                mDistanceController,
+                mAngleController
+        );
+        list.add(mta);
+        mPathServo = new MoverComposite(list);
         
         Logger.getLogger(BioteSocket.class.getName()).log(Level.INFO,
                 "Setting destination point " + x + "," + y + " theta " + theta);

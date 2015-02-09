@@ -37,17 +37,16 @@ import org.ensor.math.geometry.Vector2;
  */
 public class Odometry {
 
-    private Vector2 mCurrentPosition;
-    private double mDirection;
-
+    private final PositionSensor mPositionSensor;
+    private final Position mPosition;
+    
     private final Model mDifferentialDriveModel;
-    private final ISensor mLeftSpeed;
-    private final ISensor mRightSpeed;
-    private final ISensor mAngleSensor;
+    private final ISensor<Double> mLeftSpeed;
+    private final ISensor<Double> mRightSpeed;
 
-    class AngleSensor implements ISensor {
-        public double getValue() {
-            return Math.atan2(Math.sin(mDirection), Math.cos(mDirection));
+    class PositionSensor implements ISensor<Position> {
+        public Position getValue() {
+            return mPosition;
         }
     }
     /**
@@ -65,13 +64,14 @@ public class Odometry {
      */
     public Odometry(
             final Model aDifferentialDriveModel,
-            final ISensor aLeftSpeedSensor,
-            final ISensor aRightSpeedSensor
+            final ISensor<Double> aLeftSpeedSensor,
+            final ISensor<Double> aRightSpeedSensor
         ) {
         mDifferentialDriveModel = aDifferentialDriveModel;
         mLeftSpeed = aLeftSpeedSensor;
         mRightSpeed = aRightSpeedSensor;
-        mAngleSensor = new AngleSensor();
+        mPosition = new Position(Vector2.ZERO, Vector2.ZERO, 0.0);
+        mPositionSensor = new PositionSensor();
     }
 
     /**
@@ -82,17 +82,7 @@ public class Odometry {
      * @param aDirection New direction.
      */
     public void setDirection(final double aDirection) {
-        mDirection = aDirection;
-    }
-    /**
-     * This method returns the direction calculated by odometry.  The direction
-     * is measured according to a fixed reference coordinate system
-     * and is always in units of radians.
-     * @return Returns the direction angle (counter-clockwise from (1,0) )
-     *         in radians.
-     */
-    public double getDirection() {
-        return mDirection;
+        mPosition.setDirection(aDirection);
     }
     /**
      * This method overrides the position calculated by odometry.  This is
@@ -101,8 +91,19 @@ public class Odometry {
      * @param aPosition New position.
      */
     public void setPosition(final Vector2 aPosition) {
-        mCurrentPosition = aPosition;
+        mPosition.setPosition(aPosition);
     }
+
+    /**
+     * This method overrides the velocity calculated by odometry.  This
+     * is useful when other measures of the current position yield better
+     * estimates based on other sensors.
+     * @param aVelocity The newly updated velocity estimate.
+     */
+    public void setVelocity(final Vector2 aVelocity) {
+        mPosition.setVelocity(aVelocity);
+    }
+    
     /**
      * This method returns a sensor which can return the current angle
      * based on the odometry calculations.
@@ -110,8 +111,8 @@ public class Odometry {
      *         The angle sensor is suitable for use in a PID controller
      *         because it wraps the angle to be strictly between -PI and PI.
      */
-    public ISensor getAngleSensor() {
-        return mAngleSensor;
+    public ISensor<Position> getPositionSensor() {
+        return mPositionSensor;
     }
     /**
      * This method advances the odometry simulation by the time unit
@@ -122,16 +123,19 @@ public class Odometry {
         double leftSpeed = mLeftSpeed.getValue();
         double rightSpeed = mRightSpeed.getValue();
 
-        Model.SpeedAndTurnRate bearing =
+        SpeedAndTurnRate bearing =
                 mDifferentialDriveModel.calculateBearing(leftSpeed, rightSpeed);
 
-        Vector2 distanceTraveled = new Vector2(
-                bearing.getVelocity() * dt * Math.cos(mDirection),
-                bearing.getVelocity() * dt * Math.sin(mDirection)
+        double direction = mPosition.getAngle();
+        mPosition.setVelocity(
+                new Vector2(
+                    bearing.getVelocity() * Math.cos(direction),
+                    bearing.getVelocity() * Math.sin(direction)
+                )
         );
-        mCurrentPosition = mCurrentPosition.add(distanceTraveled);
-        mDirection = mDirection + bearing.getTurnRate() * dt;
         
-        // Publish position and direction update.
+        Vector2 distanceTraveled = mPosition.getVelocity().multiply(dt);
+        mPosition.setPosition(mPosition.getPosition().add(distanceTraveled));
+        mPosition.setDirection(direction + bearing.getTurnRate() * dt);
     }
 }
