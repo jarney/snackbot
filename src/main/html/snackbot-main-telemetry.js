@@ -40,14 +40,44 @@ function sbTelemetry(snackbot) {
     $( "#move" ).button().click(function( event ) {
             snackbot.send({
                 eventName: "move",
-                x: 1.0,
-                y: 0.0,
-                theta: (3.14/2)
+                movements: [
+                    {t:"point", x:1.0, y:0.0},
+                    {t:"angle", a: 3.14159265/2}
+                ]
             });
-
         });
-    $( "#subscribe" ).button().click(function( event ) {
-        });
+    $("#cw").button().click(function( event ) {
+        snackbot.send({
+                eventName: "move",
+                movements: [
+                    {t:"angle", a: 3.14159265/2},
+                    {t:"point", x:0.0, y:1.0},
+                    {t:"angle", a: 0.0},
+                    {t:"point", x:1.0, y:1.0},
+                    {t:"angle", a: 3*3.14159265/2},
+                    {t:"point", x:1.0, y:0.0},
+                    {t:"angle", a: 3.14159265},
+                    {t:"point", x:0.0, y:0.0},
+                    {t:"angle", a: 0.0}
+                ]
+            });
+    });
+    $("#ccw").button().click(function( event ) {
+        snackbot.send({
+                eventName: "move",
+                movements: [
+                    {t:"angle", a: 0.0},
+                    {t:"point", x:1.0, y:0.0},
+                    {t:"angle", a: 3.14159265/2},
+                    {t:"point", x:1.0, y:1.0},
+                    {t:"angle", a: 3.14159265},
+                    {t:"point", x:0.0, y:1.0},
+                    {t:"angle", a: 3*3.14159265/2},
+                    {t:"point", x:0.0, y:0.0},
+                    {t:"angle", a: 0}
+                ]
+            });
+    });
     $( "#reset" ).button().click(function( event ) {
             snackbot.send({
                 eventName: "reset",

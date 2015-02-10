@@ -76,6 +76,10 @@ public class PIDController implements IRegulator<Double, Double> {
                 Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, "");
     }
 
+    public double getSetpoint() {
+        return mSetpoint;
+    }
+    
     /**
      * The constructor creates a new PID controller
      * based on the given measurement sensor, the given

@@ -93,8 +93,12 @@ function sbConfigure(snackbot) {
     }
     
     snackbot.subscribe("position-update", function(msg) {
-        var lspd = "<p>" + trimString(msg.leftSpeed, 5) + "m/s</p>";
-        var rspd = "<p>" + trimString(msg.rightSpeed, 5) + "m/s</p>";
+        var lspd = "<p>" + trimString(msg.leftSpeed, 5) + "m/s</p><br/>" + 
+                "<p>" + trimString(msg.leftSpeedCounts, 5) + "qpps</p><br/>" +
+                "<p>" + trimString(msg.leftSpeedRPM, 5) + "RPM</p>";
+        var rspd = "<p>" + trimString(msg.rightSpeed, 5) + "m/s</p><br/>" +
+                "<p>" + trimString(msg.rightSpeedCounts, 5) + "qpps</p><br/>" +
+                "<p>" + trimString(msg.rightSpeedRPM, 5) + "RPM</p>";
         $("#leftSpeed2").html(lspd);
         $("#rightSpeed2").html(rspd);
         if ((leftDirection > 0 && msg.leftSpeed < 0) ||

@@ -28,11 +28,16 @@ function sbPIDTuning(snackbot) {
     var leftSetpointList = [];
     var rightActualList = [];
     var leftActualList = [];
+    
+    var angleActualList = [];
+    var angleSetpointList = [];
 
     var currentLeftSpeed = 0;
     var currentRightSpeed = 0;
     var currentLeftSetpoint = 0;
     var currentRightSetpoint = 0;
+    var currentAngle = 0;
+    var currentAngleSetpoint = 0;
 
     var startTime = (new Date()).getTime();
 
@@ -47,6 +52,8 @@ function sbPIDTuning(snackbot) {
         leftSetpointList.push(pt);
         rightActualList.push(pt);
         leftActualList.push(pt);
+        angleActualList.push(pt);
+        angleSetpointList.push(pt);
     }
 
 
@@ -118,6 +125,14 @@ function sbPIDTuning(snackbot) {
             {
             name: 'Right Setpoint',
             data: rightSetpointList
+            },
+            {
+            name: 'Angle',
+            data: angleActualList
+            },
+            {
+            name: 'Angle Setpoint',
+            data: angleSetpointList
             }
     ]
     });
@@ -125,6 +140,8 @@ function sbPIDTuning(snackbot) {
     snackbot.subscribe("position-update", function(msg) {
         currentLeftSpeed = msg.leftSpeed;
         currentRightSpeed = msg.rightSpeed;
+        currentAngle = msg.angle;
+        currentAngleSetpoint = msg.angleSetpoint;
         updateGraph();
     });
 
@@ -168,6 +185,9 @@ function sbPIDTuning(snackbot) {
         chart.series[1].addPoint({x: time, y: currentRightSpeed}, false, true);
         chart.series[2].addPoint({x: time, y: currentLeftSetpoint}, false, true);
         chart.series[3].addPoint({x: time, y: currentRightSetpoint}, false, true);
+        chart.series[4].addPoint({x: time, y: currentAngle}, false, true);
+        chart.series[5].addPoint({x: time, y: currentAngleSetpoint}, false, true);
+        
         chart.redraw();
     }
 

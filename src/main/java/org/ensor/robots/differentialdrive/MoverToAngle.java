@@ -28,10 +28,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ensor.algorithms.control.pid.IController;
 import org.ensor.algorithms.control.pid.IMover;
-import org.ensor.algorithms.control.pid.IRegulator;
 import org.ensor.algorithms.control.pid.ISensor;
 import org.ensor.algorithms.control.pid.PIDController;
-import org.ensor.math.geometry.Vector2;
 import org.ensor.robots.network.server.BioteSocket;
 
 /**
@@ -134,6 +132,8 @@ public class MoverToAngle
         mCurrentAngle = aSensor.getValue().getAngle();
         
         if (goalReached()) {
+            mDistanceController.reset();
+            mAngleController.reset();
             return;
         }
         

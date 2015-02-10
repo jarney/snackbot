@@ -53,6 +53,7 @@ public class MoverToPoint
 
     private double mCurrentAngle;
     private double mDistance;
+    private double mDistanceAlongHeading;
     
     private double mSpeed;
     private double mTurnRate;
@@ -65,7 +66,7 @@ public class MoverToPoint
     
     private final ISensor<Double> mDistanceSensor = new ISensor<Double>() {
         public Double getValue() {
-            return mDistance;
+            return mDistanceAlongHeading;
         }
     };
     private final IController<Double> mSpeedController =
@@ -135,21 +136,65 @@ public class MoverToPoint
         Position pos = aSensor.getValue();
         
         Vector2 currentPosition = pos.getPosition();
-        
-        Vector2 vectorToGoal = mTargetPosition.subtract(currentPosition);
-        mDistance = vectorToGoal.length();
-        if (mDistance != 0) {
-            vectorToGoal.multiply(1 / mDistance);
-        }
+
         mCurrentAngle = pos.getAngle();
+        // Calculate the unit vector along our
+        // current heading.
+        Vector2 currentHeading = new Vector2(
+            Math.cos(mCurrentAngle),
+            Math.sin(mCurrentAngle)
+        );
+        
+        // Calculate the vector from our current position
+        // to the goal position.
+        Vector2 vectorToGoal = mTargetPosition.subtract(currentPosition);
+        
+        // Project the vector to our goal along our current heading.
+        // This is the parameter which will control our speed.  Note that
+        // when we pass the goal, this projection will become negative
+        // allowing us to 'back up' when we've overshot.
+        mDistanceAlongHeading = vectorToGoal.innerProduct(currentHeading);
+        
+        mDistance = vectorToGoal.length();
+        
+        if (mDistance != 0) {
+            vectorToGoal = vectorToGoal.multiply(1 / mDistance);
+        }
 
         if (goalReached()) {
+            mDistanceController.reset();
+            mAngleController.reset();
             return;
         }
 
+        // If we've passed the target and are now moving backwards,
+        // then invert the vector to the goal so that we turn
+        // to 'face' it backwards.
+        if (mDistanceAlongHeading < 0) {
+            vectorToGoal = vectorToGoal.multiply(-1);
+        }
+        
+        
         // This is the desired angle we wish to reach.
-        double desiredAngle = Math.atan2(vectorToGoal.getY(),
+        // All of this nonsense is so that we can find
+        // the closest angle to the one we desire allowing
+        // the angle to wrap appropriately.
+        double desiredAngle = Math.atan2(
+                vectorToGoal.getY(),
                 vectorToGoal.getX());
+        
+        double currentAngleClamped = Math.atan2(
+                Math.sin(mCurrentAngle),
+                Math.cos(mCurrentAngle)
+        );
+        double angleDelta = desiredAngle - currentAngleClamped;
+        if (angleDelta > Math.PI) {
+            angleDelta -= (Math.PI * 2);
+        }
+        if (angleDelta < -Math.PI) {
+            angleDelta += (Math.PI * 2);
+        }
+        desiredAngle = mCurrentAngle + angleDelta;
         
         // The desired distance from the goal is zero, so the PID
         // regulator should always target '0'.

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Jon Arney, Ensor Robotics.
+ * Copyright 2015 Jon Arney, Ensor Robotics.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ package org.ensor.robots.differentialdrive;
  *
  * @author jona
  */
-public interface IGoalReachedListener {
-    void reached();
+public class Controller {
+    public void tick() {
+        
+    }
 }

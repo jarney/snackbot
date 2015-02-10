@@ -63,14 +63,6 @@ public class Module implements IModule {
                 mConfigModule.getConfiguration()
         );
         mgr.createBiote(ddBiote);
-        /*
-        PathFollower pathFollower = new PathFollower(
-                mgr,
-                ddBiote.getBioteId(),
-                mConfigModule.getConfiguration()
-        );
-        mgr.createBiote(pathFollower);
-        */
     }
 
     public void shutdown(IModuleManager aManager) throws Exception {
