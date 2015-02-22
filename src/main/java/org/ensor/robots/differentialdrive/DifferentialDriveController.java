@@ -39,24 +39,15 @@ public class DifferentialDriveController implements IController<SpeedAndTurnRate
 
         // Differential drive model.
     private final Model mDifferentialDriveModel;
-    private final IServo mRight;
-    private final IServo mLeft;
+    private final WheelVelocitiesController mWheelVelocitiesController;
     private double mMaxVel;
     
-    private double mLeftSpeed;
-    private double mRightSpeed;
-    
-    public double getLeftSpeed() { return mLeftSpeed; }
-    public double getRightSpeed() { return mRightSpeed; }
-
     public DifferentialDriveController(
             final Model aDifferentialDriveModel,
-            final double aMaxVel,
-            final IServo aLeft,
-            final IServo aRight) {
-        mLeft = aLeft;
-        mRight = aRight;
+            final WheelVelocitiesController aWheelVelocitiesController,
+            final double aMaxVel) {
         mDifferentialDriveModel = aDifferentialDriveModel;
+        mWheelVelocitiesController = aWheelVelocitiesController;
         mMaxVel = aMaxVel;
     }
     public void setMaxMovementSpeed(double aMaxMovementSpeed) {
@@ -105,14 +96,8 @@ public class DifferentialDriveController implements IController<SpeedAndTurnRate
                         turnRate
                 );
 
+        mWheelVelocitiesController.setOutput(wheelVelocities);
         
-        mRightSpeed = wheelVelocities.getRightVelocity();
-        mLeftSpeed = wheelVelocities.getLeftVelocity();
-        
-        LOG.log(Level.INFO, "Speeds: " + mLeftSpeed + ":" + mRightSpeed);
-        
-        mLeft.setPosition(mLeftSpeed);
-        mRight.setPosition(mRightSpeed);
     }
     
 }

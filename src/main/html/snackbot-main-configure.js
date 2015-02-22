@@ -60,6 +60,8 @@ function sbConfigure(snackbot) {
         $("#configureAnglePIDI").val(cfg.anglePID_I);
         $("#configureAnglePIDD").val(cfg.anglePID_D);
         
+        $("#configureAnglePIDI_R").val(cfg.anglePID_I_RANGE);
+        
         if (cfg.leftWheelDirection > 0) {
             $("#configureLeftDirectionReverse").prop("checked", false);
         }
@@ -172,7 +174,8 @@ function sbConfigure(snackbot) {
             
             anglePID_P: parseFloat($("#configureAnglePIDP").val()),
             anglePID_I: parseFloat($("#configureAnglePIDI").val()),
-            anglePID_D: parseFloat($("#configureAnglePIDD").val())
+            anglePID_D: parseFloat($("#configureAnglePIDD").val()),
+            anglePID_I_RANGE: parseFloat($("#configureAnglePIDI_R").val())
 
         };
         

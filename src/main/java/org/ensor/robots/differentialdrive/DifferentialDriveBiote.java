@@ -98,6 +98,7 @@ public class DifferentialDriveBiote extends Biote {
     public static final String CONFIG_ANGLE_PID_P = "anglePID_P";
     public static final String CONFIG_ANGLE_PID_I = "anglePID_I";
     public static final String CONFIG_ANGLE_PID_D = "anglePID_D";
+    public static final String CONFIG_ANGLE_PID_I_RANGE = "anglePID_I_RANGE";
     
     private final Configuration mConfiguration;
     private DictionaryAtom mConfigDict;
@@ -139,6 +140,7 @@ public class DifferentialDriveBiote extends Biote {
     private PIDController mAngleController;
     private PIDController mDistanceController;
     private DifferentialDriveController mDifferentialDrive;
+    private WheelVelocitiesController mWheelVelocitiesController;
     private double mDistanceTolerance;
     private double mAngleTolerance;
     private final RingBuffer<DictionaryAtom> mLoggingRingBuffer;
@@ -438,14 +440,15 @@ public class DifferentialDriveBiote extends Biote {
                 mRightSpeedSensor
         );
         
-
+        mWheelVelocitiesController = new WheelVelocitiesController(
+                    mLeftSpeedControl,
+                    mRightSpeedControl);
         
         if (mDifferentialDrive == null) {
             mDifferentialDrive = new DifferentialDriveController(
                     mSimpleModel,
-                    maxMovementSpeed,
-                    mLeftSpeedControl,
-                    mRightSpeedControl);
+                    mWheelVelocitiesController,
+                    maxMovementSpeed);
         }
         else {
             mDifferentialDrive.setMaxMovementSpeed(maxMovementSpeed);
@@ -460,6 +463,7 @@ public class DifferentialDriveBiote extends Biote {
                             aConfigDict.getReal(CONFIG_DISTANCE_PID_D),
                             -maxMovementSpeed,
                             maxMovementSpeed,
+                            Double.POSITIVE_INFINITY,
                             "distance"
                     );
 
@@ -470,6 +474,7 @@ public class DifferentialDriveBiote extends Biote {
                             aConfigDict.getReal(CONFIG_ANGLE_PID_D),
                             -mSimpleModel.turnRateForSpeed(maxMovementSpeed),
                             mSimpleModel.turnRateForSpeed(maxMovementSpeed),
+                            aConfigDict.getReal(CONFIG_ANGLE_PID_I_RANGE),
                             "angle"
                     );
             
@@ -480,14 +485,16 @@ public class DifferentialDriveBiote extends Biote {
                 aConfigDict.getReal(CONFIG_DISTANCE_PID_I),
                 aConfigDict.getReal(CONFIG_DISTANCE_PID_D),
                 -maxMovementSpeed,
-                maxMovementSpeed
+                maxMovementSpeed,
+                Double.POSITIVE_INFINITY
             );
             mAngleController.setPID(
                 aConfigDict.getReal(CONFIG_ANGLE_PID_P),
                 aConfigDict.getReal(CONFIG_ANGLE_PID_I),
                 aConfigDict.getReal(CONFIG_ANGLE_PID_D),
                 -mSimpleModel.turnRateForSpeed(maxMovementSpeed),
-                mSimpleModel.turnRateForSpeed(maxMovementSpeed)
+                mSimpleModel.turnRateForSpeed(maxMovementSpeed),
+                aConfigDict.getReal(CONFIG_ANGLE_PID_I_RANGE)
             );
         }
         mConfigDict = aConfigDict;
@@ -587,8 +594,6 @@ public class DifferentialDriveBiote extends Biote {
             if (mPathServo.goalReached()) {
                 reached();
                 mPathServo = null;
-                mRightSpeedControl.setPosition((long) 0);
-                mLeftSpeedControl.setPosition((long) 0);
             }
         }
         
@@ -603,8 +608,8 @@ public class DifferentialDriveBiote extends Biote {
         logData.setReal("current_m2", Im2);
         logData.setReal("leftSpeed", mLeftSpeedSensor.getValue());
         logData.setReal("rightSpeed", mRightSpeedSensor.getValue());
-        logData.setReal("leftSpeedSetpoint", mDifferentialDrive.getLeftSpeed());
-        logData.setReal("rightSpeedSetpoint", mDifferentialDrive.getRightSpeed());
+        logData.setReal("leftSpeedSetpoint", mWheelVelocitiesController.getLeftSpeed());
+        logData.setReal("rightSpeedSetpoint", mWheelVelocitiesController.getRightSpeed());
         mLoggingRingBuffer.add(logData);
 
         
@@ -754,8 +759,8 @@ public class DifferentialDriveBiote extends Biote {
     }
 
     public void reached() {
-        mRightSpeedControl.setPosition((long) 0);
-        mLeftSpeedControl.setPosition((long) 0);
+        WheelVelocities allStop = new WheelVelocities(0, 0);
+        mWheelVelocitiesController.setOutput(allStop);
         Logger.getLogger(BioteSocket.class.getName()).log(
                 Level.INFO, 
                 "Destination Reached");

@@ -26,6 +26,7 @@ package org.ensor.algorithms.control.pid;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ensor.algorithms.containers.RingBuffer;
 
 /**
  * This class represents a PID controller which is responsible
@@ -51,9 +52,11 @@ public class PIDController implements IRegulator<Double, Double> {
     private double mMinOutput;
     private double mSetpoint;
     private final String mDebugId;
+    private double mIntegralRange;
 
     private double mEIntegral;
     private double mELast;
+    private final RingBuffer<Double> mErrorDerivatives;
 
     /**
      * The constructor creates a new PID controller
@@ -73,13 +76,9 @@ public class PIDController implements IRegulator<Double, Double> {
             final double aKd
     ) {
         this(aKp, aKi, aKd,
-                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, "");
+                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, "");
     }
 
-    public double getSetpoint() {
-        return mSetpoint;
-    }
-    
     /**
      * The constructor creates a new PID controller
      * based on the given measurement sensor, the given
@@ -101,6 +100,7 @@ public class PIDController implements IRegulator<Double, Double> {
             final double aKd,
             final double aMinOutput,
             final double aMaxOutput,
+            final double aIntegralRange,
             final String aDebugId
     ) {
         mKp = aKp;
@@ -109,8 +109,18 @@ public class PIDController implements IRegulator<Double, Double> {
         mMinOutput = aMinOutput;
         mMaxOutput = aMaxOutput;
         mDebugId = aDebugId;
+        mErrorDerivatives = new RingBuffer<Double>(3);
     }
 
+    /**
+     * This method returns the current value of the setpoint
+     * for the controller.
+     * @return The current value of the setpoint for the controller.
+     */
+    public double getSetpoint() {
+        return mSetpoint;
+    }
+    
     /**
      * This method sets the desired set-point of the PID controller.
      * @param aPosition The desired position of the system.
@@ -141,6 +151,10 @@ public class PIDController implements IRegulator<Double, Double> {
         return mKd;
     }
 
+    public double getIntegralRange() {
+        return mIntegralRange;
+    }
+    
     /**
      * This method is used to reset the internal state
      * of the PID controller.  This is useful for resetting any
@@ -172,11 +186,33 @@ public class PIDController implements IRegulator<Double, Double> {
 
         double up = e * mKp;
 
-        double eDifferential = (mELast - e) / dt;
+        double eDifferential = (e - mELast) / dt;
 
+        mErrorDerivatives.add(eDifferential);
+        
         double ui = mEIntegral * mKi;
-        double ud = eDifferential * mKd;
+        
+        // Calculate the average derivative over the last 300ms
+        // and this will be the derivative component.
+        double ud = 0;
+        if (mErrorDerivatives.size() == mErrorDerivatives.getMaxSize()) {
+            eDifferential = 0;
+            for (double ed : mErrorDerivatives) {
+                eDifferential += ed;
+            }
+            eDifferential /= mErrorDerivatives.size();
+            ud = eDifferential * mKd;
+        }
+        
 
+        if (Math.abs(e) < mIntegralRange) {
+            mEIntegral += (dt * e);
+        }
+        else {
+            mEIntegral = 0;
+        }
+            
+            
         double output = up + ui + ud;
         LOG.log(Level.INFO, mDebugId + " p = " + mKp + " i = " + mKi + " d = " + mKd);
         LOG.log(Level.INFO, mDebugId + " : error : " + e + " output : " + output);
@@ -200,7 +236,6 @@ public class PIDController implements IRegulator<Double, Double> {
             // It is in this range that we begin to wind up the integral
             // component.
             aController.setOutput(output);
-            mEIntegral += (dt * e);
         }
 
         mELast = e;
@@ -224,13 +259,15 @@ public class PIDController implements IRegulator<Double, Double> {
             final double aKi,
             final double aKd,
             final double aMinOutput,
-            final double aMaxOutput) {
+            final double aMaxOutput,
+            final double aIntegralRange) {
         mKp = aKp;
         mKi = aKi;
         mKd = aKd;
         mEIntegral = 0;
         mMinOutput = aMinOutput;
         mMaxOutput = aMaxOutput;
+        mIntegralRange = aIntegralRange;
     }
 
 }

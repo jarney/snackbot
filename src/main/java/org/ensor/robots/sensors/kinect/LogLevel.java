@@ -22,14 +22,33 @@
  * THE SOFTWARE.
  */
 
-package org.ensor.robots.differentialdrive;
+package org.ensor.robots.sensors.kinect;
 
 /**
- *
+ * These describe the various log levels for the
+ * libfreenect library.
  * @author jona
  */
-public class Controller {
-    public void tick() {
-        
-    }
+public enum LogLevel {
+    /**< Log for crashing/non-recoverable errors. */
+    FREENECT_LOG_FATAL(0),
+    /**< Log for major errors. */
+    FREENECT_LOG_ERROR(1),
+    /**< Log for warning messages. */
+    FREENECT_LOG_WARNING(2),
+    /**< Log for important messages. */
+    FREENECT_LOG_NOTICE(3),
+    /**< Log for normal messages. */
+    FREENECT_LOG_INFO(4),
+    /**< Log for useful development messages. */
+    FREENECT_LOG_DEBUG(5),
+    /**< Log for slightly less useful messages. */
+    FREENECT_LOG_SPEW(6),
+    /**< Log EVERYTHING. May slow performance. */
+    FREENECT_LOG_FLOOD(7);
+    
+    private final int mLevel;
+    private LogLevel(final int aLevel) { mLevel = aLevel; }
+    protected int getLevel() { return mLevel; }
 }
+

@@ -95,6 +95,15 @@ public class RingBuffer<T> implements Iterable<T>, Collection<T> {
     public int size() {
         return mData.size();
     }
+    
+    /**
+     * Returns the maximum size of the buffer.
+     * @return The maximum number of elements that this buffer can hold.
+     */
+    public int getMaxSize() {
+        return mSize;
+    }
+    
     /**
      * Removes all elements from the buffer.
      */
