@@ -29,5 +29,5 @@ package org.ensor.robots.sensors.kinect;
  * @author jona
  */
 interface IVideoListener {
-    void videoCallback(java.nio.ByteBuffer aVideoData);
+    void videoCallback(byte[] aVideoData);
 }

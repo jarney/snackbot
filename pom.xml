@@ -228,6 +228,11 @@
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.0.18</version>
-        </dependency>    
+        </dependency>
+        <dependency>
+            <groupId>org.jcodec</groupId>
+            <artifactId>jcodec</artifactId>
+            <version>0.1.5</version>
+        </dependency>
     </dependencies>
 </project>

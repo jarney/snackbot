@@ -29,6 +29,6 @@ package org.ensor.robots.sensors.kinect;
  * @author jona
  */
 interface IDepthListener {
-    void depthCallback(java.nio.ByteBuffer aDepthData);
+    void depthCallback(byte[] aDepthData);
 
 }

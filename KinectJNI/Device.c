@@ -151,8 +151,8 @@ JNIEXPORT jint JNICALL Java_org_ensor_robots_sensors_kinect_Device_nativeOpen
     
     f_devices[aDeviceId].object = (*aJNIEnv)->NewGlobalRef(aJNIEnv, aThisObject);
     jclass cls = (*aJNIEnv)->GetObjectClass(aJNIEnv, f_devices[aDeviceId].object);
-    f_devices[aDeviceId].videomethod = (*aJNIEnv)->GetMethodID(aJNIEnv, cls, "videoCallback", "(Ljava/nio/ByteBuffer;)V");
-    f_devices[aDeviceId].depthmethod = (*aJNIEnv)->GetMethodID(aJNIEnv, cls, "depthCallback", "(Ljava/nio/ByteBuffer;)V");
+    f_devices[aDeviceId].videomethod = (*aJNIEnv)->GetMethodID(aJNIEnv, cls, "videoCallback", "([B)V");
+    f_devices[aDeviceId].depthmethod = (*aJNIEnv)->GetMethodID(aJNIEnv, cls, "depthCallback", "([B)V");
 
     if (f_devices[aDeviceId].videomethod == 0 ||
                 f_devices[aDeviceId].depthmethod == 0) {
@@ -194,6 +194,9 @@ void video_cb(freenect_device *dev, void *rgb, uint32_t timestamp)
     pthread_mutex_lock(&mutex);
 
     jfreenect_device_t *d = (jfreenect_device_t *) freenect_get_user(dev);
+    
+    (*thread_env)->SetByteArrayRegion(thread_env, d->videobuffervalue, 0, d->videobuffersize, d->f_video_buffer);
+    
     (*thread_env)->CallVoidMethod
         (thread_env, d->object, d->videomethod, d->videobuffervalue);
     
@@ -222,10 +225,9 @@ JNIEXPORT void JNICALL Java_org_ensor_robots_sensors_kinect_Device_nativeStartVi
             f_devices[aDeviceId].f_video_buffer
     );
 
-    f_devices[aDeviceId].videobuffervalue = (*aJNIEnv)->NewDirectByteBuffer(
-            aJNIEnv,
-            f_devices[aDeviceId].f_video_buffer,
-            f_devices[aDeviceId].videobuffersize);
+    f_devices[aDeviceId].videobuffervalue = 
+        (*aJNIEnv)->NewBooleanArray(aJNIEnv, f_devices[aDeviceId].videobuffersize);
+    
     f_devices[aDeviceId].videobuffervalue = (*aJNIEnv)->NewGlobalRef(aJNIEnv, 
                 f_devices[aDeviceId].videobuffervalue
             );
@@ -261,6 +263,9 @@ void depth_cb(freenect_device *dev, void *v_depth, uint32_t timestamp)
     pthread_mutex_lock(&mutex);
 
     jfreenect_device_t *d = (jfreenect_device_t *) freenect_get_user(dev);
+    
+    (*thread_env)->SetByteArrayRegion(thread_env, d->depthbuffervalue, 0, d->depthbuffersize, d->f_depth_buffer);
+    
     (*thread_env)->CallVoidMethod
         (thread_env, d->object, d->depthmethod, d->depthbuffervalue);
     
@@ -291,10 +296,9 @@ JNIEXPORT void JNICALL Java_org_ensor_robots_sensors_kinect_Device_nativeStartDe
             f_devices[aDeviceId].f_dev,
             f_devices[aDeviceId].f_depth_buffer
     );
-    f_devices[aDeviceId].depthbuffervalue = (*aJNIEnv)->NewDirectByteBuffer(
-            aJNIEnv,
-            f_devices[aDeviceId].f_depth_buffer,
-            f_devices[aDeviceId].depthbuffersize);
+    f_devices[aDeviceId].depthbuffervalue = 
+        (*aJNIEnv)->NewBooleanArray(aJNIEnv, f_devices[aDeviceId].depthbuffersize);
+    
     f_devices[aDeviceId].depthbuffervalue = (*aJNIEnv)->NewGlobalRef(aJNIEnv, 
                 f_devices[aDeviceId].depthbuffervalue
             );

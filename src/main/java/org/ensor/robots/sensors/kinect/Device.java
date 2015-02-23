@@ -84,12 +84,12 @@ class Device implements AutoCloseable {
         }
     }
     
-    private void videoCallback(java.nio.ByteBuffer aVideoData) {
+    private void videoCallback(byte[] aVideoData) {
         if (mVideoListener != null) {
             mVideoListener.videoCallback(aVideoData);
         }
     }
-    private void depthCallback(java.nio.ByteBuffer aDepthData) {
+    private void depthCallback(byte[] aDepthData) {
         if (mDepthListener != null) {
             mDepthListener.depthCallback(aDepthData);
         }

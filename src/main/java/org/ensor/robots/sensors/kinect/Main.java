@@ -24,14 +24,20 @@
 
 package org.ensor.robots.sensors.kinect;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
-
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author jona
  */
 public class Main {
     public static void main(String[] args) throws Exception {
+
+        MP4EncoderListener encoder = new MP4EncoderListener();
         
         System.out.println("Property " + System.getProperty("java.library.path"));
         
@@ -43,21 +49,15 @@ public class Main {
                 
                 System.out.println("Device is open, setting up video stream");
                 
-                IVideoListener vl = new IVideoListener() {
-                    @Override
-                    public void videoCallback(ByteBuffer aVideoData) {
-                        System.out.println("Video buffer: " + aVideoData.get(1024));
-                    }
-                    
-                };
-                openDevice.setVideoListener(vl);
+                MP4EncoderListener encoderListener = new MP4EncoderListener();
+                openDevice.setVideoListener(encoderListener);
                 
                 System.out.println("Video stream set up, setting up depth stream");
                 
                 IDepthListener dl = new IDepthListener() {
                     @Override
-                    public void depthCallback(ByteBuffer aDepthData) {
-                        System.out.println("Depth buffer: " + aDepthData.get(1024));
+                    public void depthCallback(byte[] aDepthData) {
+                        System.out.println("Depth buffer: " + aDepthData[1024]);
                     }
                 };
                 openDevice.setDepthListener(dl);
@@ -73,7 +73,11 @@ public class Main {
                 System.out.println("Closing depth stream");
                 
                 openDevice.setDepthListener(null);
+                
+                encoderListener.close();
+                
             }
         }
+        
     }
 }
